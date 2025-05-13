@@ -89,6 +89,8 @@ export async function signIn(
           email: validatedFields.data.email,
           name: result.name,
         },
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
       });
       return {
         success: true,
@@ -113,5 +115,36 @@ export async function signIn(
         password: "",
       },
     };
+  }
+}
+
+export async function refreshToken(oldAccessToken: string) {
+  try {
+    const response = await fetch(`${BACKEND_URL}/auth/refresh`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ oldAccessToken }),
+    });
+    if (!response.ok) {
+      return {
+        message: "Failed to refresh token",
+      };
+    }
+    const { accessToken, refreshToken } = await response.json();
+    const updateRes = await fetch("localhost:3000/api/auth/update", {
+      method: "POST",
+      body: JSON.stringify({ accessToken, refreshToken }),
+    });
+    if (!updateRes.ok) {
+      return {
+        message: "Failed to update token",
+      };
+    }
+    return accessToken;
+  } catch (error) {
+    console.error("Error during refresh token:", error);
+    return null;
   }
 }

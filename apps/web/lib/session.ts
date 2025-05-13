@@ -4,12 +4,12 @@ import { redirect } from "next/navigation";
 
 export type Session = {
   user: {
-    id: string;
+    id: number;
     email: string;
     name: string;
   };
-  // accessToken: string;
-  // refreshToken: string;
+  accessToken: string;
+  refreshToken: string;
 };
 
 const secretKey = process.env.SESSION_SECRET_KEY!;
@@ -48,4 +48,36 @@ export async function getSession() {
 
 export async function deleteSession() {
   (await cookies()).delete("session");
+}
+
+export async function updateSession({
+  accessToken,
+  refreshToken,
+}: {
+  accessToken: string;
+  refreshToken: string;
+}) {
+  const cookie = (await cookies()).get("session")?.value;
+  if (!cookie) return null;
+  try {
+    const { payload } = await jwtVerify(cookie, encodedKey);
+
+    if (!payload || !("user" in payload)) {
+      throw new Error("Invalid session");
+    }
+    const newPayload: Session = {
+      user: payload.user as Session["user"],
+      accessToken,
+      refreshToken,
+    };
+    await createSession(newPayload);
+  } catch (error) {
+    console.error("Failed to update session", error);
+  }
+}
+
+export async function updateTokens(accessToken: string, refreshToken: string) {
+  const cookie = (await cookies()).get("session")?.value;
+  if (!cookie) return null;
+  await updateSession({ accessToken, refreshToken });
 }
