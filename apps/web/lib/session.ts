@@ -6,6 +6,7 @@ export type Session = {
   user: {
     id: string;
     email: string;
+    name: string;
   };
   // accessToken: string;
   // refreshToken: string;
@@ -43,4 +44,8 @@ export async function getSession() {
     redirect("/auth/signin");
     return null;
   }
+}
+
+export async function deleteSession() {
+  (await cookies()).delete("session");
 }

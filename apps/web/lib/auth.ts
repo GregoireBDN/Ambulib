@@ -87,6 +87,7 @@ export async function signIn(
         user: {
           id: result.id,
           email: validatedFields.data.email,
+          name: result.name,
         },
       });
       return {
