@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { BACKEND_URL } from "./constants";
 import { FormState, LoginFormSchema, SignupFormSchema } from "./type";
+import { createSession } from "./session";
 
 export async function signUp(
   state: FormState,
@@ -82,11 +83,15 @@ export async function signIn(
     console.log("Response data:", result);
 
     if (response.ok) {
-      return {
-        message: "Login successful",
-        values: {
-          email: formData.get("email")?.toString() || "",
+      await createSession({
+        user: {
+          id: result.id,
+          email: validatedFields.data.email,
         },
+      });
+      return {
+        success: true,
+        redirect: "/",
       };
     } else {
       return {

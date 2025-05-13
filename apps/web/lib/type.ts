@@ -13,6 +13,8 @@ export type FormState =
         email?: string;
         password?: string;
       };
+      success?: boolean;
+      redirect?: string;
     }
   | undefined;
 

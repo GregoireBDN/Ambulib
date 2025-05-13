@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import SubmitButton from "@/components/ui/submitButton";
 import { signIn } from "@/lib/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
@@ -11,6 +12,13 @@ import { Eye, EyeOff } from "lucide-react";
 const SignInForm = () => {
   const [state, formAction] = useActionState(signIn, null);
   const [showPassword, setShowPassword] = React.useState(false);
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (state?.success && state?.redirect) {
+      router.push(state.redirect);
+    }
+  }, [state, router]);
 
   return (
     <form action={formAction}>
