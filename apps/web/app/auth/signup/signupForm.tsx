@@ -16,7 +16,12 @@ const SignUpForm = () => {
         )}
         <div>
           <Label htmlFor="name">Name</Label>
-          <Input id="name" name="name" placeholder="John Doe" />
+          <Input
+            id="name"
+            name="name"
+            placeholder="John Doe"
+            defaultValue={state?.values?.name || ""}
+          />
         </div>
         {state?.error?.name && (
           <p className="text-sm text-red-500">{state.error.name}</p>
@@ -24,14 +29,24 @@ const SignUpForm = () => {
 
         <div>
           <Label htmlFor="email">Email</Label>
-          <Input id="email" name="email" placeholder="john@example.com" />
+          <Input
+            id="email"
+            name="email"
+            placeholder="john@example.com"
+            defaultValue={state?.values?.email || ""}
+          />
         </div>
         {state?.error?.email && (
           <p className="text-sm text-red-500">{state.error.email}</p>
         )}
         <div>
           <Label htmlFor="password">Password</Label>
-          <Input id="password" name="password" type="password" />
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            defaultValue={state?.values?.password || ""}
+          />
         </div>
         {state?.error?.password && (
           <div className="text-sm text-red-500">

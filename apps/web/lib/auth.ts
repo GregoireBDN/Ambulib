@@ -15,7 +15,14 @@ export async function signUp(
   });
 
   if (!validatedFields.success) {
-    return { error: validatedFields.error.flatten().fieldErrors };
+    return {
+      error: validatedFields.error.flatten().fieldErrors,
+      values: {
+        name: formData.get("name")?.toString() || "",
+        email: formData.get("email")?.toString() || "",
+        password: formData.get("password")?.toString() || "",
+      },
+    };
   }
 
   const response = await fetch(`${BACKEND_URL}/auth/signup`, {
@@ -27,7 +34,7 @@ export async function signUp(
   });
 
   if (!response.ok) {
-    return redirect("auth/signin");
+    return redirect("/auth/signin");
   } else {
     return {
       message:

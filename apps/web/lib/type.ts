@@ -8,6 +8,11 @@ export type FormState =
         password?: string[];
       };
       message?: string;
+      values?: {
+        name?: string;
+        email?: string;
+        password?: string;
+      };
     }
   | undefined;
 
