@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Button } from "@repo/ui/button";
 import styles from "./page.module.css";
 
-const Home: NextPage = () => {
+const Home: NextPage = async () => {
   return (
     <div className={styles.page}>
       <main className={styles.main}>

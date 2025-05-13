@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(cuid())
+  id        Int       @id @default(autoincrement())
   email     String    @unique
   password  String
   name      String
@@ -19,11 +19,11 @@ model User {
 }
 
 model Vehicle {
-  id          String        @id @default(cuid())
+  id          Int           @id @default(autoincrement())
   plateNumber String        @unique
   type        VehicleType
   status      VehicleStatus @default(AVAILABLE)
-  driverId    String
+  driverId    Int
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   driver      User          @relation(fields: [driverId], references: [id])
