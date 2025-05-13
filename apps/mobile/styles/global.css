@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Styles personnalisés */
+@layer components {
+  .input-base {
+    @apply border border-gray-300 rounded-lg p-3 text-base;
+  }
+
+  .button-primary {
+    @apply bg-primary p-4 rounded-lg items-center;
+  }
+
+  .text-primary {
+    @apply text-primary text-sm underline;
+  }
+}

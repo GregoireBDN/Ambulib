@@ -11,17 +11,32 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.2.2",
     "@repo/ui": "workspace:*",
+    "css-mediaquery": "^0.1.2",
     "expo": "~53.0.9",
+    "expo-constants": "^17.1.6",
+    "expo-head": "^0.0.20",
+    "expo-linking": "^7.1.5",
     "expo-status-bar": "~2.2.3",
+    "expo-system-ui": "^5.0.7",
+    "hoist-non-react-statics": "^3.3.2",
+    "nativewind": "2.0.11",
     "react": "19.0.0",
-    "react-native": "0.79.2"
+    "react-native": "0.79.2",
+    "react-native-gesture-handler": "^2.25.0",
+    "react-native-reanimated": "^3.17.5",
+    "react-native-safe-area-context": "^5.4.0",
+    "react-native-screens": "^4.10.0",
+    "react-native-web": "^0.20.0",
+    "use-sync-external-store": "^1.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/react": "~19.0.10",
+    "tailwindcss": "3.3.2",
     "typescript": "~5.8.3"
   },
   "private": true
