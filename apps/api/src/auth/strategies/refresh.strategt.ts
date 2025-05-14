@@ -6,6 +6,13 @@ import { ConfigType } from '@nestjs/config';
 import { AuthService } from '../auth.service';
 import { Inject } from '@nestjs/common';
 import refreshConfig from '../config/refresh.config';
+import { Request } from 'express';
+
+interface RequestWithBody extends Request {
+  body: {
+    refreshToken: string;
+  };
+}
 
 @Injectable()
 export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
@@ -21,11 +28,16 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
       jwtFromRequest: ExtractJwt.fromBodyField('refreshToken'),
       secretOrKey: refreshTokenConfig.secret,
       ignoreExpiration: false,
+      passReqToCallback: true,
     });
   }
 
-  validate(payload: AuthJwtPayload) {
+  async validate(req: RequestWithBody, payload: AuthJwtPayload) {
     const userId = payload.sub;
-    return this.authService.validateRefreshToken(userId);
+    const refreshToken = req.body?.refreshToken;
+    if (!refreshToken) {
+      throw new Error('Refresh token not found in request body');
+    }
+    return this.authService.validateRefreshToken(userId, refreshToken);
   }
 }

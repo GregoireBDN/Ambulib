@@ -12,8 +12,8 @@ export class UserService {
     const hashedPassword = await hash(password);
     return await this.prisma.user.create({
       data: {
-        ...user,
         password: hashedPassword,
+        ...user,
       },
     });
   }
@@ -26,10 +26,21 @@ export class UserService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(userId: number) {
     return await this.prisma.user.findUnique({
       where: {
-        id,
+        id: userId,
+      },
+    });
+  }
+
+  async updateHashedRefreshToken(userId: number, hashedRT: string | null) {
+    return await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        hashedRefreshToken: hashedRT,
       },
     });
   }

@@ -5,6 +5,12 @@ import { BACKEND_URL } from "./constants";
 import { FormState, LoginFormSchema, SignupFormSchema } from "./type";
 import { createSession } from "./session";
 
+/**
+ * Sign up a user
+ * @param state - The current state of the form
+ * @param formData - The form data
+ * @returns The state of the form
+ */
 export async function signUp(
   state: FormState,
   formData: FormData
@@ -46,6 +52,12 @@ export async function signUp(
   }
 }
 
+/**
+ * Sign in a user
+ * @param prevState - The previous state of the form
+ * @param formData - The form data
+ * @returns The state of the form
+ */
 export async function signIn(
   prevState: FormState | null,
   formData: FormData
@@ -118,6 +130,11 @@ export async function signIn(
   }
 }
 
+/**
+ * Refresh a user's token
+ * @param oldAccessToken - The old access token
+ * @returns The new access token
+ */
 export async function refreshToken(oldAccessToken: string) {
   try {
     const response = await fetch(`${BACKEND_URL}/auth/refresh`, {

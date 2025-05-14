@@ -5,12 +5,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from '../user/dto/create-user.dto';
-import { UserService } from '../user/user.service';
-import { verify } from 'argon2';
+import { UserService } from 'src/user/user.service';
+import { hash, verify } from 'argon2';
+import type { AuthJwtPayload } from './types/auth-jwtPayload';
 import { JwtService } from '@nestjs/jwt';
-import { AuthJwtPayload } from './types/auth-jwtPayloat';
 import refreshConfig from './config/refresh.config';
 import { ConfigType } from '@nestjs/config';
+import { Role } from '@prisma/client';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -19,105 +21,89 @@ export class AuthService {
     @Inject(refreshConfig.KEY)
     private refreshTokenConfig: ConfigType<typeof refreshConfig>,
   ) {}
-  /**
-   * Register a new user
-   * @param dto - The user data
-   * @returns The created user
-   * @throws ConflictException if the user already exists
-   */
-  async registerUser(dto: CreateUserDto) {
-    const user = await this.userService.findByEmail(dto.email);
-    if (user) {
-      throw new ConflictException('User already exists');
-    }
-    return this.userService.create(dto);
+  async registerUser(createUserDto: CreateUserDto) {
+    const user = await this.userService.findByEmail(createUserDto.email);
+    if (user) throw new ConflictException('User already exists!');
+    return this.userService.create(createUserDto);
   }
 
-  /**
-   * Validate a local user
-   * @param email - The user's email
-   * @param password - The user's password
-   * @returns The validated user
-   * @throws UnauthorizedException if the user is not found or the password is invalid
-   */
   async validateLocalUser(email: string, password: string) {
     const user = await this.userService.findByEmail(email);
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-    if (!(await verify(user.password, password))) {
-      throw new UnauthorizedException('Invalid password');
-    }
-    return { id: user.id, name: user.name };
+    if (!user) throw new UnauthorizedException('User not found!');
+    const isPasswordMatched = verify(user.password, password);
+    if (!isPasswordMatched)
+      throw new UnauthorizedException('Invalid Credentials!');
+
+    return { id: user.id, name: user.name, role: user.role };
   }
 
-  /**
-   * Login a user
-   * @param userId - The user's ID
-   * @param name - The user's name
-   * @returns The user's ID, name, and access token
-   */
-  async login(userId: number, name?: string) {
-    const { accessToken, refreshToken } = await this.generateToken(userId);
-    return { id: userId, name: name, accessToken, refreshToken };
+  async login(userId: number, name: string, role: Role) {
+    const { accessToken, refreshToken } = await this.generateTokens(userId);
+    const hashedRT = await hash(refreshToken);
+    await this.userService.updateHashedRefreshToken(userId, hashedRT);
+    return {
+      id: userId,
+      name: name,
+      role,
+      accessToken,
+      refreshToken,
+    };
   }
 
-  /**
-   * Generate a token for a user
-   * @param userId - The user's ID
-   * @returns The access token
-   */
-  async generateToken(userId: number) {
+  async generateTokens(userId: number) {
     const payload: AuthJwtPayload = { sub: userId };
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload),
       this.jwtService.signAsync(payload, this.refreshTokenConfig),
     ]);
-    return { accessToken, refreshToken };
+
+    return {
+      accessToken,
+      refreshToken,
+    };
   }
 
-  /**
-   * Validate a JWT token
-   * @param userId - The user's ID
-   * @returns The user's ID
-   * @throws UnauthorizedException if the user is not found
-   */
-  async validateJwtToken(userId: number) {
+  async validateJwtUser(userId: number) {
     const user = await this.userService.findOne(userId);
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-    const currentUser = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-    };
+    if (!user) throw new UnauthorizedException('User not found!');
+    const currentUser = { id: user.id, role: user.role };
     return currentUser;
   }
 
-  /**
-   * Validate a refresh token
-   * @param userId - The user's ID
-   * @returns The user's ID
-   */
-  async validateRefreshToken(userId: number) {
+  async validateRefreshToken(userId: number, refreshToken: string) {
     const user = await this.userService.findOne(userId);
-    if (!user) {
-      throw new UnauthorizedException('User not found');
-    }
-    const currentUser = {
-      id: user.id,
-    };
+    if (!user) throw new UnauthorizedException('User not found!');
+
+    const refreshTokenMatched = await verify(
+      user.hashedRefreshToken,
+      refreshToken,
+    );
+
+    if (!refreshTokenMatched)
+      throw new UnauthorizedException('Invalid Refresh Token!');
+    const currentUser = { id: user.id };
     return currentUser;
   }
 
-  /**
-   * Refresh a token
-   * @param userId - The user's ID
-   * @returns The new access token and refresh token
-   */
-  async refreshToken(userId: number, name?: string) {
-    const { accessToken, refreshToken } = await this.generateToken(userId);
-    return { id: userId, name: name, accessToken, refreshToken };
+  async refreshToken(userId: number, name: string) {
+    const { accessToken, refreshToken } = await this.generateTokens(userId);
+    const hashedRT = await hash(refreshToken);
+    await this.userService.updateHashedRefreshToken(userId, hashedRT);
+    return {
+      id: userId,
+      name: name,
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  async validateGoogleUser(googleUser: CreateUserDto) {
+    const user = await this.userService.findByEmail(googleUser.email);
+    if (user) return user;
+    return await this.userService.create(googleUser);
+  }
+
+  async signOut(userId: number) {
+    return await this.userService.updateHashedRefreshToken(userId, null);
   }
 }

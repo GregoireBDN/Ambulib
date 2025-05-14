@@ -2,6 +2,10 @@
 import { BACKEND_URL } from "./constants";
 import { authFetch } from "./authFetch";
 
+/**
+ * Get the profile of the current user
+ * @returns The profile of the current user
+ */
 export async function getProfile() {
   // const session = await getSession();
   // if (!session) {

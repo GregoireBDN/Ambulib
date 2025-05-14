@@ -8,43 +8,23 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  password  String
-  name      String
-  role      UserRole  @default(USER)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  vehicles  Vehicle[]
+  id                 Int     @id @default(autoincrement())
+  email              String  @unique
+  name               String
+  password           String
+  hashedRefreshToken String?
+  role               Role    @default(USER)
 }
 
-model Vehicle {
-  id          Int           @id @default(autoincrement())
-  plateNumber String        @unique
-  type        VehicleType
-  status      VehicleStatus @default(AVAILABLE)
-  driverId    Int
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  driver      User          @relation(fields: [driverId], references: [id])
+model Category {
+  id    Int     @id @default(autoincrement())
+  slug  String  @unique
+  title String
+  img   String?
 }
 
-enum UserRole {
+enum Role {
   ADMIN
-  DISPATCHER
-  DRIVER
+  EDITOR
   USER
-}
-
-enum VehicleType {
-  STANDARD
-  URGENCE
-  VSL
-}
-
-enum VehicleStatus {
-  AVAILABLE
-  ON_DUTY
-  MAINTENANCE
-  OUT_OF_SERVICE
 }
