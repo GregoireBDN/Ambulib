@@ -45,8 +45,8 @@ const SignInForm = () => {
   };
 
   return (
-    <View className="w-full p-6 bg-white rounded-2xl shadow-lg">
-      <Text className="text-3xl font-extrabold mb-8 text-center text-blue-700 tracking-wide">
+    <View className="w-full p-4 bg-white rounded-xl shadow-lg">
+      <Text className="text-2xl font-bold mb-4 text-center text-blue-700">
         Connexion
       </Text>
 

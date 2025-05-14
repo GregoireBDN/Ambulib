@@ -7,7 +7,7 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import SignInForm from "./signinForm";
+import SignUpForm from "./signupForm";
 
 const { width } = Dimensions.get("window");
 
@@ -15,7 +15,7 @@ const LOGO_WIDTH = width < 500 ? width * 0.7 : Math.min(width * 0.6, 400);
 const LOGO_HEIGHT = width < 500 ? width * 0.5 : Math.min(width * 0.4, 230);
 const FORM_PADDING = width < 500 ? 24 : 32;
 
-const SignInPage = () => {
+const SignUpPage = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Image
@@ -30,7 +30,7 @@ const SignInPage = () => {
       />
       <Text style={styles.title}>AMBULIB</Text>
       <View style={[styles.formContainer, { padding: FORM_PADDING }]}>
-        <SignInForm />
+        <SignUpForm />
       </View>
     </ScrollView>
   );
@@ -67,4 +67,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SignInPage;
+export default SignUpPage;
