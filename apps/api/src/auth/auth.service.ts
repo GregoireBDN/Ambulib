@@ -30,7 +30,10 @@ export class AuthService {
   async validateLocalUser(email: string, password: string) {
     const user = await this.userService.findByEmail(email);
     if (!user) throw new UnauthorizedException('User not found!');
-    const isPasswordMatched = verify(user.password, password);
+    if (!user.password)
+      throw new UnauthorizedException('Invalid user configuration!');
+
+    const isPasswordMatched = await verify(user.password, password);
     if (!isPasswordMatched)
       throw new UnauthorizedException('Invalid Credentials!');
 
@@ -73,6 +76,8 @@ export class AuthService {
   async validateRefreshToken(userId: number, refreshToken: string) {
     const user = await this.userService.findOne(userId);
     if (!user) throw new UnauthorizedException('User not found!');
+    if (!user.hashedRefreshToken)
+      throw new UnauthorizedException('No refresh token found!');
 
     const refreshTokenMatched = await verify(
       user.hashedRefreshToken,

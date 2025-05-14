@@ -1,22 +1,25 @@
 import { createSession } from "@/lib/session";
+import { Role } from "@/lib/type";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const accessToken = searchParams.get("access_token");
-    const refreshToken = searchParams.get("refresh_token");
+    const searchParams = new URL(request.url).searchParams;
+    const accessToken = searchParams.get("accessToken");
+    const refreshToken = searchParams.get("refreshToken");
     const userId = searchParams.get("userId");
     const name = searchParams.get("name");
     const email = searchParams.get("email");
+    const role = searchParams.get("role");
 
-    if (!accessToken || !refreshToken || !userId || !name || !email) {
+    if (!accessToken || !refreshToken || !userId || !name || !email || !role) {
       console.error("Missing required parameters:", {
         accessToken: !!accessToken,
         refreshToken: !!refreshToken,
         userId: !!userId,
         name: !!name,
         email: !!email,
+        role: !!role,
       });
       return NextResponse.redirect(
         new URL("/auth/signin?error=missing_parameters", request.url)
@@ -29,6 +32,7 @@ export async function GET(request: NextRequest) {
           id: Number(userId),
           name: name,
           email: email,
+          role: role as Role,
         },
         accessToken,
         refreshToken,

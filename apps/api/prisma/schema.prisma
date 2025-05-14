@@ -24,7 +24,8 @@ model Category {
 }
 
 enum Role {
-  ADMIN
-  EDITOR
-  USER
+  SUPER_ADMIN // Administrateur système avec tous les droits
+  ADMIN // Administrateur du service ambulancier
+  DRIVER // Conducteur d'ambulance
+  USER // Utilisateur basique
 }

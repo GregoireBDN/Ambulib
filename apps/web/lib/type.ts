@@ -49,7 +49,8 @@ export const LoginFormSchema = z.object({
 });
 
 export enum Role {
+  SUPER_ADMIN = "SUPER_ADMIN",
   ADMIN = "ADMIN",
-  EDITOR = "EDITOR",
+  DRIVER = "DRIVER",
   USER = "USER",
 }
