@@ -18,6 +18,7 @@
     "expo-constants": "^17.1.6",
     "expo-head": "^0.0.20",
     "expo-linking": "^7.1.5",
+    "expo-secure-store": "~14.2.3",
     "expo-status-bar": "~2.2.3",
     "expo-system-ui": "^5.0.7",
     "hoist-non-react-statics": "^3.3.2",

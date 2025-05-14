@@ -6,7 +6,7 @@ import SignUpPage from "./screens/auth/signup/signup";
 export default function App() {
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      <SignUpPage />
+      <SignInPage />
     </View>
   );
 }

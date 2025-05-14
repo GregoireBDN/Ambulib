@@ -18,7 +18,7 @@ const SignInForm = () => {
   const handleSignIn = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("http://localhost:3001/auth/login", {
+      const response = await fetch("http://localhost:3001/auth/signin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
