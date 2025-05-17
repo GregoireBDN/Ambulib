@@ -21,7 +21,8 @@ import { Roles } from './decorators/roles.decorator';
 interface RequestWithUser extends Request {
   user: {
     id: number;
-    name: string;
+    firstName: string;
+    lastName: string;
     role: Role;
     email: string;
   };
@@ -40,14 +41,19 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('signin')
   login(@Request() req: RequestWithUser) {
-    return this.authService.login(req.user.id, req.user.name, req.user.role);
+    return this.authService.login(
+      req.user.id,
+      req.user.firstName,
+      req.user.lastName,
+      req.user.role,
+    );
   }
 
   @Roles('ADMIN', 'DRIVER')
   @Get('protected')
   getAll(@Request() req: RequestWithUser) {
     return {
-      messege: `Now you can access this protected API. this is your user ID: ${req.user.id}`,
+      message: `Now you can access this protected API. this is your user ID: ${req.user.id}`,
     };
   }
 
@@ -55,7 +61,11 @@ export class AuthController {
   @UseGuards(RefreshAuthGuard)
   @Post('refresh')
   refreshToken(@Request() req: RequestWithUser) {
-    return this.authService.refreshToken(req.user.id, req.user.name);
+    return this.authService.refreshToken(
+      req.user.id,
+      req.user.firstName,
+      req.user.lastName,
+    );
   }
 
   @Public()
@@ -69,14 +79,16 @@ export class AuthController {
   async googleCallback(@Request() req: RequestWithUser, @Res() res: Response) {
     const response = await this.authService.login(
       req.user.id,
-      req.user.name,
+      req.user.firstName,
+      req.user.lastName,
       req.user.role,
     );
     const redirectUrl = new URL(
       'http://localhost:3002/api/auth/google/callback',
     );
     redirectUrl.searchParams.append('userId', response.id.toString());
-    redirectUrl.searchParams.append('name', response.name);
+    redirectUrl.searchParams.append('firstName', response.firstName);
+    redirectUrl.searchParams.append('lastName', response.lastName);
     redirectUrl.searchParams.append('email', req.user.email);
     redirectUrl.searchParams.append('accessToken', response.accessToken);
     redirectUrl.searchParams.append('refreshToken', response.refreshToken);

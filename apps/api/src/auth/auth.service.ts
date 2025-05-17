@@ -37,16 +37,22 @@ export class AuthService {
     if (!isPasswordMatched)
       throw new UnauthorizedException('Invalid Credentials!');
 
-    return { id: user.id, name: user.name, role: user.role };
+    return {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+    };
   }
 
-  async login(userId: number, name: string, role: Role) {
+  async login(userId: number, firstName: string, lastName: string, role: Role) {
     const { accessToken, refreshToken } = await this.generateTokens(userId);
     const hashedRT = await hash(refreshToken);
     await this.userService.updateHashedRefreshToken(userId, hashedRT);
     return {
       id: userId,
-      name: name,
+      firstName,
+      lastName,
       role,
       accessToken,
       refreshToken,
@@ -90,13 +96,14 @@ export class AuthService {
     return currentUser;
   }
 
-  async refreshToken(userId: number, name: string) {
+  async refreshToken(userId: number, firstName: string, lastName: string) {
     const { accessToken, refreshToken } = await this.generateTokens(userId);
     const hashedRT = await hash(refreshToken);
     await this.userService.updateHashedRefreshToken(userId, hashedRT);
     return {
       id: userId,
-      name: name,
+      firstName,
+      lastName,
       accessToken,
       refreshToken,
     };

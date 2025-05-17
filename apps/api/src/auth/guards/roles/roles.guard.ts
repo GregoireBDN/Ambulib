@@ -7,7 +7,8 @@ import { Request } from 'express';
 interface RequestWithUser extends Request {
   user: {
     id: number;
-    name: string;
+    firstName: string;
+    lastName: string;
     role: Role;
   };
 }

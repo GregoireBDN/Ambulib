@@ -8,12 +8,20 @@ datasource db {
 }
 
 model User {
-  id                 Int     @id @default(autoincrement())
-  email              String  @unique
-  name               String
-  password           String
-  hashedRefreshToken String?
-  role               Role    @default(USER)
+  id                  Int                   @id @default(autoincrement())
+  email               String                @unique
+  firstName           String
+  lastName            String
+  password            String
+  hashedRefreshToken  String?
+  phoneNumber         String?
+  age                 Int?
+  notes               String?
+  medicalCondition    String?
+  specialRequirements SpecialRequirements[]
+  emergencyContact    EmergencyContact?
+  dependent           Dependent[]
+  role                Role                  @default(USER)
 }
 
 model Category {
@@ -28,4 +36,34 @@ enum Role {
   ADMIN // Administrateur du service ambulancier
   DRIVER // Conducteur d'ambulance
   USER // Utilisateur basique
+}
+
+model EmergencyContact {
+  id           Int     @id @default(autoincrement())
+  firstName    String
+  lastName     String
+  phoneNumber  String
+  email        String?
+  relationship String
+  userId       Int     @unique
+  user         User    @relation(fields: [userId], references: [id])
+}
+
+model Dependent {
+  id                  Int                   @id @default(autoincrement())
+  firstName           String
+  lastName            String
+  age                 Int?
+  notes               String?
+  medicalCondition    String?
+  specialRequirements SpecialRequirements[]
+  userId              Int?
+  user                User?                 @relation(fields: [userId], references: [id])
+}
+
+enum SpecialRequirements {
+  NEEDS_OXYGEN
+  NEEDS_LYING_TRANSPORT
+  ALLERGIES
+  MEDICATIONS
 }
