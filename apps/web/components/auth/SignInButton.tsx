@@ -13,7 +13,7 @@ const SignInButton = async () => {
         </>
       ) : (
         <>
-          <p>{session.user.name}</p>
+          <p>{`${session.user.firstName} ${session.user.lastName}`}</p>
           <a href={"/api/auth/signout"}>Sign Out</a>
         </>
       )}

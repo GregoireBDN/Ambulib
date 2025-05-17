@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Image from "next/image";
-import { Button } from "@repo/ui/button";
+import { Button } from "@/components/ui/button";
 import styles from "./page.module.css";
 
 const Home: NextPage = async () => {
@@ -57,9 +57,7 @@ const Home: NextPage = async () => {
             Read our docs
           </a>
         </div>
-        <Button appName="web" className={styles.secondary}>
-          Open alert
-        </Button>
+        <Button className={styles.secondary}>Open alert</Button>
       </main>
       <footer className={styles.footer}>
         <a

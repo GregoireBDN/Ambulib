@@ -8,16 +8,26 @@ export async function GET(request: NextRequest) {
     const accessToken = searchParams.get("accessToken");
     const refreshToken = searchParams.get("refreshToken");
     const userId = searchParams.get("userId");
-    const name = searchParams.get("name");
+    const firstName = searchParams.get("firstName");
+    const lastName = searchParams.get("lastName");
     const email = searchParams.get("email");
     const role = searchParams.get("role");
 
-    if (!accessToken || !refreshToken || !userId || !name || !email || !role) {
+    if (
+      !accessToken ||
+      !refreshToken ||
+      !userId ||
+      !firstName ||
+      !lastName ||
+      !email ||
+      !role
+    ) {
       console.error("Missing required parameters:", {
         accessToken: !!accessToken,
         refreshToken: !!refreshToken,
         userId: !!userId,
-        name: !!name,
+        firstName: !!firstName,
+        lastName: !!lastName,
         email: !!email,
         role: !!role,
       });
@@ -30,7 +40,8 @@ export async function GET(request: NextRequest) {
       await createSession({
         user: {
           id: Number(userId),
-          name: name,
+          firstName,
+          lastName,
           email: email,
           role: role as Role,
         },

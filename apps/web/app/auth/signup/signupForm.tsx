@@ -15,16 +15,29 @@ const SignUpForm = () => {
           <p className="text-sm text-red-500">{state.message}</p>
         )}
         <div>
-          <Label htmlFor="name">Name</Label>
+          <Label htmlFor="firstName">First Name</Label>
           <Input
-            id="name"
-            name="name"
-            placeholder="John Doe"
-            defaultValue={state?.values?.name || ""}
+            id="firstName"
+            name="firstName"
+            placeholder="John"
+            defaultValue={state?.values?.firstName || ""}
           />
         </div>
-        {state?.error?.name && (
-          <p className="text-sm text-red-500">{state.error.name}</p>
+        {state?.error?.firstName && (
+          <p className="text-sm text-red-500">{state.error.firstName}</p>
+        )}
+
+        <div>
+          <Label htmlFor="lastName">Last Name</Label>
+          <Input
+            id="lastName"
+            name="lastName"
+            placeholder="Doe"
+            defaultValue={state?.values?.lastName || ""}
+          />
+        </div>
+        {state?.error?.lastName && (
+          <p className="text-sm text-red-500">{state.error.lastName}</p>
         )}
 
         <div>

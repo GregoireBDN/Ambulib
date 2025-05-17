@@ -16,7 +16,8 @@ export async function signUp(
   formData: FormData
 ): Promise<FormState> {
   const validatedFields = SignupFormSchema.safeParse({
-    name: formData.get("name"),
+    firstName: formData.get("firstName"),
+    lastName: formData.get("lastName"),
     email: formData.get("email"),
     password: formData.get("password"),
   });
@@ -25,7 +26,8 @@ export async function signUp(
     return {
       error: validatedFields.error.flatten().fieldErrors,
       values: {
-        name: formData.get("name")?.toString() || "",
+        firstName: formData.get("firstName")?.toString() || "",
+        lastName: formData.get("lastName")?.toString() || "",
         email: formData.get("email")?.toString() || "",
         password: formData.get("password")?.toString() || "",
       },
@@ -99,7 +101,8 @@ export async function signIn(
         user: {
           id: result.id,
           email: validatedFields.data.email,
-          name: result.name,
+          firstName: result.firstName,
+          lastName: result.lastName,
           role: result.role,
         },
         accessToken: result.accessToken,
