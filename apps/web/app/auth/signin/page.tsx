@@ -1,20 +1,21 @@
 import React from "react";
 import SignInForm from "./signinForm";
-import { BACKEND_URL } from "@/lib/constants";
+import { Separator } from "@/components/ui/separator";
+import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 
 const SignInPage = () => {
   return (
-    <div className="bg-white p-8 rounded-lg shadow-lg w-96 flex flex-col justify-center items-center ">
-      <h1 className="text-center text-2xl font-bold mb-4">Sign In Page</h1>
+    <div className="flex flex-col items-center justify-center space-y-6">
       <SignInForm />
-      <hr />
-      <a
-        className="border px-4 py-2 rounded bg-sky-600 text-white"
-        href={`${BACKEND_URL}/auth/google/login`}
-      >
-        Sign In With Google
-      </a>
-      <div className=" flex flex-col gap-2"></div>
+      <div className="relative w-full">
+        <div className="absolute inset-0 flex items-center">
+          <Separator />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground" />
+        </div>
+      </div>
+      <GoogleSignInButton />
     </div>
   );
 };

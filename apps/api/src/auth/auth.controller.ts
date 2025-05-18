@@ -84,7 +84,7 @@ export class AuthController {
       req.user.role,
     );
     const redirectUrl = new URL(
-      'http://localhost:3002/api/auth/google/callback',
+      'http://localhost:3000/api/auth/google/callback',
     );
     redirectUrl.searchParams.append('userId', response.id.toString());
     redirectUrl.searchParams.append('firstName', response.firstName);

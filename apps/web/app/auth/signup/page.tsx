@@ -1,18 +1,21 @@
-import Link from "next/link";
 import React from "react";
 import SignUpForm from "./signupForm";
+import { Separator } from "@/components/ui/separator";
+import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
 
 const SignUpPage = () => {
   return (
-    <div className="bg-white p-8 rounded-lg shadow-lg w-96 flex flex-col justify-center items-center ">
-      <h1 className="text-center text-2xl font-bold mb-4">Sign Up Page</h1>
+    <div className="flex flex-col items-center justify-center space-y-6">
       <SignUpForm />
-      <div className="flex justify-between text-sm">
-        <p>Already have an account?</p>
-        <Link className="underline" href={"/auth/signin"}>
-          Sign In
-        </Link>
+      <div className="relative w-full">
+        <div className="absolute inset-0 flex items-center">
+          <Separator />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground" />
+        </div>
       </div>
+      <GoogleSignInButton />
     </div>
   );
 };
