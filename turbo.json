@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local", "SESSION_SECRET_KEY"],
+  "globalDependencies": ["**/.env.*local", "SESSION_SECRET_KEY", "BACKEND_URL"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

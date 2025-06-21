@@ -15,13 +15,32 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const SignUpForm = () => {
   const [state, action] = useActionState(signUp, undefined);
   const [showPassword, setShowPassword] = React.useState(false);
+  const router = useRouter();
+
+  console.log("SignUpForm render - state:", state);
+
+  React.useEffect(() => {
+    if (state?.success && state?.redirect) {
+      console.log("Redirecting to:", state.redirect);
+      router.push(state.redirect);
+    }
+  }, [state, router]);
+
+  const handleSubmit = (formData: FormData) => {
+    console.log(
+      "SignUpForm submitted with data:",
+      Array.from(formData.entries())
+    );
+    return action(formData);
+  };
 
   return (
-    <Card className="w-[350px]">
+    <Card className="w-[450px]">
       <CardHeader>
         <CardTitle>Créer un compte</CardTitle>
         <CardDescription>
@@ -29,7 +48,7 @@ const SignUpForm = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form action={action}>
+        <form action={handleSubmit}>
           <div className="flex flex-col gap-4">
             {state?.message && (
               <p className="text-sm text-destructive">{state.message}</p>
@@ -61,6 +80,82 @@ const SignUpForm = () => {
                 {state?.error?.lastName && (
                   <p className="text-sm text-destructive">
                     {state.error.lastName}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="age">Âge</Label>
+                <Input
+                  id="age"
+                  name="age"
+                  type="number"
+                  placeholder="25"
+                  defaultValue={state?.values?.age || ""}
+                />
+                {state?.error?.age && (
+                  <p className="text-sm text-destructive">{state.error.age}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="phoneNumber">Téléphone</Label>
+                <Input
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  placeholder="0612345678"
+                  defaultValue={state?.values?.phoneNumber || ""}
+                />
+                {state?.error?.phoneNumber && (
+                  <p className="text-sm text-destructive">
+                    {state.error.phoneNumber}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="address">Adresse</Label>
+              <Input
+                id="address"
+                name="address"
+                placeholder="123 rue de la Paix"
+                defaultValue={state?.values?.address || ""}
+              />
+              {state?.error?.address && (
+                <p className="text-sm text-destructive">
+                  {state.error.address}
+                </p>
+              )}
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="city">Ville</Label>
+                <Input
+                  id="city"
+                  name="city"
+                  placeholder="Paris"
+                  defaultValue={state?.values?.city || ""}
+                />
+                {state?.error?.city && (
+                  <p className="text-sm text-destructive">{state.error.city}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="postalCode">Code postal</Label>
+                <Input
+                  id="postalCode"
+                  name="postalCode"
+                  placeholder="75001"
+                  defaultValue={state?.values?.postalCode || ""}
+                />
+                {state?.error?.postalCode && (
+                  <p className="text-sm text-destructive">
+                    {state.error.postalCode}
                   </p>
                 )}
               </div>

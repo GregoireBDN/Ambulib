@@ -15,14 +15,25 @@ export async function signUp(
   state: FormState,
   formData: FormData
 ): Promise<FormState> {
+  console.log("Starting signUp function");
+  console.log("FormData entries:", Array.from(formData.entries()));
+
   const validatedFields = SignupFormSchema.safeParse({
     firstName: formData.get("firstName"),
     lastName: formData.get("lastName"),
     email: formData.get("email"),
     password: formData.get("password"),
+    age: formData.get("age"),
+    phoneNumber: formData.get("phoneNumber"),
+    address: formData.get("address"),
+    city: formData.get("city"),
+    postalCode: formData.get("postalCode"),
   });
 
+  console.log("Validation result:", validatedFields);
+
   if (!validatedFields.success) {
+    console.log("Validation failed:", validatedFields.error);
     return {
       error: validatedFields.error.flatten().fieldErrors,
       values: {
@@ -30,26 +41,90 @@ export async function signUp(
         lastName: formData.get("lastName")?.toString() || "",
         email: formData.get("email")?.toString() || "",
         password: formData.get("password")?.toString() || "",
+        age: formData.get("age")?.toString() || "",
+        phoneNumber: formData.get("phoneNumber")?.toString() || "",
+        address: formData.get("address")?.toString() || "",
+        city: formData.get("city")?.toString() || "",
+        postalCode: formData.get("postalCode")?.toString() || "",
       },
     };
   }
 
-  const response = await fetch(`${BACKEND_URL}/auth/signup`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(validatedFields.data),
-  });
+  try {
+    console.log("Sending request to backend at:", `${BACKEND_URL}/auth/signup`);
+    console.log("Request payload:", validatedFields.data);
 
-  if (!response.ok) {
-    return redirect("/auth/signin");
-  } else {
+    const response = await fetch(`${BACKEND_URL}/auth/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(validatedFields.data),
+    });
+
+    console.log("Response status:", response.status);
+    console.log(
+      "Response headers:",
+      Object.fromEntries(response.headers.entries())
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.log("Error response data:", errorData);
+      return {
+        message: errorData.message || "Erreur lors de l'inscription",
+        values: {
+          firstName: formData.get("firstName")?.toString() || "",
+          lastName: formData.get("lastName")?.toString() || "",
+          email: formData.get("email")?.toString() || "",
+          password: formData.get("password")?.toString() || "",
+          age: formData.get("age")?.toString() || "",
+          phoneNumber: formData.get("phoneNumber")?.toString() || "",
+          address: formData.get("address")?.toString() || "",
+          city: formData.get("city")?.toString() || "",
+          postalCode: formData.get("postalCode")?.toString() || "",
+        },
+      };
+    } else {
+      const result = await response.json();
+      console.log("Success response data:", result);
+
+      // Connecter automatiquement l'utilisateur après l'inscription
+      console.log("Signup successful, creating session...");
+      await createSession({
+        user: {
+          id: result.id,
+          email: validatedFields.data.email,
+          firstName: result.firstName,
+          lastName: result.lastName,
+          role: result.role,
+          isProfileComplete: result.isProfileComplete,
+        },
+        accessToken: result.accessToken,
+        refreshToken: result.refreshToken,
+      });
+      console.log("Session created successfully");
+
+      return {
+        success: true,
+        redirect: "/",
+      };
+    }
+  } catch (error) {
+    console.error("Error during sign up:", error);
     return {
-      message:
-        response.status === 409
-          ? "User already exists"
-          : "User created successfully",
+      message: "An error occurred during sign up",
+      values: {
+        firstName: formData.get("firstName")?.toString() || "",
+        lastName: formData.get("lastName")?.toString() || "",
+        email: formData.get("email")?.toString() || "",
+        password: formData.get("password")?.toString() || "",
+        age: formData.get("age")?.toString() || "",
+        phoneNumber: formData.get("phoneNumber")?.toString() || "",
+        address: formData.get("address")?.toString() || "",
+        city: formData.get("city")?.toString() || "",
+        postalCode: formData.get("postalCode")?.toString() || "",
+      },
     };
   }
 }
@@ -65,11 +140,14 @@ export async function signIn(
   formData: FormData
 ): Promise<FormState> {
   console.log("Starting signIn function");
+  console.log("FormData entries:", Array.from(formData.entries()));
 
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
   });
+
+  console.log("Validation result:", validatedFields);
 
   if (!validatedFields.success) {
     console.log("Validation failed:", validatedFields.error);
@@ -83,7 +161,9 @@ export async function signIn(
   }
 
   try {
-    console.log("Sending request to backend");
+    console.log("Sending request to backend at:", `${BACKEND_URL}/auth/signin`);
+    console.log("Request payload:", validatedFields.data);
+
     const response = await fetch(`${BACKEND_URL}/auth/signin`, {
       method: "POST",
       headers: {
@@ -93,10 +173,16 @@ export async function signIn(
     });
 
     console.log("Response status:", response.status);
+    console.log(
+      "Response headers:",
+      Object.fromEntries(response.headers.entries())
+    );
+
     const result = await response.json();
     console.log("Response data:", result);
 
     if (response.ok) {
+      console.log("Login successful, creating session...");
       await createSession({
         user: {
           id: result.id,
@@ -104,15 +190,18 @@ export async function signIn(
           firstName: result.firstName,
           lastName: result.lastName,
           role: result.role,
+          isProfileComplete: result.isProfileComplete,
         },
         accessToken: result.accessToken,
         refreshToken: result.refreshToken,
       });
+      console.log("Session created successfully");
       return {
         success: true,
         redirect: "/",
       };
     } else {
+      console.log("Login failed with status:", response.status);
       return {
         message:
           response.status === 401 ? "Invalid credentials" : response.statusText,

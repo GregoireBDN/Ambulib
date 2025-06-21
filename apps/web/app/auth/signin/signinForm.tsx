@@ -21,11 +21,20 @@ const SignInForm = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const router = useRouter();
 
+  console.log("SignInForm render - state:", state);
+
   React.useEffect(() => {
+    console.log("SignInForm useEffect - state changed:", state);
     if (state?.success && state?.redirect) {
+      console.log("Redirecting to:", state.redirect);
       router.push(state.redirect);
     }
   }, [state, router]);
+
+  const handleSubmit = (formData: FormData) => {
+    console.log("Form submitted with data:", Array.from(formData.entries()));
+    return formAction(formData);
+  };
 
   return (
     <Card className="w-[350px]">
@@ -36,7 +45,7 @@ const SignInForm = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form action={formAction}>
+        <form action={handleSubmit}>
           <div className="flex flex-col gap-4">
             {state?.message && (
               <p className="text-sm text-destructive">{state.message}</p>

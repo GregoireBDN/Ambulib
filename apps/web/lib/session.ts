@@ -2,6 +2,7 @@ import { jwtVerify, SignJWT } from "jose";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { Role } from "./type";
+
 export type Session = {
   user: {
     id: number;
@@ -9,6 +10,7 @@ export type Session = {
     firstName: string;
     lastName: string;
     role: Role;
+    isProfileComplete: boolean;
   };
   accessToken: string;
   refreshToken: string;
