@@ -49,6 +49,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         lastName: user.lastName,
         email: user.email,
         role: user.role,
+        isProfileComplete: user.isProfileComplete,
       });
       return user;
     } catch (error) {

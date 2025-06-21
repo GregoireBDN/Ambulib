@@ -5,13 +5,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from '../user/dto/create-user.dto';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 import { hash, verify } from 'argon2';
 import type { AuthJwtPayload } from './types/auth-jwtPayload';
 import { JwtService } from '@nestjs/jwt';
 import refreshConfig from './config/refresh.config';
 import { ConfigType } from '@nestjs/config';
-import { Role } from '@prisma/client';
+import { Role, AuthProvider } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -21,10 +21,50 @@ export class AuthService {
     @Inject(refreshConfig.KEY)
     private refreshTokenConfig: ConfigType<typeof refreshConfig>,
   ) {}
+
   async registerUser(createUserDto: CreateUserDto) {
-    const user = await this.userService.findByEmail(createUserDto.email);
-    if (user) throw new ConflictException('User already exists!');
-    return this.userService.create(createUserDto);
+    console.log('AuthService.registerUser called with:', createUserDto);
+
+    try {
+      console.log('Checking if user exists...');
+      const user = await this.userService.findByEmail(createUserDto.email);
+      console.log(
+        'User check result:',
+        user ? 'User exists' : 'User does not exist',
+      );
+
+      if (user) throw new ConflictException('User already exists!');
+
+      console.log('Creating new user...');
+      // Pour l'inscription classique, on marque le profil comme complet
+      const newUser = await this.userService.create({
+        ...createUserDto,
+        authProvider: AuthProvider.CREDENTIALS,
+        isProfileComplete: true,
+      });
+
+      console.log('User created successfully:', newUser);
+
+      // Connecter automatiquement l'utilisateur après l'inscription
+      console.log('Logging in user after registration...');
+      const loginResult = await this.login(
+        newUser.id,
+        newUser.firstName,
+        newUser.lastName,
+        newUser.role,
+        newUser.isProfileComplete,
+      );
+
+      console.log('User logged in successfully after registration');
+      return loginResult;
+    } catch (error) {
+      console.error('Error in registerUser:', {
+        message: error.message,
+        stack: error.stack,
+        name: error.name,
+      });
+      throw error;
+    }
   }
 
   async validateLocalUser(email: string, password: string) {
@@ -42,10 +82,17 @@ export class AuthService {
       firstName: user.firstName,
       lastName: user.lastName,
       role: user.role,
+      isProfileComplete: user.isProfileComplete,
     };
   }
 
-  async login(userId: number, firstName: string, lastName: string, role: Role) {
+  async login(
+    userId: number,
+    firstName: string,
+    lastName: string,
+    role: Role,
+    isProfileComplete: boolean,
+  ) {
     const { accessToken, refreshToken } = await this.generateTokens(userId);
     const hashedRT = await hash(refreshToken);
     await this.userService.updateHashedRefreshToken(userId, hashedRT);
@@ -54,6 +101,7 @@ export class AuthService {
       firstName,
       lastName,
       role,
+      isProfileComplete,
       accessToken,
       refreshToken,
     };
@@ -75,7 +123,11 @@ export class AuthService {
   async validateJwtUser(userId: number) {
     const user = await this.userService.findOne(userId);
     if (!user) throw new UnauthorizedException('User not found!');
-    const currentUser = { id: user.id, role: user.role };
+    const currentUser = {
+      id: user.id,
+      role: user.role,
+      isProfileComplete: user.isProfileComplete,
+    };
     return currentUser;
   }
 
@@ -92,11 +144,19 @@ export class AuthService {
 
     if (!refreshTokenMatched)
       throw new UnauthorizedException('Invalid Refresh Token!');
-    const currentUser = { id: user.id };
+    const currentUser = {
+      id: user.id,
+      isProfileComplete: user.isProfileComplete,
+    };
     return currentUser;
   }
 
-  async refreshToken(userId: number, firstName: string, lastName: string) {
+  async refreshToken(
+    userId: number,
+    firstName: string,
+    lastName: string,
+    isProfileComplete: boolean,
+  ) {
     const { accessToken, refreshToken } = await this.generateTokens(userId);
     const hashedRT = await hash(refreshToken);
     await this.userService.updateHashedRefreshToken(userId, hashedRT);
@@ -104,6 +164,7 @@ export class AuthService {
       id: userId,
       firstName,
       lastName,
+      isProfileComplete,
       accessToken,
       refreshToken,
     };
@@ -112,7 +173,27 @@ export class AuthService {
   async validateGoogleUser(googleUser: CreateUserDto) {
     const user = await this.userService.findByEmail(googleUser.email);
     if (user) return user;
-    return await this.userService.create(googleUser);
+
+    // Pour Google, on marque le profil comme incomplet
+    return await this.userService.create({
+      ...googleUser,
+      authProvider: AuthProvider.GOOGLE,
+      isProfileComplete: false,
+    });
+  }
+
+  async completeProfile(userId: number, profileData: Partial<CreateUserDto>) {
+    const user = await this.userService.findOne(userId);
+    if (!user) throw new UnauthorizedException('User not found!');
+
+    const { age, ...restProfileData } = profileData;
+    const updateData = {
+      ...restProfileData,
+      age: age ? (typeof age === 'string' ? parseInt(age) : age) : undefined,
+      isProfileComplete: true,
+    };
+
+    return this.userService.update(userId, updateData);
   }
 
   async signOut(userId: number) {

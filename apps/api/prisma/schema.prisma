@@ -8,27 +8,32 @@ datasource db {
 }
 
 model User {
-  id                  Int                   @id @default(autoincrement())
-  email               String                @unique
-  firstName           String
-  lastName            String
-  password            String
-  hashedRefreshToken  String?
-  phoneNumber         String?
-  age                 Int?
-  notes               String?
-  medicalCondition    String?
-  specialRequirements SpecialRequirements[]
-  emergencyContact    EmergencyContact?
-  dependent           Dependent[]
-  role                Role                  @default(USER)
+  id                 Int     @id @default(autoincrement())
+  email              String  @unique
+  firstName          String
+  lastName           String
+  password           String
+  hashedRefreshToken String?
+  phoneNumber        String?
+  age                Int?
+
+  // Adresse
+  address    String?
+  city       String?
+  postalCode String?
+
+  // Informations d'authentification
+  authProvider      AuthProvider @default(CREDENTIALS)
+  isProfileComplete Boolean      @default(false)
+
+  emergencyContact EmergencyContact?
+  dependent        Dependent[]
+  role             Role              @default(USER)
 }
 
-model Category {
-  id    Int     @id @default(autoincrement())
-  slug  String  @unique
-  title String
-  img   String?
+enum AuthProvider {
+  CREDENTIALS // Email/Mot de passe
+  GOOGLE // Authentification Google
 }
 
 enum Role {
@@ -50,15 +55,18 @@ model EmergencyContact {
 }
 
 model Dependent {
-  id                  Int                   @id @default(autoincrement())
-  firstName           String
-  lastName            String
-  age                 Int?
-  notes               String?
-  medicalCondition    String?
-  specialRequirements SpecialRequirements[]
-  userId              Int?
-  user                User?                 @relation(fields: [userId], references: [id])
+  id          Int     @id @default(autoincrement())
+  firstName   String
+  lastName    String
+  age         Int?
+  phoneNumber String?
+
+  // Adresse
+  address    String?
+  city       String?
+  postalCode String?
+  userId     Int?
+  user       User?   @relation(fields: [userId], references: [id])
 }
 
 enum SpecialRequirements {
