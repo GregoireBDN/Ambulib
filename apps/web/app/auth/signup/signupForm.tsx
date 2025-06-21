@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, User, Building } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const SignUpForm = () => {
@@ -40,76 +40,106 @@ const SignUpForm = () => {
   };
 
   return (
-    <Card className="w-[450px]">
-      <CardHeader>
-        <CardTitle>Créer un compte</CardTitle>
-        <CardDescription>
-          Entrez vos informations pour créer votre compte
+    <Card className="w-full max-w-md border-0 shadow-2xl bg-white/95 backdrop-blur-sm">
+      <CardHeader className="text-center pb-6">
+        <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+          <User className="h-8 w-8 text-blue-600" />
+        </div>
+        <CardTitle className="text-2xl font-bold text-gray-900">
+          Créer un compte
+        </CardTitle>
+        <CardDescription className="text-gray-600">
+          Rejoignez Ambulib et accédez à nos services de transport médical
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form action={handleSubmit}>
           <div className="flex flex-col gap-4">
             {state?.message && (
-              <p className="text-sm text-destructive">{state.message}</p>
+              <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-600">{state.message}</p>
+              </div>
             )}
+
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="firstName">Prénom</Label>
+                <Label
+                  htmlFor="firstName"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Prénom
+                </Label>
                 <Input
                   id="firstName"
                   name="firstName"
                   placeholder="Jean"
                   defaultValue={state?.values?.firstName || ""}
+                  className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                 />
                 {state?.error?.firstName && (
-                  <p className="text-sm text-destructive">
+                  <p className="text-sm text-red-600">
                     {state.error.firstName}
                   </p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="lastName">Nom</Label>
+                <Label
+                  htmlFor="lastName"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Nom
+                </Label>
                 <Input
                   id="lastName"
                   name="lastName"
                   placeholder="Dupont"
                   defaultValue={state?.values?.lastName || ""}
+                  className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                 />
                 {state?.error?.lastName && (
-                  <p className="text-sm text-destructive">
-                    {state.error.lastName}
-                  </p>
+                  <p className="text-sm text-red-600">{state.error.lastName}</p>
                 )}
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="age">Âge</Label>
+                <Label
+                  htmlFor="age"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Âge
+                </Label>
                 <Input
                   id="age"
                   name="age"
                   type="number"
                   placeholder="25"
                   defaultValue={state?.values?.age || ""}
+                  className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                 />
                 {state?.error?.age && (
-                  <p className="text-sm text-destructive">{state.error.age}</p>
+                  <p className="text-sm text-red-600">{state.error.age}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="phoneNumber">Téléphone</Label>
+                <Label
+                  htmlFor="phoneNumber"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Téléphone
+                </Label>
                 <Input
                   id="phoneNumber"
                   name="phoneNumber"
                   placeholder="0612345678"
                   defaultValue={state?.values?.phoneNumber || ""}
+                  className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                 />
                 {state?.error?.phoneNumber && (
-                  <p className="text-sm text-destructive">
+                  <p className="text-sm text-red-600">
                     {state.error.phoneNumber}
                   </p>
                 )}
@@ -117,44 +147,60 @@ const SignUpForm = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="address">Adresse</Label>
+              <Label
+                htmlFor="address"
+                className="text-sm font-medium text-gray-700"
+              >
+                Adresse
+              </Label>
               <Input
                 id="address"
                 name="address"
                 placeholder="123 rue de la Paix"
                 defaultValue={state?.values?.address || ""}
+                className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
               />
               {state?.error?.address && (
-                <p className="text-sm text-destructive">
-                  {state.error.address}
-                </p>
+                <p className="text-sm text-red-600">{state.error.address}</p>
               )}
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="city">Ville</Label>
+                <Label
+                  htmlFor="city"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Ville
+                </Label>
                 <Input
                   id="city"
                   name="city"
                   placeholder="Paris"
                   defaultValue={state?.values?.city || ""}
+                  className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                 />
                 {state?.error?.city && (
-                  <p className="text-sm text-destructive">{state.error.city}</p>
+                  <p className="text-sm text-red-600">{state.error.city}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="postalCode">Code postal</Label>
+                <Label
+                  htmlFor="postalCode"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Code postal
+                </Label>
                 <Input
                   id="postalCode"
                   name="postalCode"
                   placeholder="75001"
                   defaultValue={state?.values?.postalCode || ""}
+                  className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                 />
                 {state?.error?.postalCode && (
-                  <p className="text-sm text-destructive">
+                  <p className="text-sm text-red-600">
                     {state.error.postalCode}
                   </p>
                 )}
@@ -162,32 +208,44 @@ const SignUpForm = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label
+                htmlFor="email"
+                className="text-sm font-medium text-gray-700"
+              >
+                Email
+              </Label>
               <Input
                 id="email"
                 name="email"
                 placeholder="jean@exemple.com"
                 defaultValue={state?.values?.email || ""}
+                className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
               />
               {state?.error?.email && (
-                <p className="text-sm text-destructive">{state.error.email}</p>
+                <p className="text-sm text-red-600">{state.error.email}</p>
               )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Mot de passe</Label>
+              <Label
+                htmlFor="password"
+                className="text-sm font-medium text-gray-700"
+              >
+                Mot de passe
+              </Label>
               <div className="relative">
                 <Input
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
                   defaultValue={state?.values?.password || ""}
+                  className="border-gray-300 focus:border-blue-500 focus:ring-blue-500 pr-10"
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent text-gray-500"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -203,9 +261,9 @@ const SignUpForm = () => {
                 </Button>
               </div>
               {state?.error?.password && (
-                <div className="text-sm text-destructive space-y-1">
-                  <p>Le mot de passe doit :</p>
-                  <ul className="list-disc pl-4">
+                <div className="text-sm text-red-600 space-y-1 bg-red-50 p-3 rounded-lg border border-red-200">
+                  <p className="font-medium">Le mot de passe doit :</p>
+                  <ul className="list-disc pl-4 space-y-1">
                     {state.error.password.map((error) => (
                       <li key={error}>{error}</li>
                     ))}
@@ -214,14 +272,14 @@ const SignUpForm = () => {
               )}
             </div>
 
-            <SubmitButton className="w-full">Créer un compte</SubmitButton>
+            <SubmitButton className="w-full" variant="primary" size="lg">
+              Créer mon compte
+            </SubmitButton>
 
-            <div className="flex justify-between items-center text-sm">
-              <p className="text-muted-foreground">
-                Vous avez déjà un compte ?
-              </p>
+            <div className="flex justify-between items-center text-sm pt-4 border-t border-gray-200">
+              <p className="text-gray-600">Vous avez déjà un compte ?</p>
               <Link
-                className="text-primary hover:text-primary/80 transition-colors"
+                className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
                 href="/auth/signin"
               >
                 Se connecter

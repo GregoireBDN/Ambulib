@@ -2,8 +2,8 @@ import React, { PropsWithChildren } from "react";
 
 const AuthLayout = ({ children }: PropsWithChildren) => {
   return (
-    <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-background to-muted">
-      <div className="w-full max-w-[400px]">{children}</div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      {children}
     </div>
   );
 };
