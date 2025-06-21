@@ -38,14 +38,18 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
       const user = await this.authService.validateGoogleUser({
         email: profile.emails[0].value,
-        name: profile.displayName ?? '',
+        firstName: profile.name?.givenName ?? '',
+        lastName: profile.name?.familyName ?? '',
         password: '',
       });
 
       done(null, {
         id: user.id,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
+        role: user.role,
+        isProfileComplete: user.isProfileComplete,
       });
       return user;
     } catch (error) {

@@ -1,7 +1,21 @@
-import { IsEmail, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsString,
+  IsOptional,
+  IsBoolean,
+  Min,
+  Max,
+  ValidateIf,
+} from 'class-validator';
+import { Transform } from 'class-transformer';
+import { AuthProvider } from '@prisma/client';
+
 export class CreateUserDto {
   @IsString()
-  name: string;
+  firstName: string;
+
+  @IsString()
+  lastName: string;
 
   @IsString()
   @IsEmail()
@@ -9,4 +23,31 @@ export class CreateUserDto {
 
   @IsString()
   password: string;
+
+  @IsOptional()
+  @IsString()
+  age?: string;
+
+  @IsOptional()
+  @IsString()
+  phoneNumber?: string;
+
+  @IsOptional()
+  @IsString()
+  address?: string;
+
+  @IsOptional()
+  @IsString()
+  city?: string;
+
+  @IsOptional()
+  @IsString()
+  postalCode?: string;
+
+  @IsOptional()
+  authProvider?: AuthProvider;
+
+  @IsOptional()
+  @IsBoolean()
+  isProfileComplete?: boolean;
 }

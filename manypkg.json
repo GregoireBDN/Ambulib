@@ -1,0 +1,9 @@
+{
+  "packages": ["apps/*", "packages/*"],
+  "changelog": {
+    "ignore": ["@types/*"]
+  },
+  "version": {
+    "ignore": ["@types/*"]
+  }
+}
