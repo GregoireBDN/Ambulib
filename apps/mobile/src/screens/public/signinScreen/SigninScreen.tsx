@@ -4,123 +4,115 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  Platform,
-  Image,
-  Alert,
+  TextInput,
+  TouchableOpacity,
+  Switch,
+  SafeAreaView,
 } from "react-native";
 import { Button } from "../../../components/common/Button";
-import { Input } from "../../../components/common/Input";
+import { Ionicons } from "@expo/vector-icons";
 
 export function SigninScreen({ navigation }: any) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
   const handleSignin = async () => {
-    // Reset des erreurs
-    setEmailError("");
-    setPasswordError("");
-
-    // Validation
-    let hasError = false;
-
-    if (!email) {
-      setEmailError("L'email est requis");
-      hasError = true;
-    } else if (!validateEmail(email)) {
-      setEmailError("Veuillez entrer un email valide");
-      hasError = true;
-    }
-
-    if (!password) {
-      setPasswordError("Le mot de passe est requis");
-      hasError = true;
-    } else if (password.length < 6) {
-      setPasswordError("Le mot de passe doit contenir au moins 6 caractères");
-      hasError = true;
-    }
-
-    if (hasError) return;
-
-    // Simulation de la connexion
     setIsLoading(true);
-
-    try {
-      // Ici vous ajouterez votre logique de connexion
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      Alert.alert("Connexion réussie", `Bienvenue ${email}!`, [
-        { text: "OK", onPress: () => navigation.navigate("Home") },
-      ]);
-    } catch (error) {
-      Alert.alert("Erreur", "Une erreur est survenue lors de la connexion");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleForgotPassword = () => {
-    Alert.alert(
-      "Mot de passe oublié",
-      "Un email de réinitialisation sera envoyé à votre adresse email"
-    );
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setIsLoading(false);
+    // Remplacez par votre logique de navigation
+    // navigation.navigate("Home");
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="always"
-        keyboardDismissMode="on-drag"
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Logo */}
-        <View style={styles.logoContainer}>
-          <Image
-            source={require("../../../assets/img/AmbulibLogoNoBg.png")}
-            style={styles.logo}
-            resizeMode="contain"
-          />
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Connexion</Text>
+          <View style={{ width: 24 }} />
         </View>
 
-        {/* Titre */}
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>Connexion</Text>
-          <Text style={styles.subtitle}>
-            Connectez-vous à votre compte pour continuer
-          </Text>
-        </View>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          <Text style={styles.subtitle}>Bon retour sur HaVRID</Text>
 
-        {/* Formulaire */}
-        <View style={styles.formContainer}>
-          <Input
-            label="Email"
-            placeholder="Entrez votre email"
-            value={email}
-            onChangeText={setEmail}
-            error={emailError}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            autoCorrect={false}
-            required
-          />
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Email</Text>
+            <View style={styles.textInputWrapper}>
+              <Ionicons
+                name="mail-outline"
+                size={22}
+                color="#888"
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="votre.email@exemple.fr"
+                placeholderTextColor="#A9A9A9"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+            </View>
+          </View>
 
-          <Input
-            label="Mot de passe"
-            placeholder="Entrez votre mot de passe"
-            value={password}
-            onChangeText={setPassword}
-            error={passwordError}
-            isPassword
-            required
-          />
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Mot de passe</Text>
+            <View style={styles.textInputWrapper}>
+              <Ionicons
+                name="lock-closed-outline"
+                size={22}
+                color="#888"
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="••••••••"
+                placeholderTextColor="#A9A9A9"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={!isPasswordVisible}
+              />
+              <TouchableOpacity
+                style={styles.iconTouchable}
+                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+              >
+                <Ionicons
+                  name={isPasswordVisible ? "eye-off-outline" : "eye-outline"}
+                  size={26}
+                  color="#888"
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={styles.optionsContainer}>
+            <View style={styles.rememberMeContainer}>
+              <Switch
+                value={rememberMe}
+                onValueChange={setRememberMe}
+                trackColor={{ false: "#767577", true: "#007AFF" }}
+                thumbColor={"#f4f3f4"}
+                ios_backgroundColor="#3e3e3e"
+              />
+              <Text style={styles.rememberMeText}>Se souvenir de moi</Text>
+            </View>
+            <TouchableOpacity>
+              <Text style={styles.forgotPasswordText}>
+                Mot de passe oublié ?
+              </Text>
+            </TouchableOpacity>
+          </View>
 
           <Button
             title="Se connecter"
@@ -130,75 +122,149 @@ export function SigninScreen({ navigation }: any) {
             style={styles.signinButton}
           />
 
+          <View style={styles.separatorContainer}>
+            <View style={styles.separatorLine} />
+            <Text style={styles.separatorText}>ou</Text>
+            <View style={styles.separatorLine} />
+          </View>
+
           <Button
-            title="Mot de passe oublié ?"
-            onPress={handleForgotPassword}
+            title="Touch ID / Face ID"
+            onPress={() => {}}
             variant="outline"
             fullWidth
-            style={styles.forgotButton}
+            textStyle={{ color: "#333" }}
+            style={{ borderColor: "#E0E0E0" }}
           />
-        </View>
 
-        {/* Footer */}
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            Pas encore de compte ?{" "}
-            <Text style={styles.linkText}>Créer un compte</Text>
-          </Text>
+          <View style={styles.footerLinks}>
+            <Text style={styles.footerText}>
+              Pas encore de compte ?{" "}
+              <Text
+                style={styles.linkText}
+                onPress={() => {
+                  /* navigation to signup */
+                }}
+              >
+                Créer un compte
+              </Text>
+            </Text>
+          </View>
+        </ScrollView>
+
+        <View style={styles.supportFooter}>
+          <Text style={styles.supportText}>Besoin d'aide ?</Text>
+          <Text style={styles.supportText}>Support : 01 23 45 67 89</Text>
         </View>
-      </ScrollView>
-    </View>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+  },
   container: {
     flex: 1,
-    backgroundColor: "#F8F9FA",
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingTop: 32,
+    paddingBottom: 12,
+    backgroundColor: "#2A67E2",
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#FFFFFF",
   },
   scrollContent: {
-    flexGrow: 1,
     padding: 24,
-    paddingTop: Platform.OS === "ios" ? 60 : 40,
-  },
-  logoContainer: {
-    alignItems: "center",
-    marginBottom: 30,
-  },
-  logo: {
-    width: 200,
-    height: 200,
-  },
-  titleContainer: {
-    alignItems: "center",
-    marginBottom: 32,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#1A1A1A",
-    marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: "#666",
     textAlign: "center",
-    lineHeight: 22,
-  },
-  formContainer: {
     marginBottom: 32,
+    backgroundColor: "#2A67E2",
+    color: "#FFFFFF",
+    paddingBottom: 20,
+    marginHorizontal: -24,
+    marginTop: -24,
+  },
+  inputGroup: {
+    marginBottom: 20,
+  },
+  inputLabel: {
+    fontSize: 16,
+    color: "#333",
+    marginBottom: 8,
+    fontWeight: "500",
+  },
+  textInputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#E0E0E0",
+    borderRadius: 8,
+    backgroundColor: "#F8F9FA",
+  },
+  icon: {
+    paddingLeft: 12,
+  },
+  iconTouchable: {
+    paddingHorizontal: 12,
+  },
+  input: {
+    flex: 1,
+    height: 48,
+    fontSize: 16,
+    paddingHorizontal: 10,
+  },
+  optionsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  rememberMeContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  rememberMeText: {
+    marginLeft: 8,
+    fontSize: 14,
+    color: "#333",
+  },
+  forgotPasswordText: {
+    fontSize: 14,
+    color: "#007AFF",
+    fontWeight: "600",
   },
   signinButton: {
-    marginTop: 8,
-    marginBottom: 16,
+    backgroundColor: "#2A67E2",
   },
-  forgotButton: {
-    marginTop: 8,
-  },
-  footer: {
+  separatorContainer: {
+    flexDirection: "row",
     alignItems: "center",
-    marginTop: "auto",
-    paddingTop: 24,
+    marginVertical: 24,
+  },
+  separatorLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: "#E0E0E0",
+  },
+  separatorText: {
+    marginHorizontal: 16,
+    color: "#888",
+  },
+  footerLinks: {
+    alignItems: "center",
+    marginTop: 32,
   },
   footerText: {
     fontSize: 16,
@@ -207,5 +273,15 @@ const styles = StyleSheet.create({
   linkText: {
     color: "#007AFF",
     fontWeight: "600",
+  },
+  supportFooter: {
+    alignItems: "center",
+    padding: 20,
+    borderTopWidth: 1,
+    borderTopColor: "#E0E0E0",
+    backgroundColor: "#F8F9FA",
+  },
+  supportText: {
+    color: "#666",
   },
 });
