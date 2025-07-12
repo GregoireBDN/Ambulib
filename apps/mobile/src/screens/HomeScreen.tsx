@@ -1,13 +1,12 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  SafeAreaView,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView, SafeAreaView } from "react-native";
 import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
+import {
+  PrimaryButton,
+  SecondaryButton,
+  AlertButton,
+  GhostButton,
+} from "../components/common/Button";
 
 export function HomeScreen({ navigation }: any) {
   return (
@@ -27,98 +26,102 @@ export function HomeScreen({ navigation }: any) {
             </Text>
           </View>
         </View>
-        <View style={styles.accessContainer}>
-          <Text style={styles.accessTitle}>Accédez à votre espace</Text>
-          <Text style={styles.accessSubtitle}>
-            Gérez vos transports sanitaires{"\n"}en toute simplicité
-          </Text>
-        </View>
-        <TouchableOpacity
-          style={styles.primaryButton}
-          onPress={() => navigation.navigate("Signin")}
-        >
-          <Text style={styles.primaryButtonText}>Se connecter</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.secondaryButton}
-          onPress={() => navigation.navigate("Signup")}
-        >
-          <Text style={styles.secondaryButtonText}>Créer un compte</Text>
-        </TouchableOpacity>
-        <View style={styles.featuresSection}>
-          <View style={styles.featuresHeaderContainer}>
-            <View style={styles.featuresLine} />
-            <Text style={styles.featuresHeader}>Fonctionnalités</Text>
-            <View style={styles.featuresLine} />
+        <View style={styles.mainContent}>
+          <View style={styles.accessContainer}>
+            <Text style={styles.accessTitle}>Accédez à votre espace</Text>
+            <Text style={styles.accessSubtitle}>
+              Gérez vos transports sanitaires{"\n"}en toute simplicité
+            </Text>
           </View>
-          <View style={styles.featureItem}>
-            <Ionicons
-              name="search"
-              size={28}
-              color="#2A67E2"
-              style={styles.featureIcon}
-            />
-            <View>
-              <Text style={styles.featureTitle}>Transport garanti</Text>
-              <Text style={styles.featureDesc}>
-                Trouvez votre transporteur sans effort
-              </Text>
-            </View>
-          </View>
-          <View style={styles.featureItem}>
-            <Ionicons
-              name="calendar-outline"
-              size={28}
-              color="#2A67E2"
-              style={styles.featureIcon}
-            />
-            <View>
-              <Text style={styles.featureTitle}>Réservation simplifiée</Text>
-              <Text style={styles.featureDesc}>
-                Planifiez vos transports en quelques clics
-              </Text>
-            </View>
-          </View>
-          <View style={styles.featureItem}>
-            <Ionicons
-              name="location-outline"
-              size={28}
-              color="#2A67E2"
-              style={styles.featureIcon}
-            />
-            <View>
-              <Text style={styles.featureTitle}>Suivi en temps réel</Text>
-              <Text style={styles.featureDesc}>
-                Suivez votre transport à tout moment
-              </Text>
-            </View>
-          </View>
-          <View style={styles.featureItem}>
-            <FontAwesome5
-              name="shield-alt"
-              size={26}
-              color="#2A67E2"
-              style={styles.featureIcon}
-            />
-            <View>
-              <Text style={styles.featureTitle}>Sécurisé et pratique</Text>
-              <Text style={styles.featureDesc}>
-                Sauvegarde de vos documents essentiels et respect des normes
-                sanitaires
-              </Text>
-            </View>
-          </View>
-        </View>
-        <TouchableOpacity style={styles.urgenceButton}>
-          <Ionicons
-            name="call"
-            size={22}
-            color="#FF3B30"
-            style={{ marginRight: 8 }}
+          <PrimaryButton
+            title="Se connecter"
+            onPress={() => navigation.navigate("Signin")}
+            fullWidth
+            size="medium"
+            style={styles.primaryButton}
           />
-          <Text style={styles.urgenceButtonText}>Urgence : 15</Text>
-        </TouchableOpacity>
+          <SecondaryButton
+            title="Créer un compte"
+            onPress={() => navigation.navigate("Signup")}
+            fullWidth
+            size="medium"
+            style={styles.secondaryButton}
+          />
+          <View style={styles.featuresSection}>
+            <View style={styles.featuresHeaderContainer}>
+              <View style={styles.featuresLine} />
+              <Text style={styles.featuresHeader}>Fonctionnalités</Text>
+              <View style={styles.featuresLine} />
+            </View>
+            <View style={styles.featureItem}>
+              <Ionicons
+                name="search"
+                size={28}
+                color="#2A67E2"
+                style={styles.featureIcon}
+              />
+              <View>
+                <Text style={styles.featureTitle}>Transport garanti</Text>
+                <Text style={styles.featureDesc}>
+                  Trouvez votre transporteur sans effort
+                </Text>
+              </View>
+            </View>
+            <View style={styles.featureItem}>
+              <Ionicons
+                name="calendar-outline"
+                size={28}
+                color="#2A67E2"
+                style={styles.featureIcon}
+              />
+              <View>
+                <Text style={styles.featureTitle}>Réservation simplifiée</Text>
+                <Text style={styles.featureDesc}>
+                  Planifiez vos transports en quelques clics
+                </Text>
+              </View>
+            </View>
+            <View style={styles.featureItem}>
+              <Ionicons
+                name="location-outline"
+                size={28}
+                color="#2A67E2"
+                style={styles.featureIcon}
+              />
+              <View>
+                <Text style={styles.featureTitle}>Suivi en temps réel</Text>
+                <Text style={styles.featureDesc}>
+                  Suivez votre transport à tout moment
+                </Text>
+              </View>
+            </View>
+            <View style={styles.featureItem}>
+              <FontAwesome5
+                name="shield-alt"
+                size={26}
+                color="#2A67E2"
+                style={styles.featureIcon}
+              />
+              <View>
+                <Text style={styles.featureTitle}>Sécurisé et pratique</Text>
+                <Text style={styles.featureDesc}>
+                  Sauvegarde de vos documents essentiels et respect des normes
+                  sanitaires
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
         <View style={styles.supportFooter}>
+          <AlertButton
+            title="Urgence : 15"
+            onPress={() => {}}
+            fullWidth
+            size="medium"
+            leftIcon={<Ionicons name="call" size={22} color="#FF3B30" />}
+            style={{ ...styles.urgenceButton, paddingHorizontal: 24 }}
+            textColor="#FF3B30"
+          />
           <Text style={styles.supportText}>Support : 01 23 45 67 89</Text>
         </View>
       </ScrollView>
@@ -132,10 +135,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   scrollContent: {
-    padding: 0,
     backgroundColor: "#FFFFFF",
     flexGrow: 1,
     justifyContent: "flex-start",
+  },
+  mainContent: {
+    paddingHorizontal: 24,
+    flex: 1,
   },
   headerContainer: {
     alignItems: "center",
@@ -188,37 +194,11 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   primaryButton: {
-    backgroundColor: "#2A67E2",
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: "center",
-    marginHorizontal: 24,
     marginBottom: 12,
-    shadowColor: "#2A67E2",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  primaryButtonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
   },
   secondaryButton: {
-    borderWidth: 2,
-    borderColor: "#2A67E2",
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: "center",
-    marginHorizontal: 24,
     marginBottom: 32,
     backgroundColor: "#fff",
-  },
-  secondaryButtonText: {
-    color: "#2A67E2",
-    fontSize: 18,
-    fontWeight: "bold",
   },
   featuresSection: {
     marginHorizontal: 24,
@@ -260,21 +240,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   urgenceButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 2,
-    borderColor: "#FF3B30",
-    borderRadius: 12,
-    paddingVertical: 14,
-    marginHorizontal: 24,
     marginBottom: 16,
-    justifyContent: "center",
     backgroundColor: "#fff",
-  },
-  urgenceButtonText: {
-    color: "#FF3B30",
-    fontSize: 18,
-    fontWeight: "bold",
   },
   supportFooter: {
     alignItems: "center",

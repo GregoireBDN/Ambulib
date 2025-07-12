@@ -9,7 +9,7 @@ import {
   Switch,
   SafeAreaView,
 } from "react-native";
-import { Button } from "../../../components/common/Button";
+import { PrimaryButton, GhostButton } from "../../../components/common/Button";
 import { Ionicons } from "@expo/vector-icons";
 
 export function SigninScreen({ navigation }: any) {
@@ -32,6 +32,7 @@ export function SigninScreen({ navigation }: any) {
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+            {/* Peut rester TouchableOpacity car c'est une flèche */}
             <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Connexion</Text>
@@ -114,7 +115,7 @@ export function SigninScreen({ navigation }: any) {
             </TouchableOpacity>
           </View>
 
-          <Button
+          <PrimaryButton
             title="Se connecter"
             onPress={handleSignin}
             loading={isLoading}
@@ -128,13 +129,15 @@ export function SigninScreen({ navigation }: any) {
             <View style={styles.separatorLine} />
           </View>
 
-          <Button
+          <GhostButton
             title="Touch ID / Face ID"
             onPress={() => {}}
-            variant="outline"
             fullWidth
-            textStyle={{ color: "#333" }}
-            style={{ borderColor: "#E0E0E0" }}
+            leftIcon={
+              <Ionicons name="finger-print" size={20} color="#2563eb" />
+            }
+            style={{ borderColor: "#E0E0E0", backgroundColor: "#F6F8FA" }}
+            textStyle={{ color: "#222" }}
           />
 
           <View style={styles.footerLinks}>

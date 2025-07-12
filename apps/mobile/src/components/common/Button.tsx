@@ -2,19 +2,14 @@ import React from "react";
 import {
   TouchableOpacity,
   Text,
-  StyleSheet,
   ActivityIndicator,
+  View,
   ViewStyle,
   TextStyle,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-export type ButtonVariant =
-  | "primary"
-  | "secondary"
-  | "danger"
-  | "success"
-  | "warning"
-  | "outline";
+export type ButtonVariant = "primary" | "secondary" | "alert" | "ghost";
 export type ButtonSize = "small" | "medium" | "large";
 
 interface ButtonProps {
@@ -27,6 +22,10 @@ interface ButtonProps {
   fullWidth?: boolean;
   style?: ViewStyle;
   textStyle?: TextStyle;
+  leftIcon?: React.ReactNode;
+  backgroundColor?: string; // override
+  textColor?: string; // override
+  borderColor?: string; // override
 }
 
 export function Button({
@@ -39,35 +38,53 @@ export function Button({
   fullWidth = false,
   style,
   textStyle,
+  leftIcon,
+  backgroundColor,
+  textColor,
+  borderColor,
 }: ButtonProps) {
   const getButtonStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
-      borderRadius: 8,
+      borderRadius: 12,
       alignItems: "center",
       justifyContent: "center",
       flexDirection: "row",
+      minHeight: 48,
     };
 
     // Tailles
     const sizeStyles: Record<ButtonSize, ViewStyle> = {
-      small: { paddingHorizontal: 12, paddingVertical: 6, minHeight: 32 },
-      medium: { paddingHorizontal: 16, paddingVertical: 10, minHeight: 40 },
-      large: { paddingHorizontal: 20, paddingVertical: 14, minHeight: 48 },
+      small: { paddingHorizontal: 12, paddingVertical: 6, minHeight: 36 },
+      medium: { paddingHorizontal: 16, paddingVertical: 12, minHeight: 48 },
+      large: { paddingHorizontal: 20, paddingVertical: 18, minHeight: 56 },
     };
 
     // Variantes
     const variantStyles: Record<ButtonVariant, ViewStyle> = {
-      primary: { backgroundColor: "#007AFF" },
-      secondary: { backgroundColor: "#8E8E93" },
-      danger: { backgroundColor: "#FF3B30" },
-      success: { backgroundColor: "#34C759" },
-      warning: { backgroundColor: "#FF9500" },
-      outline: {
-        backgroundColor: "transparent",
-        borderWidth: 1,
-        borderColor: "#007AFF",
+      primary: {
+        backgroundColor: "#2563eb",
+        borderWidth: 0,
+      },
+      secondary: {
+        backgroundColor: "#fff",
+        borderWidth: 2,
+        borderColor: "#2563eb",
+      },
+      alert: {
+        backgroundColor: "#fff",
+        borderWidth: 2,
+        borderColor: "#FF3B30",
+      },
+      ghost: {
+        backgroundColor: "#F6F8FA",
+        borderWidth: 0,
       },
     };
+
+    // Overrides
+    if (backgroundColor)
+      variantStyles[variant].backgroundColor = backgroundColor;
+    if (borderColor) variantStyles[variant].borderColor = borderColor;
 
     // État désactivé
     const disabledStyle: ViewStyle =
@@ -86,77 +103,77 @@ export function Button({
       ...variantStyles[variant],
       ...disabledStyle,
       ...widthStyle,
+      ...style,
     };
   };
 
   const getTextStyle = (): TextStyle => {
     const baseTextStyle: TextStyle = {
-      fontWeight: "600",
+      fontWeight: "bold",
       textAlign: "center",
-    };
-
-    // Tailles de texte
-    const textSizeStyles: Record<ButtonSize, TextStyle> = {
-      small: { fontSize: 14 },
-      medium: { fontSize: 16 },
-      large: { fontSize: 18 },
+      fontSize: size === "small" ? 15 : 18,
     };
 
     // Couleurs de texte selon la variante
     const textColorStyles: Record<ButtonVariant, TextStyle> = {
-      primary: { color: "#FFFFFF" },
-      secondary: { color: "#FFFFFF" },
-      danger: { color: "#FFFFFF" },
-      success: { color: "#FFFFFF" },
-      warning: { color: "#FFFFFF" },
-      outline: { color: "#007AFF" },
+      primary: { color: "#fff" },
+      secondary: { color: "#2563eb" },
+      alert: { color: "#FF3B30" },
+      ghost: { color: "#222" },
     };
+
+    // Overrides
+    if (textColor) textColorStyles[variant].color = textColor;
 
     return {
       ...baseTextStyle,
-      ...textSizeStyles[size],
       ...textColorStyles[variant],
+      ...textStyle, // priorité à la prop textStyle
     };
   };
 
   return (
     <TouchableOpacity
-      style={[getButtonStyle(), style]}
+      style={getButtonStyle()}
       onPress={onPress}
       disabled={disabled || loading}
       activeOpacity={0.7}
     >
+      {leftIcon && <View style={{ marginRight: 8 }}>{leftIcon}</View>}
       {loading && (
         <ActivityIndicator
           size="small"
-          color={variant === "outline" ? "#007AFF" : "#FFFFFF"}
+          color={
+            textColor
+              ? textColor
+              : variant === "primary"
+                ? "#fff"
+                : variant === "alert"
+                  ? "#FF3B30"
+                  : variant === "secondary"
+                    ? "#2563eb"
+                    : "#222"
+          }
           style={{ marginRight: 8 }}
         />
       )}
-      <Text style={[getTextStyle(), textStyle]}>
-        {loading ? "Chargement..." : title}
-      </Text>
+      <Text style={getTextStyle()}>{loading ? "Chargement..." : title}</Text>
     </TouchableOpacity>
   );
 }
 
-// Composants pré-configurés pour des actions spécifiques
-export const ConfirmButton = (props: Omit<ButtonProps, "variant">) => (
-  <Button {...props} variant="success" />
+// Boutons préconfigurés
+export const PrimaryButton = (props: Omit<ButtonProps, "variant">) => (
+  <Button {...props} variant="primary" />
 );
-
-export const DeleteButton = (props: Omit<ButtonProps, "variant">) => (
-  <Button {...props} variant="danger" />
-);
-
-export const CancelButton = (props: Omit<ButtonProps, "variant">) => (
+export const SecondaryButton = (props: Omit<ButtonProps, "variant">) => (
   <Button {...props} variant="secondary" />
 );
-
-export const WarningButton = (props: Omit<ButtonProps, "variant">) => (
-  <Button {...props} variant="warning" />
-);
-
-export const OutlineButton = (props: Omit<ButtonProps, "variant">) => (
-  <Button {...props} variant="outline" />
+export const AlertButton = (
+  props: Omit<ButtonProps, "variant" | "leftIcon"> & {
+    leftIcon?: React.ReactNode;
+  }
+) => <Button {...props} variant="alert" leftIcon={props.leftIcon} />;
+export const GhostButton = (props: Omit<ButtonProps, "variant">) => (
+  <Button {...props} variant="ghost" />
 );
