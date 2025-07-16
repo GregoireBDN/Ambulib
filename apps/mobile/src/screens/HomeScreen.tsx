@@ -1,6 +1,13 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, SafeAreaView } from "react-native";
-import { Ionicons, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  SafeAreaView,
+  Image,
+} from "react-native";
+import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import {
   PrimaryButton,
   SecondaryButton,
@@ -17,10 +24,11 @@ export function HomeScreen({ navigation }: any) {
       >
         <View style={styles.headerContainer}>
           <View style={styles.logoContainer}>
-            <View style={styles.logoBg}>
-              <MaterialIcons name="local-shipping" size={44} color="#2A67E2" />
-            </View>
-            <Text style={styles.appName}>HAVRID</Text>
+            <Image
+              source={require("../assets/img/HavridHomePage.png")}
+              style={styles.logoImage}
+              resizeMode="contain"
+            />
             <Text style={styles.appSubtitle}>
               Transport sanitaire simplifié
             </Text>
@@ -145,23 +153,17 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     alignItems: "center",
-    backgroundColor: "#2A67E2",
+    backgroundColor: "#1a365d", // Fond bleu foncé comme sur l'image
     paddingTop: 48,
     paddingBottom: 32,
   },
   logoContainer: {
     alignItems: "center",
   },
-  logoBg: {
-    backgroundColor: "#fff",
-    borderRadius: 20,
-    padding: 16,
-    marginBottom: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+  logoImage: {
+    width: 200,
+    height: 140,
+    marginBottom: 16,
   },
   appName: {
     fontSize: 32,
@@ -171,9 +173,10 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   appSubtitle: {
-    color: "#E0E0E0",
+    color: "#FFFFFF",
     fontSize: 16,
     marginBottom: 0,
+    textAlign: "center",
   },
   accessContainer: {
     alignItems: "center",
