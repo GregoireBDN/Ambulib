@@ -14,6 +14,7 @@ import {
   AlertButton,
   GhostButton,
 } from "../components/common/Button";
+import { LinearGradient } from "expo-linear-gradient";
 
 export function HomeScreen({ navigation }: any) {
   return (
@@ -22,7 +23,12 @@ export function HomeScreen({ navigation }: any) {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.headerContainer}>
+        <LinearGradient
+          colors={["#1E293B", "#5270A1"]}
+          style={styles.headerContainer}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
           <View style={styles.logoContainer}>
             <Image
               source={require("../assets/img/HavridHomePage.png")}
@@ -33,7 +39,7 @@ export function HomeScreen({ navigation }: any) {
               Transport sanitaire simplifié
             </Text>
           </View>
-        </View>
+        </LinearGradient>
         <View style={styles.mainContent}>
           <View style={styles.accessContainer}>
             <Text style={styles.accessTitle}>Accédez à votre espace</Text>
@@ -153,7 +159,6 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     alignItems: "center",
-    backgroundColor: "#1a365d", // Fond bleu foncé comme sur l'image
     paddingTop: 48,
     paddingBottom: 32,
   },

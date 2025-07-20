@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { PrimaryButton, GhostButton } from "../../../components/common/Button";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
 export function SigninScreen({ navigation }: any) {
   const [email, setEmail] = useState("");
@@ -30,128 +31,135 @@ export function SigninScreen({ navigation }: any) {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-            {/* Peut rester TouchableOpacity car c'est une flèche */}
-            <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Connexion</Text>
-          <View style={{ width: 24 }} />
-        </View>
-
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          <Text style={styles.subtitle}>Bon retour sur HaVRID</Text>
-
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Email</Text>
-            <View style={styles.textInputWrapper}>
-              <Ionicons
-                name="mail-outline"
-                size={22}
-                color="#888"
-                style={styles.icon}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="votre.email@exemple.fr"
-                placeholderTextColor="#A9A9A9"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
+          <LinearGradient
+            colors={["#4A90E2", "#2563EB"]}
+            style={styles.header}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+          >
+            <View style={styles.headerContent}>
+              <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+                <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
+              </TouchableOpacity>
+              <Text style={styles.headerTitle}>Connexion</Text>
+              <View style={{ width: 24 }} />
             </View>
-          </View>
+            <Text style={styles.subtitle}>Bon retour sur HaVRID</Text>
+          </LinearGradient>
 
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Mot de passe</Text>
-            <View style={styles.textInputWrapper}>
-              <Ionicons
-                name="lock-closed-outline"
-                size={22}
-                color="#888"
-                style={styles.icon}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="••••••••"
-                placeholderTextColor="#A9A9A9"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={!isPasswordVisible}
-              />
-              <TouchableOpacity
-                style={styles.iconTouchable}
-                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-              >
+          <View style={styles.formContainer}>
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Email</Text>
+              <View style={styles.textInputWrapper}>
                 <Ionicons
-                  name={isPasswordVisible ? "eye-off-outline" : "eye-outline"}
-                  size={26}
+                  name="mail-outline"
+                  size={22}
                   color="#888"
+                  style={styles.icon}
                 />
+                <TextInput
+                  style={styles.input}
+                  placeholder="votre.email@exemple.fr"
+                  placeholderTextColor="#A9A9A9"
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+              </View>
+            </View>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Mot de passe</Text>
+              <View style={styles.textInputWrapper}>
+                <Ionicons
+                  name="lock-closed-outline"
+                  size={22}
+                  color="#888"
+                  style={styles.icon}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="••••••••"
+                  placeholderTextColor="#A9A9A9"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={!isPasswordVisible}
+                />
+                <TouchableOpacity
+                  style={styles.iconTouchable}
+                  onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                >
+                  <Ionicons
+                    name={isPasswordVisible ? "eye-off-outline" : "eye-outline"}
+                    size={26}
+                    color="#888"
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={styles.optionsContainer}>
+              <View style={styles.rememberMeContainer}>
+                <Switch
+                  value={rememberMe}
+                  onValueChange={setRememberMe}
+                  trackColor={{ false: "#767577", true: "#007AFF" }}
+                  thumbColor={"#f4f3f4"}
+                  ios_backgroundColor="#3e3e3e"
+                />
+                <Text style={styles.rememberMeText}>Se souvenir de moi</Text>
+              </View>
+              <TouchableOpacity>
+                <Text style={styles.forgotPasswordText}>
+                  Mot de passe oublié ?
+                </Text>
               </TouchableOpacity>
             </View>
-          </View>
 
-          <View style={styles.optionsContainer}>
-            <View style={styles.rememberMeContainer}>
-              <Switch
-                value={rememberMe}
-                onValueChange={setRememberMe}
-                trackColor={{ false: "#767577", true: "#007AFF" }}
-                thumbColor={"#f4f3f4"}
-                ios_backgroundColor="#3e3e3e"
-              />
-              <Text style={styles.rememberMeText}>Se souvenir de moi</Text>
+            <PrimaryButton
+              title="Se connecter"
+              onPress={handleSignin}
+              loading={isLoading}
+              fullWidth
+              style={styles.signinButton}
+            />
+
+            <View style={styles.separatorContainer}>
+              <View style={styles.separatorLine} />
+              <Text style={styles.separatorText}>ou</Text>
+              <View style={styles.separatorLine} />
             </View>
-            <TouchableOpacity>
-              <Text style={styles.forgotPasswordText}>
-                Mot de passe oublié ?
+
+            <GhostButton
+              title="Touch ID / Face ID"
+              onPress={() => {}}
+              fullWidth
+              leftIcon={
+                <Ionicons name="finger-print" size={20} color="#2563eb" />
+              }
+              style={{ borderColor: "#E0E0E0", backgroundColor: "#F6F8FA" }}
+              textStyle={{ color: "#222" }}
+            />
+
+            <View style={styles.footerLinks}>
+              <Text style={styles.footerText}>
+                Pas encore de compte ?{" "}
+                <Text
+                  style={styles.linkText}
+                  onPress={() => {
+                    /* navigation to signup */
+                  }}
+                >
+                  Créer un compte
+                </Text>
               </Text>
-            </TouchableOpacity>
-          </View>
-
-          <PrimaryButton
-            title="Se connecter"
-            onPress={handleSignin}
-            loading={isLoading}
-            fullWidth
-            style={styles.signinButton}
-          />
-
-          <View style={styles.separatorContainer}>
-            <View style={styles.separatorLine} />
-            <Text style={styles.separatorText}>ou</Text>
-            <View style={styles.separatorLine} />
-          </View>
-
-          <GhostButton
-            title="Touch ID / Face ID"
-            onPress={() => {}}
-            fullWidth
-            leftIcon={
-              <Ionicons name="finger-print" size={20} color="#2563eb" />
-            }
-            style={{ borderColor: "#E0E0E0", backgroundColor: "#F6F8FA" }}
-            textStyle={{ color: "#222" }}
-          />
-
-          <View style={styles.footerLinks}>
-            <Text style={styles.footerText}>
-              Pas encore de compte ?{" "}
-              <Text
-                style={styles.linkText}
-                onPress={() => {
-                  /* navigation to signup */
-                }}
-              >
-                Créer un compte
-              </Text>
-            </Text>
+            </View>
           </View>
         </ScrollView>
 
@@ -173,13 +181,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
     paddingHorizontal: 16,
-    paddingTop: 32,
-    paddingBottom: 12,
-    backgroundColor: "#2A67E2",
+    paddingTop: 27,
+    paddingBottom: 24,
+    height: 120,
   },
   headerTitle: {
     fontSize: 20,
@@ -187,17 +192,13 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
   },
   scrollContent: {
-    padding: 24,
+    flexGrow: 1,
   },
   subtitle: {
     fontSize: 16,
     textAlign: "center",
-    marginBottom: 32,
-    backgroundColor: "#2A67E2",
     color: "#FFFFFF",
-    paddingBottom: 20,
-    marginHorizontal: -24,
-    marginTop: -24,
+    marginTop: 23,
   },
   inputGroup: {
     marginBottom: 20,
@@ -279,12 +280,23 @@ const styles = StyleSheet.create({
   },
   supportFooter: {
     alignItems: "center",
-    padding: 20,
+    justifyContent: "center",
+    height: 80,
+    width: 393,
     borderTopWidth: 1,
     borderTopColor: "#E0E0E0",
     backgroundColor: "#F8F9FA",
   },
   supportText: {
     color: "#666",
+  },
+  formContainer: {
+    padding: 24,
+  },
+  headerContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
   },
 });
