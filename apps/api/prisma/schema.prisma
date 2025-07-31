@@ -8,39 +8,22 @@ datasource db {
 }
 
 model User {
-  id                 Int     @id @default(autoincrement())
-  email              String  @unique
+  email              String            @unique
+  password           String
+  id                 Int               @id @default(autoincrement())
+  hashedRefreshToken String?
+  role               Role              @default(USER)
+  age                Int?
   firstName          String
   lastName           String
-  password           String
-  hashedRefreshToken String?
   phoneNumber        String?
-  age                Int?
-
-  // Adresse
-  address    String?
-  city       String?
-  postalCode String?
-
-  // Informations d'authentification
-  authProvider      AuthProvider @default(CREDENTIALS)
-  isProfileComplete Boolean      @default(false)
-
-  emergencyContact EmergencyContact?
-  dependent        Dependent[]
-  role             Role              @default(USER)
-}
-
-enum AuthProvider {
-  CREDENTIALS // Email/Mot de passe
-  GOOGLE // Authentification Google
-}
-
-enum Role {
-  SUPER_ADMIN // Administrateur système avec tous les droits
-  ADMIN // Administrateur du service ambulancier
-  DRIVER // Conducteur d'ambulance
-  USER // Utilisateur basique
+  address            String?
+  authProvider       AuthProvider      @default(CREDENTIALS)
+  city               String?
+  isProfileComplete  Boolean           @default(false)
+  postalCode         String?
+  dependent          Dependent[]
+  emergencyContact   EmergencyContact?
 }
 
 model EmergencyContact {
@@ -59,14 +42,24 @@ model Dependent {
   firstName   String
   lastName    String
   age         Int?
+  userId      Int?
+  address     String?
+  city        String?
   phoneNumber String?
+  postalCode  String?
+  user        User?   @relation(fields: [userId], references: [id])
+}
 
-  // Adresse
-  address    String?
-  city       String?
-  postalCode String?
-  userId     Int?
-  user       User?   @relation(fields: [userId], references: [id])
+enum AuthProvider {
+  CREDENTIALS
+  GOOGLE
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  DRIVER
+  USER
 }
 
 enum SpecialRequirements {

@@ -15,7 +15,10 @@
     "check-types": "turbo run check-types",
     "nx:serve:web": "nx serve web",
     "nx:serve:api": "nx serve api",
-    "nx:serve:all": "nx run-many --target=serve --projects=web,api --parallel"
+    "nx:serve:all": "nx run-many --target=serve --projects=web,api --parallel",
+    "full-stack": "pnpm nx run full-stack",
+    "studio": "pnpm nx run studio",
+    "swagger": "pnpm nx run swagger"
   },
   "devDependencies": {
     "@manypkg/cli": "^0.24.0",
