@@ -1,0 +1,55 @@
+{
+  "name": "ambulib-workspace",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["pnpm run dev --filter=api", "pnpm run dev --filter=web"],
+        "parallel": true,
+        "color": true
+      }
+    },
+    "dev:api": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm run dev --filter=api"
+      }
+    },
+    "dev:web": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm run dev --filter=web"
+      }
+    },
+    "dev:mobile": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm run dev --filter=mobile"
+      }
+    },
+    "studio": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd apps/api && pnpm prisma studio"
+      }
+    },
+    "swagger": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd apps/api && pnpm run dev"
+      }
+    },
+    "full-stack": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "pnpm run dev --filter=api",
+          "pnpm run dev --filter=web",
+          "cd apps/api && pnpm prisma studio"
+        ],
+        "parallel": true,
+        "color": true
+      }
+    }
+  }
+}

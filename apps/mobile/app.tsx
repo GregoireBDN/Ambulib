@@ -1,12 +1,15 @@
-import React from "react";
-import { View } from "react-native";
-import SignInPage from "./screens/auth/signin/signin";
-import SignUpPage from "./screens/auth/signup/signup";
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { AppNavigator } from "./src/navigation/AppNavigator";
 
 export default function App() {
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      <SignInPage />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SafeAreaProvider>
+        <AppNavigator />
+        <StatusBar style="auto" />
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }

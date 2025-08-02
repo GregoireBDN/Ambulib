@@ -14,7 +14,16 @@
     "test:e2e": "turbo run test:e2e",
     "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
     "check": "manypkg check",
-    "fix": "manypkg fix"
+    "fix": "manypkg fix",
+    "check-types": "turbo run check-types",
+    "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "check": "manypkg check",
+    "fix": "manypkg fix",
+    "full-stack": "pnpm nx run full-stack",
+    "studio": "pnpm nx run studio",
+    "swagger": "pnpm nx run swagger"
   },
   "devDependencies": {
     "@manypkg/cli": "^0.24.0",
