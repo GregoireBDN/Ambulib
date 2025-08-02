@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "neon": {
+      "type": "sse",
+      "url": "https://mcp.neon.tech/sse"
+    },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
+    }
+  }
+}

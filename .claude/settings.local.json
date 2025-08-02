@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Bash(rm:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm run:*)",
+      "Bash(ls:*)",
+      "Bash(timeout:*)",
+      "Bash(true)",
+      "Bash(pnpm turbo:*)",
+      "Bash(pnpm exec turbo dev:*)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "neon",
+    "context7"
+  ]
+}
