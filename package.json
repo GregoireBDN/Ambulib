@@ -4,22 +4,20 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
-    "dev:api": "turbo run start:dev --filter=api...",
-    "dev:web": "turbo run dev --filter=web...",
-    "dev:mobile": "turbo run start --filter=mobile...",
+    "dev": "turbo run dev --ui=tui",
+    "dev:api": "turbo run start:dev --filter=api",
+    "dev:web": "turbo run dev --filter=web",
+    "dev:mobile": "turbo run start --filter=mobile",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check": "manypkg check",
-    "fix": "manypkg fix",
     "check-types": "turbo run check-types",
-    "nx:serve:web": "nx serve web",
-    "nx:serve:api": "nx serve api",
-    "nx:serve:all": "nx run-many --target=serve --projects=web,api --parallel"
+    "test": "turbo run test",
+    "test:e2e": "turbo run test:e2e",
+    "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
+    "check": "manypkg check",
+    "fix": "manypkg fix"
   },
   "devDependencies": {
     "@manypkg/cli": "^0.24.0",
-    "nx": "21.0.3",
     "prettier": "^3.4.2",
     "turbo": "latest"
   },
