@@ -1,0 +1,13 @@
+mcp:
+  github:
+    default_repo: GregoireBDN/Ambulib
+    create_issue_per_task: true
+    create_branch_per_issue: true
+    branch_naming:
+      pattern: "claude/${issue_title_snake_case}"
+    create_pr_per_branch: true
+    pr:
+      auto_link_issue: true
+      title_from_issue: true
+      description_from_issue: true
+      add_fixes_keyword: true

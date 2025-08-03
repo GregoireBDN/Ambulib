@@ -7,6 +7,12 @@
     "context7": {
       "type": "http",
       "url": "https://mcp.context7.com/mcp"
+    },
+    "github": {
+      "type": "stdio",
+      "command": "docker run -i --rm -e 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 ghcr.io/github/github-mcp-server",
+      "args": [],
+      "env": {}
     }
   }
 }
