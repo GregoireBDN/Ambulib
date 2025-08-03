@@ -1,13 +1,4 @@
-import {
-  IsEmail,
-  IsString,
-  IsOptional,
-  IsBoolean,
-  Min,
-  Max,
-  ValidateIf,
-} from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsEmail, IsString, IsOptional, IsBoolean } from 'class-validator';
 import { AuthProvider } from '@prisma/client';
 
 export class CreateUserDto {
