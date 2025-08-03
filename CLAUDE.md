@@ -6,9 +6,37 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is Ambulib, a full-stack application for ambulance services built as a Turborepo monorepo with three main applications:
 
-- **API** (`apps/api`): NestJS backend with PostgreSQL database, authentication, and user management
-- **Web** (`apps/web`): Next.js frontend with server-side rendering and authentication
-- **Mobile** (`apps/mobile`): Expo React Native mobile application
+- **API** (`apps/api`): NestJS backend with PostgreSQL database, authentication, and comprehensive user management
+- **Web** (`apps/web`): Next.js frontend with server-side rendering, authentication, and interactive dashboards with charts
+- **Mobile** (`apps/mobile`): Expo React Native mobile application for ambulance drivers
+
+## User Roles & Architecture
+
+The application supports 4 main user types with specific permissions:
+
+### 1. ADMIN (System Administrators)
+- **User Management**: Create, modify, delete user accounts
+- **Account Creation**: Specifically create FLEET_MANAGER and AMBULANCE_DRIVER accounts
+- **Vehicle Management**: Manage ambulances and fleet resources
+- **System Configuration**: Global settings and parameters
+- **Global Reports**: System-wide analytics and statistics
+
+### 2. CLIENT (Patients/Guardians) 
+- **Booking Management**: Schedule rides in advance or for emergencies
+- **Transport Tickets**: Manage and submit transport vouchers
+- **Medical Information**: Store and manage important medical data for transport
+- **Guardian Management**: Guardians can manage dependent's information and bookings
+
+### 3. FLEET_MANAGER (Fleet Managers)
+- **Ambulance Scheduling**: Plan and manage ambulance availability
+- **Route Assignment**: Assign rides to specific ambulance drivers
+- **Operations Supervision**: Monitor ongoing operations and fleet status
+- **Emergency Management**: Handle urgent requests and resource allocation
+
+### 4. AMBULANCE_DRIVER (Ambulance Drivers)
+- **Schedule Consultation**: View assigned rides and daily schedule
+- **Ride Management**: Manage assigned transport requests
+- **Status Updates**: Update transport status and completion
 
 ## Development Commands
 
@@ -34,11 +62,14 @@ pnpm check-types
 # Format code
 pnpm format
 
-# Run tests
+# Run tests (REQUIRED before commits)
 pnpm test
 
-# Run end-to-end tests
+# Run end-to-end tests (REQUIRED for API changes)
 pnpm test:e2e
+
+# Run tests with coverage (minimum 80% required)
+pnpm test:cov
 ```
 
 ### Application-Specific Commands
@@ -82,9 +113,10 @@ pnpm web           # Run in web browser
 ### Frontend (Next.js Web)
 - **Framework**: Next.js 15 with App Router
 - **Styling**: TailwindCSS with Radix UI components
+- **Charts & Graphs**: Recharts library for interactive data visualization
 - **Authentication**: Server actions with session management using cookies
 - **State Management**: Server-side with Zod validation
-- **UI Components**: Custom component library in `components/ui/`
+- **UI Components**: Custom component library in `components/ui/` including chart components
 
 ### Mobile (Expo React Native)
 - **Framework**: Expo 50 with React Native
@@ -94,11 +126,17 @@ pnpm web           # Run in web browser
 
 ### Database Schema
 Key models:
-- **User**: Main user entity with roles (USER, ADMIN, DRIVER, SUPER_ADMIN)
+- **User**: Main user entity with roles (CLIENT, ADMIN, FLEET_MANAGER, AMBULANCE_DRIVER, SUPER_ADMIN)
 - **EmergencyContact**: User's emergency contact information
-- **Dependent**: User's dependents
+- **Dependent**: User's dependents (managed by guardians)
+- **Booking**: Transport reservations (scheduled and emergency)
+- **MedicalInfo**: Important medical information for transport
+- **TransportTicket**: Transport vouchers and documentation
+- **Ambulance**: Fleet vehicles and their specifications
+- **Route**: Transport routes and assignments
+- **Assignment**: Driver-to-booking assignments
 - **AuthProvider**: CREDENTIALS or GOOGLE authentication
-- **Role-based access control** with different permission levels
+- **Role-based access control** with granular permission levels
 
 ## Project Structure Conventions
 
@@ -130,10 +168,27 @@ The applications expect these environment variables:
 1. **Turborepo Tasks**: Use `pnpm <command>` at root to run tasks across all packages
 2. **Database Changes**: Modify `apps/api/prisma/schema.prisma` then run migrations
 3. **API Development**: Use NestJS modules, guards, and decorators pattern
-4. **Frontend Development**: Use server actions for form handling, Zod for validation
+4. **Frontend Development**: Use server actions for form handling, Zod for validation, Recharts for data visualization
 5. **Mobile Development**: Follow Expo conventions, use NativeWind for styling
-6. **Testing**: Run `pnpm test` before commits, especially for API endpoints
+6. **Testing Requirements**: 
+   - Run `pnpm test` before ALL commits (minimum 80% coverage)
+   - Run `pnpm test:e2e` for API changes
+   - All new features MUST include unit and integration tests
 7. **Build Pipeline**: Dependencies are automatically resolved by Turborepo
+
+## Testing Standards
+
+### Backend Testing (MANDATORY)
+- **Unit Tests**: Every service, controller, and guard must have unit tests
+- **Integration Tests**: Database operations and module interactions
+- **E2E Tests**: Complete API endpoint workflows
+- **Coverage**: Minimum 80% code coverage required
+- **Test Files**: `*.spec.ts` for unit tests, `*.e2e-spec.ts` for e2e tests
+
+### Frontend Testing
+- **Component Tests**: UI components and chart components
+- **Integration Tests**: Form submissions and data flow
+- **E2E Tests**: User workflows across different roles
 
 ## Common Patterns
 
