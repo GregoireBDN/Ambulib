@@ -77,9 +77,9 @@ export class AuthController {
       return result;
     } catch (error) {
       console.error('Signup error details:', {
-        message: error.message,
-        stack: error.stack,
-        name: error.name,
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : 'No stack trace',
+        name: error instanceof Error ? error.name : 'Unknown error type',
       });
       throw error;
     }
@@ -111,13 +111,13 @@ export class AuthController {
     );
   }
 
-  @Roles('ADMIN', 'DRIVER')
+  @Roles('ADMIN', 'AMBULANCE_DRIVER')
   @Get('protected')
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({
     summary: 'Endpoint protégé',
     description:
-      'Endpoint accessible uniquement aux utilisateurs authentifiés avec les rôles ADMIN ou DRIVER',
+      'Endpoint accessible uniquement aux utilisateurs authentifiés avec les rôles ADMIN ou AMBULANCE_DRIVER',
   })
   @ApiResponse({
     status: 200,
