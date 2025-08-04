@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@repo/ui";
 import { BACKEND_URL } from "@/lib/constants";
 
 interface SocialSignInButtonProps {

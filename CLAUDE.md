@@ -1,211 +1,181 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with this repository.
 
 ## Project Overview
 
-This is Ambulib, a full-stack application for ambulance services built as a Turborepo monorepo with three main applications:
+Ambulib - Application pour services d'ambulance (Turborepo monorepo):
+- **API** (`apps/api`): NestJS backend with PostgreSQL/Prisma
+- **Web** (`apps/web`): Next.js frontend with authentication and dashboards
+- **Mobile** (`apps/mobile`): Expo React Native for ambulance drivers
 
-- **API** (`apps/api`): NestJS backend with PostgreSQL database, authentication, and comprehensive user management
-- **Web** (`apps/web`): Next.js frontend with server-side rendering, authentication, and interactive dashboards with charts
-- **Mobile** (`apps/mobile`): Expo React Native mobile application for ambulance drivers
+## ACCESSIBILITÉ PRIORITAIRE
 
-## User Roles & Architecture
+**CIBLE**: Personnes âgées et handicapées nécessitant des services d'ambulance
+- WCAG 2.1 Level AA obligatoire
+- Interface simple, intuitive et rassurante
+- Support complet lecteurs d'écran et navigation clavier
 
-The application supports 4 main user types with specific permissions:
+### Composants Accessibles Disponibles
+```
+@repo/ui/components/accessible/
+├── LargeButton.tsx (44px+, contraste élevé)
+├── AccessibleInput.tsx (ARIA complet)
+├── EmergencyButton.tsx (double confirmation)
+└── AccessibleChart.tsx (alternatives textuelles)
+```
 
-### 1. ADMIN (System Administrators)
-- **User Management**: Create, modify, delete user accounts
-- **Account Creation**: Specifically create FLEET_MANAGER and AMBULANCE_DRIVER accounts
-- **Vehicle Management**: Manage ambulances and fleet resources
-- **System Configuration**: Global settings and parameters
-- **Global Reports**: System-wide analytics and statistics
+## Règles de Développement
+- Pas d'emoji dans le code/communication
+- Tests obligatoires avant commits (80% coverage minimum)
+- Toujours utiliser les composants accessibles pour la cible principale
 
-### 2. CLIENT (Patients/Guardians) 
-- **Booking Management**: Schedule rides in advance or for emergencies
-- **Transport Tickets**: Manage and submit transport vouchers
-- **Medical Information**: Store and manage important medical data for transport
-- **Guardian Management**: Guardians can manage dependent's information and bookings
+## User Roles
 
-### 3. FLEET_MANAGER (Fleet Managers)
-- **Ambulance Scheduling**: Plan and manage ambulance availability
-- **Route Assignment**: Assign rides to specific ambulance drivers
-- **Operations Supervision**: Monitor ongoing operations and fleet status
-- **Emergency Management**: Handle urgent requests and resource allocation
-
-### 4. AMBULANCE_DRIVER (Ambulance Drivers)
-- **Schedule Consultation**: View assigned rides and daily schedule
-- **Ride Management**: Manage assigned transport requests
-- **Status Updates**: Update transport status and completion
+1. **CLIENT**: Patients/guardians - booking, medical info, transport tickets
+2. **ADMIN**: User management, vehicle management, global reports
+3. **FLEET_MANAGER**: Ambulance scheduling, route assignment, operations
+4. **AMBULANCE_DRIVER**: Schedule consultation, ride management, status updates
 
 ## Development Commands
 
-### Main Development Commands
 ```bash
-# Start all applications in development mode
-pnpm dev
+# Main commands
+pnpm dev          # Start all apps
+pnpm dev:api      # NestJS API only
+pnpm dev:web      # Next.js web only
+pnpm dev:mobile   # Expo mobile only
 
-# Start specific applications
-pnpm dev:api    # NestJS API server
-pnpm dev:web    # Next.js web application  
-pnpm dev:mobile # Expo mobile app
-
-# Build all applications
-pnpm build
-
-# Lint all code
-pnpm lint
-
-# Type checking
-pnpm check-types
-
-# Format code
-pnpm format
-
-# Run tests (REQUIRED before commits)
-pnpm test
-
-# Run end-to-end tests (REQUIRED for API changes)
-pnpm test:e2e
-
-# Run tests with coverage (minimum 80% required)
-pnpm test:cov
+# Quality checks (REQUIRED before commits)
+pnpm test         # Run tests (80% coverage minimum)
+pnpm test:e2e     # E2E tests for API changes
+pnpm lint         # ESLint
+pnpm check-types  # TypeScript checking
+pnpm build        # Build all apps
 ```
 
-### Application-Specific Commands
-```bash
-# API (NestJS) - from apps/api/
-pnpm dev           # Start development server
-pnpm test          # Run unit tests
-pnpm test:e2e      # Run end-to-end tests
-pnpm test:cov      # Run tests with coverage
+## Tech Stack
 
-# Web (Next.js) - from apps/web/
-pnpm dev           # Start development server
-pnpm build         # Build for production
-pnpm start         # Start production server
-pnpm lint          # Run ESLint
-pnpm check-types   # TypeScript type checking
+### Backend (apps/api)
+- NestJS with PostgreSQL/Prisma ORM
+- JWT auth + Google OAuth, Argon2 hashing
+- Modular architecture with guards/decorators
 
-# Mobile (Expo) - from apps/mobile/
-pnpm start         # Start Expo development server
-pnpm android       # Run on Android
-pnpm ios           # Run on iOS
-pnpm web           # Run in web browser
+### Frontend (apps/web)  
+- Next.js 15 App Router + TailwindCSS
+- Recharts for data visualization
+- Server actions + Zod validation
+
+### Mobile (apps/mobile)
+- Expo 50 + React Native
+- NativeWind styling + React Navigation
+
+### Key Database Models
+User, Booking, MedicalInfo, TransportTicket, Ambulance, Route, Assignment
+
+## shadcn/ui & Component System
+
+### Structure
+```
+packages/ui/src/
+├── components/ui/          # shadcn/ui components
+├── components/accessible/  # Accessible components for target users
+└── lib/utils.ts           # Shared utilities
 ```
 
-## Architecture & Key Technologies
+### Usage
+```typescript
+// Standard components
+import { Button, Card } from "@repo/ui"
 
-### Monorepo (Turborepo)
-- **Build System**: Turborepo for task orchestration and caching
-- **Package Manager**: pnpm with workspaces
-- **Task Pipeline**: Optimized build dependencies and parallel execution
-- **Caching**: Intelligent caching for builds, tests, and type checking
-- **Environment Variables**: Properly declared for cache invalidation
+// Accessible components (for seniors/handicapped)
+import { LargeButton, AccessibleInput } from "@repo/ui"
+```
 
-### Backend (NestJS API)
-- **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: JWT tokens with refresh token strategy, Google OAuth, local auth
-- **Password Hashing**: Argon2
-- **Architecture**: Modular NestJS with guards, decorators, and strategies
-- **Key Modules**: Auth, User, Prisma service
+### Adding Components
+```bash
+cd packages/ui
+npx shadcn@latest add [component-name]
+```
 
-### Frontend (Next.js Web)
-- **Framework**: Next.js 15 with App Router
-- **Styling**: TailwindCSS with Radix UI components
-- **Charts & Graphs**: Recharts library for interactive data visualization
-- **Authentication**: Server actions with session management using cookies
-- **State Management**: Server-side with Zod validation
-- **UI Components**: Custom component library in `components/ui/` including chart components
+## Important Environment Variables
+```bash
+DATABASE_URL=              # PostgreSQL connection
+SESSION_SECRET_KEY=        # Session encryption
+BACKEND_URL=              # API base URL
+JWT_SECRET=               # JWT signing
+GOOGLE_CLIENT_ID=         # OAuth
+GOOGLE_CLIENT_SECRET=     # OAuth
+```
 
-### Mobile (Expo React Native)
-- **Framework**: Expo 50 with React Native
-- **Styling**: NativeWind (TailwindCSS for React Native)
-- **Navigation**: React Navigation (screens structure visible)
-- **Shared UI**: Uses workspace shared UI components
+## shadcn/ui Component System
 
-### Database Schema
-Key models:
-- **User**: Main user entity with roles (CLIENT, ADMIN, FLEET_MANAGER, AMBULANCE_DRIVER, SUPER_ADMIN)
-- **EmergencyContact**: User's emergency contact information
-- **Dependent**: User's dependents (managed by guardians)
-- **Booking**: Transport reservations (scheduled and emergency)
-- **MedicalInfo**: Important medical information for transport
-- **TransportTicket**: Transport vouchers and documentation
-- **Ambulance**: Fleet vehicles and their specifications
-- **Route**: Transport routes and assignments
-- **Assignment**: Driver-to-booking assignments
-- **AuthProvider**: CREDENTIALS or GOOGLE authentication
-- **Role-based access control** with granular permission levels
+### Architecture
+- **Shared UI Package**: `packages/ui` contains all shadcn/ui components and accessible components
+- **shadcn/ui CLI**: Fully configured and functional in `packages/ui/`
+- **Path Mapping**: `@repo/ui/*` points to shared components across all apps
+- **Component Structure**:
+  ```
+  packages/ui/src/
+  ├── components/ui/          # shadcn/ui components
+  ├── components/accessible/  # Custom accessible components
+  ├── lib/utils.ts           # Shared utilities (cn function)
+  └── styles/globals.css     # Design tokens and CSS variables
+  ```
 
-## Project Structure Conventions
+### Usage Guidelines
 
-### Component Organization
-- Shared UI components in `components/ui/` with TypeScript
-- Feature-specific components organized by domain (auth, dashboard, landing)
-- Each component directory includes index.ts for clean imports
+#### Adding New shadcn/ui Components
+```bash
+cd packages/ui
+npx shadcn@latest add [component-name]
+```
 
-### Authentication Flow
-- JWT access tokens with refresh token rotation
-- Session management via server-side cookies in Next.js
-- Google OAuth integration available
-- Role-based authorization with guards
+#### Importing Components in Apps
+```typescript
+// Standard shadcn/ui components
+import { Button, Card, Input } from "@repo/ui"
 
-### Environment Variables
-The applications expect these environment variables:
-- `DATABASE_URL`: PostgreSQL connection string  
-- `SESSION_SECRET_KEY`: For session encryption
-- `BACKEND_URL`: API base URL for frontend communication
-- `JWT_SECRET`: JWT token signing secret
-- `REFRESH_TOKEN_SECRET`: Refresh token signing secret
-- `GOOGLE_CLIENT_ID`: Google OAuth client ID
-- `GOOGLE_CLIENT_SECRET`: Google OAuth client secret
-- `CORS_ORIGIN`: CORS allowed origin
-- `FRONTEND_URL`: Frontend application URL
+// Accessible components (for seniors/handicapped users)
+import { LargeButton, AccessibleInput, EmergencyButton } from "@repo/ui"
 
-## Development Workflow
+// Utilities
+import { cn } from "@repo/ui/lib/utils"
+```
 
-1. **Turborepo Tasks**: Use `pnpm <command>` at root to run tasks across all packages
-2. **Database Changes**: Modify `apps/api/prisma/schema.prisma` then run migrations
-3. **API Development**: Use NestJS modules, guards, and decorators pattern
-4. **Frontend Development**: Use server actions for form handling, Zod for validation, Recharts for data visualization
-5. **Mobile Development**: Follow Expo conventions, use NativeWind for styling
-6. **Testing Requirements**: 
-   - Run `pnpm test` before ALL commits (minimum 80% coverage)
-   - Run `pnpm test:e2e` for API changes
-   - All new features MUST include unit and integration tests
-7. **Build Pipeline**: Dependencies are automatically resolved by Turborepo
+#### Component Categories
 
-## Testing Standards
+**Standard UI Components** (`@repo/ui/components/ui`):
+- Core: Button, Card, Input, Label, Textarea
+- Forms: Checkbox, Select, Progress, Separator  
+- Charts: AreaChart, BarChart, LineChart, PieChart, ChartContainer
+- Layout: Alert Dialog (and other components added via CLI)
 
-### Backend Testing (MANDATORY)
-- **Unit Tests**: Every service, controller, and guard must have unit tests
-- **Integration Tests**: Database operations and module interactions
-- **E2E Tests**: Complete API endpoint workflows
-- **Coverage**: Minimum 80% code coverage required
-- **Test Files**: `*.spec.ts` for unit tests, `*.e2e-spec.ts` for e2e tests
+**Accessible Components** (`@repo/ui/components/accessible`):
+- LargeButton: WCAG-compliant buttons (44px+ minimum)
+- AccessibleInput: Enhanced form inputs with proper ARIA
+- EmergencyButton: Critical action button with double confirmation
+- SeniorCard: Senior-friendly card layout
+- AccessibleChart: Charts with text alternatives
 
-### Frontend Testing
-- **Component Tests**: UI components and chart components
-- **Integration Tests**: Form submissions and data flow
-- **E2E Tests**: User workflows across different roles
+#### Configuration Files
+- `packages/ui/components.json`: shadcn/ui configuration
+- `packages/ui/tsconfig.json`: TypeScript configuration with proper path mapping
+- Apps reference shared components via `@repo/ui/*` path mapping
 
-## Common Patterns
+#### Development Best Practices
+1. **Never modify** shadcn/ui components directly - use composition or extend them
+2. **Use accessible variants** for senior/handicapped users (LargeButton vs Button)
+3. **Follow design tokens** defined in `packages/ui/src/styles/globals.css`
+4. **Test CLI functionality** after any configuration changes
+5. **Maintain separation**: Keep Next.js-specific components in apps, not in packages/ui
 
-### API Error Handling
-- Authentication guards protect routes
-- Role-based access using decorators
-- Prisma service handles database operations
-
-### Frontend Form Handling
-- Server actions for form submission
-- Zod schemas for validation
-- Error state management with FormState type
-
-### Shared Code
-- UI components shared via workspace packages (`@repo/ui`)
-- TypeScript configurations shared across apps (`@repo/typescript-config`)
-- ESLint configurations shared for consistency (`@repo/eslint-config`)
+#### Design System Integration
+- **CSS Variables**: All components use CSS custom properties for theming
+- **Consistent Spacing**: Uses Tailwind design tokens
+- **Color System**: Semantic color naming (primary, secondary, muted, etc.)
+- **Responsive Design**: Mobile-first approach with proper breakpoints
+- **Dark Mode Ready**: CSS variables support automatic theme switching
 
 ## Turborepo Configuration
 

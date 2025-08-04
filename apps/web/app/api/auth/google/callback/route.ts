@@ -44,6 +44,7 @@ export async function GET(request: NextRequest) {
           lastName,
           email: email,
           role: role as Role,
+          isProfileComplete: true,
         },
         accessToken,
         refreshToken,

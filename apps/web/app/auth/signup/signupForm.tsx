@@ -1,7 +1,6 @@
 "use client";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import SubmitButton from "@/components/ui/submitButton";
+import { Input, Label } from "@repo/ui";
+import { SubmitButton } from "@/components/forms";
 import { signUp } from "@/lib/auth";
 import React from "react";
 import { useActionState } from "react";
@@ -11,9 +10,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@repo/ui";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button } from "@repo/ui";
 import { Eye, EyeOff, User, Building } from "lucide-react";
 import { useRouter } from "next/navigation";
 

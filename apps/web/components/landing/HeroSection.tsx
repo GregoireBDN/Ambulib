@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@repo/ui";
 import { ArrowRight, Truck } from "lucide-react";
 import Link from "next/link";
 
-const HeroSection = () => {
+const HeroSection = (): React.JSX.Element => {
   return (
     <section className="relative overflow-hidden bg-white">
       <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-700 opacity-90"></div>

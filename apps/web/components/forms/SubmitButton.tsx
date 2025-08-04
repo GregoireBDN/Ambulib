@@ -1,6 +1,6 @@
 "use client";
 import React, { PropsWithChildren } from "react";
-import { Button, type ButtonProps } from "./button";
+import { Button, type ButtonProps } from "@repo/ui";
 import { useFormStatus } from "react-dom";
 import { cn } from "@/lib/utils";
 

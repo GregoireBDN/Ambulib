@@ -28,6 +28,7 @@ export type FormState =
       success?: boolean;
       redirect?: string;
     }
+  | null
   | undefined;
 
 export const SignupFormSchema = z.object({

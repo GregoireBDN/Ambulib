@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@repo/ui/lib/utils"
 
 interface ChartContainerProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode

@@ -1,7 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui";
 import { Clock, MapPin, Shield, CreditCard, Users, Star } from "lucide-react";
 
-const FeaturesSection = () => {
+const FeaturesSection = (): React.JSX.Element => {
   const features = [
     {
       icon: Clock,
@@ -61,8 +61,8 @@ const FeaturesSection = () => {
             Pourquoi choisir Ambulib ?
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Découvrez les avantages qui font d'Ambulib la solution de référence
-            pour le transport médical.
+            Découvrez les avantages qui font d&apos;Ambulib la solution de
+            référence pour le transport médical.
           </p>
         </div>
 
