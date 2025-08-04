@@ -18,7 +18,8 @@
       "Bash(cp:*)",
       "Bash(ls:*)",
       "Bash(npx shadcn:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(turbo run:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
