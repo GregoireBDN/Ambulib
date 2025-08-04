@@ -1,11 +1,4 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui";
 import {
   ArrowRight,
   LayoutDashboard,
@@ -21,7 +14,7 @@ interface QuickActionsSectionProps {
   userRole: Role;
 }
 
-const QuickActionsSection = ({ userRole }: QuickActionsSectionProps) => {
+const QuickActionsSection = ({ userRole }: QuickActionsSectionProps): React.JSX.Element => {
   const adminActions = [
     {
       icon: LayoutDashboard,

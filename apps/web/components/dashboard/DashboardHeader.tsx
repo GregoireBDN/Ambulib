@@ -4,7 +4,7 @@ interface DashboardHeaderProps {
   userRole: Role;
 }
 
-const DashboardHeader = ({ userRole }: DashboardHeaderProps) => {
+const DashboardHeader = ({ userRole }: DashboardHeaderProps): React.JSX.Element => {
   const getWelcomeMessage = (role: Role) => {
     switch (role) {
       case Role.ADMIN:

@@ -1,5 +1,5 @@
 import { getSession } from "@/lib/session";
-import { Button } from "@/components/ui/button";
+import { Button } from "@repo/ui";
 import Link from "next/link";
 import React from "react";
 import { User, LogOut } from "lucide-react";

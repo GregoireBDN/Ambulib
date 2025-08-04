@@ -1,6 +1,6 @@
 import { Users, MapPin, Star, Clock } from "lucide-react";
 
-const StatsSection = () => {
+const StatsSection = (): React.JSX.Element => {
   const stats = [
     {
       icon: Users,

@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@repo/ui";
 import { ArrowRight, Phone, Mail } from "lucide-react";
 import Link from "next/link";
 
-const CTASection = () => {
+const CTASection = (): React.JSX.Element => {
   return (
     <section className="py-20 bg-gradient-to-br from-blue-600 to-indigo-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

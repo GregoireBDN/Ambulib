@@ -1,7 +1,7 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@repo/ui";
 import { Star, Quote } from "lucide-react";
 
-const TestimonialsSection = () => {
+const TestimonialsSection = (): React.JSX.Element => {
   const testimonials = [
     {
       name: "Marie Dubois",

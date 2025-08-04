@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@repo/ui";
 
-const HelpSection = () => {
+const HelpSection = (): React.JSX.Element => {
   return (
     <div className="bg-white rounded-2xl shadow-xl p-8">
       <h2 className="text-2xl font-bold text-gray-900 mb-6">Besoin d'aide ?</h2>
