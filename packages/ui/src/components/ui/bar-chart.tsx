@@ -13,7 +13,7 @@ import {
 } from "recharts"
 
 interface BarChartProps {
-  data: Array<Record<string, any>>
+  data: Array<Record<string, string | number>>
   xAxisKey: string
   bars: Array<{
     key: string

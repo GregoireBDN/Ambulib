@@ -13,7 +13,7 @@ import {
 } from "recharts"
 
 interface AreaChartProps {
-  data: Array<Record<string, any>>
+  data: Array<Record<string, string | number>>
   xAxisKey: string
   areas: Array<{
     key: string

@@ -13,7 +13,7 @@ import {
 } from "recharts"
 
 interface LineChartProps {
-  data: Array<Record<string, any>>
+  data: Array<Record<string, string | number>>
   xAxisKey: string
   lines: Array<{
     key: string

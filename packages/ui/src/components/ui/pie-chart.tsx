@@ -43,7 +43,7 @@ const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
     innerRadius = 0,
     outerRadius = 80
   }, ref) => {
-    const renderLabel = (entry: any) => {
+    const renderLabel = (entry: { name: string; value: number }) => {
       if (!showLabels) return null
       return `${entry.name}: ${entry.value}`
     }

@@ -6,6 +6,7 @@
 
 export { LargeButton, type LargeButtonProps } from './LargeButton';
 export { AccessibleInput, type AccessibleInputProps } from './AccessibleInput';
+export { ClientIcon } from './ClientIcon';
 export { EmergencyButton, type EmergencyButtonProps } from './EmergencyButton';
 export { SeniorCard, type SeniorCardProps } from './SeniorCard';
 export { default as AccessibleChart } from './AccessibleChart';
