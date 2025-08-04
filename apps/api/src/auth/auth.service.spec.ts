@@ -2,7 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { ConflictException, UnauthorizedException, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  UnauthorizedException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Role, AuthProvider } from '@prisma/client';
 import * as argon2 from 'argon2';
 import refreshConfig from './config/refresh.config';
@@ -238,7 +242,9 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException if user not found', async () => {
-      userService.findOne.mockRejectedValue(new NotFoundException('User not found'));
+      userService.findOne.mockRejectedValue(
+        new NotFoundException('User not found'),
+      );
 
       await expect(service.validateJwtUser(999)).rejects.toThrow(
         NotFoundException,
@@ -366,7 +372,9 @@ describe('AuthService', () => {
     });
 
     it('should throw UnauthorizedException if user not found', async () => {
-      userService.findOne.mockRejectedValue(new NotFoundException('User not found'));
+      userService.findOne.mockRejectedValue(
+        new NotFoundException('User not found'),
+      );
 
       await expect(service.completeProfile(999, {})).rejects.toThrow(
         NotFoundException,

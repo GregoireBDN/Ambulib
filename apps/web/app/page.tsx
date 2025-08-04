@@ -2,8 +2,9 @@ import type { NextPage } from "next";
 import { getSession } from "@/lib/session";
 import { Role } from "@/lib/type";
 
-// Import des composants modulaires
-import LandingPage from "@/components/landing/LandingPage";
+// Import des composants accessibles
+import AccessibleHeroSection from "@/components/landing/AccessibleHeroSection";
+import ClientDashboard from "@/components/dashboards/ClientDashboard";
 import Dashboard from "@/components/dashboard/Dashboard";
 
 const Home: NextPage = async () => {
@@ -11,12 +12,22 @@ const Home: NextPage = async () => {
   const isAuthenticated = !!session?.user;
   const userRole = session?.user?.role;
 
-  // Landing page pour utilisateurs non connectés
+  // Landing page accessible pour utilisateurs non connectés
   if (!isAuthenticated) {
-    return <LandingPage />;
+    return <AccessibleHeroSection />;
   }
 
-  // Dashboard pour utilisateurs connectés
+  // Dashboard spécialisé pour les clients (personnes âgées/handicapées)
+  if (userRole === Role.USER) {
+    return (
+      <ClientDashboard 
+        userRole={userRole} 
+        userName={session.user.firstName || "Utilisateur"}
+      />
+    );
+  }
+
+  // Dashboard standard pour les autres rôles (ADMIN, FLEET_MANAGER, DRIVER)
   return <Dashboard userRole={userRole as Role} />;
 };
 

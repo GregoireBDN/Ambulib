@@ -11,9 +11,17 @@
       "Bash(npx prisma migrate:*)",
       "Bash(curl:*)",
       "Bash(mkdir:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(npx tsc:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(cp:*)",
+      "Bash(ls:*)",
+      "Bash(npx shadcn:*)",
+      "Bash(mv:*)"
     ]
   },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "neon",
     "context7"

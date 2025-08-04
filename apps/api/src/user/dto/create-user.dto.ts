@@ -1,4 +1,11 @@
-import { IsEmail, IsString, IsOptional, IsBoolean } from 'class-validator';
+import {
+  IsEmail,
+  IsString,
+  IsOptional,
+  IsBoolean,
+  Matches,
+  MinLength,
+} from 'class-validator';
 import { AuthProvider } from '@prisma/client';
 
 export class CreateUserDto {
@@ -13,6 +20,19 @@ export class CreateUserDto {
   email: string;
 
   @IsString()
+  @MinLength(8, {
+    message: 'Le mot de passe doit contenir au moins 8 caractères',
+  })
+  @Matches(/[a-zA-Z]/, {
+    message: 'Le mot de passe doit contenir au moins une lettre',
+  })
+  @Matches(/\d/, {
+    message: 'Le mot de passe doit contenir au moins un chiffre',
+  })
+  @Matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, {
+    message:
+      'Le mot de passe doit contenir au moins un caractère spécial (!@#$%^&*...)',
+  })
   password: string;
 
   @IsOptional()

@@ -1,0 +1,33 @@
+<svg viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fond du logo -->
+  <rect x="0" y="0" width="200" height="60" fill="none"/>
+  
+  <!-- Croix médicale moderne -->
+  <g transform="translate(10, 10)">
+    <!-- Cercle de fond -->
+    <circle cx="20" cy="20" r="18" fill="#1e40af" stroke="#ffffff" stroke-width="2"/>
+    
+    <!-- Croix blanche -->
+    <rect x="16" y="10" width="8" height="20" fill="#ffffff" rx="2"/>
+    <rect x="10" y="16" width="20" height="8" fill="#ffffff" rx="2"/>
+    
+    <!-- Point central pour le style -->
+    <circle cx="20" cy="20" r="3" fill="#dc2626"/>
+  </g>
+  
+  <!-- Texte Ambulib -->
+  <text x="55" y="25" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1e40af">
+    Ambulib
+  </text>
+  
+  <!-- Sous-titre -->
+  <text x="55" y="42" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">
+    Transport médical de confiance
+  </text>
+  
+  <!-- Élément décoratif (pulse médical) -->
+  <g transform="translate(150, 20)" opacity="0.3">
+    <path d="M0,20 L5,20 L8,10 L12,30 L16,5 L20,25 L25,20 L30,20" 
+          stroke="#dc2626" stroke-width="2" fill="none"/>
+  </g>
+</svg>

@@ -189,7 +189,9 @@ describe('AdminService', () => {
     });
 
     it('should throw ConflictException if ambulance already exists', async () => {
-      (prisma.ambulance.findUnique as jest.Mock).mockResolvedValue(mockAmbulance);
+      (prisma.ambulance.findUnique as jest.Mock).mockResolvedValue(
+        mockAmbulance,
+      );
 
       await expect(service.createAmbulance(createAmbulanceDto)).rejects.toThrow(
         ConflictException,

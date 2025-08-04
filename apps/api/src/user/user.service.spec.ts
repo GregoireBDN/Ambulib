@@ -179,7 +179,11 @@ describe('UserService', () => {
 
   describe('findOne', () => {
     it('should find user by ID successfully', async () => {
-      const { password, hashedRefreshToken, ...expectedUserWithoutSensitiveData } = mockUser;
+      const {
+        password,
+        hashedRefreshToken,
+        ...expectedUserWithoutSensitiveData
+      } = mockUser;
 
       (prismaService.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
 

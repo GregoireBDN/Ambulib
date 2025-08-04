@@ -1,16 +1,13 @@
 import React from "react";
-import SignUpForm from "./signupForm";
-import GoogleSignInButton from "@/components/auth/GoogleSignInButton";
-import AuthSeparator from "@/components/auth/AuthSeparator";
+import MultiStepSignUpForm from "@/components/auth/MultiStepSignUpForm";
 
+/**
+ * Page d'inscription accessible
+ * Utilise le formulaire multi-étapes optimisé pour réduire la charge cognitive
+ * des personnes âgées et handicapées
+ */
 const SignUpPage = () => {
-  return (
-    <div className="flex flex-col items-center justify-center space-y-6">
-      <SignUpForm />
-      <AuthSeparator />
-      <GoogleSignInButton />
-    </div>
-  );
+  return <MultiStepSignUpForm />;
 };
 
 export default SignUpPage;
