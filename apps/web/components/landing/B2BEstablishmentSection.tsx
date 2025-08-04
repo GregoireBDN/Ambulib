@@ -4,6 +4,7 @@ import React from "react";
 import { Building2, Users, Clock, CheckCircle, Phone, Mail } from "lucide-react";
 import { LargeButton } from "@/components/accessible/LargeButton";
 import { SeniorCard } from "@/components/accessible/SeniorCard";
+import { ClientIcon } from "@/components/accessible/ClientIcon";
 
 /**
  * B2BEstablishmentSection - Section dédiée aux établissements de santé
@@ -45,7 +46,7 @@ const B2BEstablishmentSection = () => {
         {/* Header section */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-3 bg-blue-100 px-6 py-3 rounded-full mb-6">
-            <Building2 className="h-6 w-6 text-blue-600" />
+            <ClientIcon icon={Building2} className="h-6 w-6 text-blue-600" />
             <span className="text-blue-800 font-semibold">Établissements de santé</span>
           </div>
           
@@ -71,15 +72,15 @@ const B2BEstablishmentSection = () => {
           >
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-green-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Personnel médical qualifié</span>
               </div>
               <div className="flex items-center gap-2 text-green-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Équipement médical complet</span>
               </div>
               <div className="flex items-center gap-2 text-green-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Suivi temps réel</span>
               </div>
             </div>
@@ -94,15 +95,15 @@ const B2BEstablishmentSection = () => {
           >
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-green-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Programmation flexible</span>
               </div>
               <div className="flex items-center gap-2 text-green-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Retours à domicile</span>
               </div>
               <div className="flex items-center gap-2 text-green-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Gestion administrative</span>
               </div>
             </div>
@@ -117,15 +118,15 @@ const B2BEstablishmentSection = () => {
           >
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-red-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Réactivité immédiate</span>
               </div>
               <div className="flex items-center gap-2 text-red-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Équipe d&apos;astreinte</span>
               </div>
               <div className="flex items-center gap-2 text-red-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Ligne dédiée</span>
               </div>
             </div>
@@ -140,15 +141,15 @@ const B2BEstablishmentSection = () => {
           >
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-blue-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Patients bariatriques</span>
               </div>
               <div className="flex items-center gap-2 text-blue-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Pédiatrie spécialisée</span>
               </div>
               <div className="flex items-center gap-2 text-blue-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Soins intensifs</span>
               </div>
             </div>
@@ -298,7 +299,7 @@ const B2BEstablishmentSection = () => {
                 className="w-full"
                 priority="high"
               >
-                <Mail className="h-6 w-6" />
+                <ClientIcon icon={Mail} className="h-6 w-6" />
                 Envoyer ma demande de devis
               </LargeButton>
             </form>
@@ -325,14 +326,14 @@ const B2BEstablishmentSection = () => {
                       href="tel:+33123456790"
                       className="flex items-center gap-3 text-blue-800 hover:text-blue-900 font-semibold text-lg"
                     >
-                      <Phone className="h-6 w-6" />
+                      <ClientIcon icon={Phone} className="h-6 w-6" />
                       01 23 45 67 90
                     </a>
                     <a
                       href="mailto:commercial@ambulib.fr"
                       className="flex items-center gap-3 text-blue-800 hover:text-blue-900 font-semibold text-lg"
                     >
-                      <Mail className="h-6 w-6" />
+                      <ClientIcon icon={Mail} className="h-6 w-6" />
                       commercial@ambulib.fr
                     </a>
                   </div>
@@ -347,15 +348,15 @@ const B2BEstablishmentSection = () => {
                   </h4>
                   <ul className="space-y-2 text-green-800">
                     <li className="flex items-center gap-2">
-                      <CheckCircle className="h-5 w-5" />
+                      <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                       Réponse sous 2h en journée
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle className="h-5 w-5" />
+                      <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                       Devis personnalisé sous 24h
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle className="h-5 w-5" />
+                      <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                       Mise en service sous 48h
                     </li>
                   </ul>

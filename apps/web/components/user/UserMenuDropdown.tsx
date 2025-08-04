@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ChevronDown, User, Settings, LogOut, Shield, Truck, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Role } from "@/lib/type";
+import { ClientIcon } from "@/components/accessible/ClientIcon";
 import UserAvatar from "./UserAvatar";
 
 /**
@@ -92,17 +93,19 @@ const UserMenuDropdown = ({ user, onSignOut, className }: UserMenuDropdownProps)
     );
 
     switch (event.key) {
-      case "ArrowDown":
+      case "ArrowDown": {
         event.preventDefault();
         const nextIndex = currentIndex < menuItems.length - 1 ? currentIndex + 1 : 0;
         menuItems[nextIndex]?.focus();
         break;
+      }
       
-      case "ArrowUp":
+      case "ArrowUp": {
         event.preventDefault();
         const prevIndex = currentIndex > 0 ? currentIndex - 1 : menuItems.length - 1;
         menuItems[prevIndex]?.focus();
         break;
+      }
       
       case "Home":
         event.preventDefault();
@@ -186,17 +189,17 @@ const UserMenuDropdown = ({ user, onSignOut, className }: UserMenuDropdownProps)
               {user.firstName} {user.lastName}
             </div>
             <div className="flex items-center gap-1 text-xs text-gray-600">
-              <RoleIcon className="h-3 w-3" aria-hidden="true" />
+              <ClientIcon icon={RoleIcon} className="h-3 w-3" />
               {getRoleLabel(user.role)}
             </div>
           </div>
           
-          <ChevronDown 
+          <ClientIcon 
+            icon={ChevronDown}
             className={cn(
               "h-4 w-4 text-gray-600 transition-transform duration-200",
               isOpen && "rotate-180"
             )}
-            aria-hidden="true"
           />
         </button>
 
@@ -222,7 +225,7 @@ const UserMenuDropdown = ({ user, onSignOut, className }: UserMenuDropdownProps)
                     {user.firstName} {user.lastName}
                   </div>
                   <div className="flex items-center gap-1 text-sm text-gray-600">
-                    <RoleIcon className="h-4 w-4" aria-hidden="true" />
+                    <ClientIcon icon={RoleIcon} className="h-4 w-4" />
                     {getRoleLabel(user.role)}
                   </div>
                   <div className="text-sm text-gray-500 truncate">
@@ -242,7 +245,7 @@ const UserMenuDropdown = ({ user, onSignOut, className }: UserMenuDropdownProps)
                 className="flex items-center gap-3 px-4 py-3 text-base text-gray-700 hover:bg-blue-50 hover:text-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-500/50 focus:ring-inset transition-all duration-200 min-h-[44px]"
                 onClick={() => setIsOpen(false)}
               >
-                <User className="h-5 w-5" aria-hidden="true" />
+                <ClientIcon icon={User} className="h-5 w-5" />
                 Mon profil
               </Link>
 
@@ -254,7 +257,7 @@ const UserMenuDropdown = ({ user, onSignOut, className }: UserMenuDropdownProps)
                   className="flex items-center gap-3 px-4 py-3 text-base text-gray-700 hover:bg-blue-50 hover:text-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-500/50 focus:ring-inset transition-all duration-200 min-h-[44px]"
                   onClick={() => setIsOpen(false)}
                 >
-                  <Settings className="h-5 w-5" aria-hidden="true" />
+                  <ClientIcon icon={Settings} className="h-5 w-5" />
                   Paramètres
                 </Link>
               )}
@@ -267,7 +270,7 @@ const UserMenuDropdown = ({ user, onSignOut, className }: UserMenuDropdownProps)
                   className="flex items-center gap-3 px-4 py-3 text-base text-gray-700 hover:bg-blue-50 hover:text-blue-900 focus:outline-none focus:ring-4 focus:ring-blue-500/50 focus:ring-inset transition-all duration-200 min-h-[44px]"
                   onClick={() => setIsOpen(false)}
                 >
-                  <Users className="h-5 w-5" aria-hidden="true" />
+                  <ClientIcon icon={Users} className="h-5 w-5" />
                   Gestion utilisateurs
                 </Link>
               )}
@@ -287,7 +290,7 @@ const UserMenuDropdown = ({ user, onSignOut, className }: UserMenuDropdownProps)
                 await onSignOut();
               }}
             >
-              <LogOut className="h-5 w-5" aria-hidden="true" />
+              <ClientIcon icon={LogOut} className="h-5 w-5" />
               Déconnexion
             </button>
           </div>

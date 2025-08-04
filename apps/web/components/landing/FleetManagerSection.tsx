@@ -4,6 +4,7 @@ import React from "react";
 import { Truck, Settings, BarChart3, Zap, CheckCircle, Phone, Mail, Code, Clock } from "lucide-react";
 import { LargeButton } from "@/components/accessible/LargeButton";
 import { SeniorCard } from "@/components/accessible/SeniorCard";
+import { ClientIcon } from "@/components/accessible/ClientIcon";
 
 /**
  * FleetManagerSection - Section dédiée aux gestionnaires de flotte médicalisée
@@ -47,7 +48,7 @@ const FleetManagerSection = (): React.JSX.Element => {
         {/* Header section */}
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-3 bg-slate-100 px-6 py-3 rounded-full mb-6">
-            <Truck className="h-6 w-6 text-slate-600" />
+            <ClientIcon icon={Truck} className="h-6 w-6 text-slate-600" />
             <span className="text-slate-800 font-semibold">Gestionnaires de flotte</span>
           </div>
           
@@ -73,15 +74,15 @@ const FleetManagerSection = (): React.JSX.Element => {
           >
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-orange-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Débordements & urgences</span>
               </div>
               <div className="flex items-center gap-2 text-orange-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Congés & formations</span>
               </div>
               <div className="flex items-center gap-2 text-orange-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Maintenance véhicules</span>
               </div>
             </div>
@@ -96,15 +97,15 @@ const FleetManagerSection = (): React.JSX.Element => {
           >
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-blue-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Zones non couvertes</span>
               </div>
               <div className="flex items-center gap-2 text-blue-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Expansion territoriale</span>
               </div>
               <div className="flex items-center gap-2 text-blue-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Maillage complémentaire</span>
               </div>
             </div>
@@ -119,15 +120,15 @@ const FleetManagerSection = (): React.JSX.Element => {
           >
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-purple-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Transport bariatrique</span>
               </div>
               <div className="flex items-center gap-2 text-purple-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Néonatal & pédiatrie</span>
               </div>
               <div className="flex items-center gap-2 text-purple-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>SMUR & réanimation</span>
               </div>
             </div>
@@ -142,15 +143,15 @@ const FleetManagerSection = (): React.JSX.Element => {
           >
             <div className="space-y-3">
               <div className="flex items-center gap-2 text-green-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>API REST complète</span>
               </div>
               <div className="flex items-center gap-2 text-green-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Webhook temps réel</span>
               </div>
               <div className="flex items-center gap-2 text-green-700">
-                <CheckCircle className="h-5 w-5" />
+                <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                 <span>Reporting automatisé</span>
               </div>
             </div>
@@ -171,7 +172,7 @@ const FleetManagerSection = (): React.JSX.Element => {
               {/* Performance opérationnelle */}
               <div className="space-y-4">
                 <h4 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                  <Clock className="h-6 w-6 text-blue-600" />
+                  <ClientIcon icon={Clock} className="h-6 w-6 text-blue-600" />
                   Performance
                 </h4>
                 <div className="space-y-3">
@@ -193,28 +194,28 @@ const FleetManagerSection = (): React.JSX.Element => {
               {/* Capacité technique */}
               <div className="space-y-4">
                 <h4 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                  <Code className="h-6 w-6 text-green-600" />
+                  <ClientIcon icon={Code} className="h-6 w-6 text-green-600" />
                   Technique
                 </h4>
                 <div className="space-y-3 text-gray-700">
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <ClientIcon icon={CheckCircle} className="h-5 w-5 text-green-600" />
                     <span>API REST v2.0</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <ClientIcon icon={CheckCircle} className="h-5 w-5 text-green-600" />
                     <span>Webhooks temps réel</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <ClientIcon icon={CheckCircle} className="h-5 w-5 text-green-600" />
                     <span>SSO / SAML 2.0</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <ClientIcon icon={CheckCircle} className="h-5 w-5 text-green-600" />
                     <span>Géolocalisation GPS</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <ClientIcon icon={CheckCircle} className="h-5 w-5 text-green-600" />
                     <span>Reporting BI intégré</span>
                   </div>
                 </div>
@@ -223,7 +224,7 @@ const FleetManagerSection = (): React.JSX.Element => {
               {/* Couverture réseau */}
               <div className="space-y-4">
                 <h4 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                  <Truck className="h-6 w-6 text-orange-600" />
+                  <ClientIcon icon={Truck} className="h-6 w-6 text-orange-600" />
                   Réseau
                 </h4>
                 <div className="space-y-3">
@@ -423,7 +424,7 @@ const FleetManagerSection = (): React.JSX.Element => {
                 className="w-full"
                 priority="high"
               >
-                <Mail className="h-6 w-6" />
+                <ClientIcon icon={Mail} className="h-6 w-6" />
                 Envoyer ma demande de partenariat
               </LargeButton>
             </form>
@@ -450,14 +451,14 @@ const FleetManagerSection = (): React.JSX.Element => {
                       href="tel:+33123456791"
                       className="flex items-center gap-3 text-slate-800 hover:text-slate-900 font-semibold text-lg"
                     >
-                      <Phone className="h-6 w-6" />
+                      <ClientIcon icon={Phone} className="h-6 w-6" />
                       01 23 45 67 91
                     </a>
                     <a
                       href="mailto:partenaires@ambulib.fr"
                       className="flex items-center gap-3 text-slate-800 hover:text-slate-900 font-semibold text-lg"
                     >
-                      <Mail className="h-6 w-6" />
+                      <ClientIcon icon={Mail} className="h-6 w-6" />
                       partenaires@ambulib.fr
                     </a>
                   </div>
@@ -472,15 +473,15 @@ const FleetManagerSection = (): React.JSX.Element => {
                   </h4>
                   <ul className="space-y-2 text-green-800">
                     <li className="flex items-center gap-2">
-                      <CheckCircle className="h-5 w-5" />
+                      <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                       Documentation API complète
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle className="h-5 w-5" />
+                      <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                       Environnement de test
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle className="h-5 w-5" />
+                      <ClientIcon icon={CheckCircle} className="h-5 w-5" />
                       Formation technique incluse
                     </li>
                   </ul>
@@ -489,7 +490,7 @@ const FleetManagerSection = (): React.JSX.Element => {
                     size="default"
                     className="mt-4 w-full"
                   >
-                    <Code className="h-5 w-5" />
+                    <ClientIcon icon={Code} className="h-5 w-5" />
                     Accéder à la documentation
                   </LargeButton>
                 </div>

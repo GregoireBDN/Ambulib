@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Role } from "@/lib/type";
 
@@ -103,10 +104,12 @@ const UserAvatar = React.forwardRef<HTMLDivElement, UserAvatarProps>(
           tabIndex={0}
         >
           {imageUrl ? (
-            <img
+            <Image
               src={imageUrl}
               alt={`Photo de profil de ${firstName} ${lastName}`}
               className="h-full w-full rounded-full object-cover"
+              width={sizeValue}
+              height={sizeValue}
             />
           ) : (
             <span aria-hidden="true">

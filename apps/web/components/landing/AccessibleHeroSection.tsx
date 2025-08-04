@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Phone, Calendar, Shield, ArrowRight, Users, Building2, Truck } from "lucide-react";
 import { LargeButton } from "@/components/accessible/LargeButton";
 import { EmergencyButton } from "@/components/accessible/EmergencyButton";
+import { ClientIcon } from "@/components/accessible/ClientIcon";
 import B2BEstablishmentSection from "./B2BEstablishmentSection";
 import FleetManagerSection from "./FleetManagerSection";
 
@@ -51,7 +52,7 @@ const AccessibleHeroSection = (): React.JSX.Element => {
                     }`}
                     aria-pressed={activeTarget === 'particulier'}
                   >
-                    <Users className="h-4 w-4 inline mr-2" />
+                    <ClientIcon icon={Users} className="h-4 w-4 inline mr-2" />
                     Particulier
                   </button>
                   <button
@@ -63,7 +64,7 @@ const AccessibleHeroSection = (): React.JSX.Element => {
                     }`}
                     aria-pressed={activeTarget === 'etablissement'}
                   >
-                    <Building2 className="h-4 w-4 inline mr-2" />
+                    <ClientIcon icon={Building2} className="h-4 w-4 inline mr-2" />
                     Établissement
                   </button>
                   <button
@@ -75,7 +76,7 @@ const AccessibleHeroSection = (): React.JSX.Element => {
                     }`}
                     aria-pressed={activeTarget === 'gestionnaire'}
                   >
-                    <Truck className="h-4 w-4 inline mr-2" />
+                    <ClientIcon icon={Truck} className="h-4 w-4 inline mr-2" />
                     Gestionnaire
                   </button>
                 </div>
@@ -140,7 +141,7 @@ const AccessibleHeroSection = (): React.JSX.Element => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 my-8">
               <div className="flex flex-col items-center text-center p-4">
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-3">
-                  <Shield className="h-8 w-8 text-blue-600" aria-hidden="true" />
+                  <ClientIcon icon={Shield} className="h-8 w-8 text-blue-600" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Sécurisé</h3>
                 <p className="text-gray-600">Personnel qualifié et véhicules adaptés</p>
@@ -148,7 +149,7 @@ const AccessibleHeroSection = (): React.JSX.Element => {
               
               <div className="flex flex-col items-center text-center p-4">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-3">
-                  <Phone className="h-8 w-8 text-green-600" aria-hidden="true" />
+                  <ClientIcon icon={Phone} className="h-8 w-8 text-green-600" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Disponible</h3>
                 <p className="text-gray-600">Assistance téléphonique permanente</p>
@@ -156,7 +157,7 @@ const AccessibleHeroSection = (): React.JSX.Element => {
               
               <div className="flex flex-col items-center text-center p-4">
                 <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-3">
-                  <Calendar className="h-8 w-8 text-purple-600" aria-hidden="true" />
+                  <ClientIcon icon={Calendar} className="h-8 w-8 text-purple-600" />
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">Simple</h3>
                 <p className="text-gray-600">Réservation facile par téléphone ou en ligne</p>
@@ -175,9 +176,9 @@ const AccessibleHeroSection = (): React.JSX.Element => {
                       ariaLabel="Créer un compte pour réserver vos transports"
                       className="w-full sm:w-auto"
                     >
-                      <Calendar className="h-6 w-6" aria-hidden="true" />
+                      <ClientIcon icon={Calendar} className="h-6 w-6" />
                       Réserver un transport
-                      <ArrowRight className="h-6 w-6" aria-hidden="true" />
+                      <ClientIcon icon={ArrowRight} className="h-6 w-6" />
                     </LargeButton>
                   </Link>
                   <Link href="/auth/signin">
@@ -203,9 +204,9 @@ const AccessibleHeroSection = (): React.JSX.Element => {
                       ariaLabel="Demander un devis pour votre établissement"
                       className="w-full sm:w-auto"
                     >
-                      <Building2 className="h-6 w-6" aria-hidden="true" />
+                      <ClientIcon icon={Building2} className="h-6 w-6" />
                       Demander un devis
-                      <ArrowRight className="h-6 w-6" aria-hidden="true" />
+                      <ClientIcon icon={ArrowRight} className="h-6 w-6" />
                     </LargeButton>
                   </Link>
                   <a href="tel:+33123456790">
@@ -215,7 +216,7 @@ const AccessibleHeroSection = (): React.JSX.Element => {
                       ariaLabel="Appeler notre équipe commerciale"
                       className="w-full sm:w-auto"
                     >
-                      <Phone className="h-6 w-6" aria-hidden="true" />
+                      <ClientIcon icon={Phone} className="h-6 w-6" />
                       Équipe commerciale
                     </LargeButton>
                   </a>
@@ -232,9 +233,9 @@ const AccessibleHeroSection = (): React.JSX.Element => {
                       ariaLabel="Découvrir nos solutions de partenariat"
                       className="w-full sm:w-auto"
                     >
-                      <Truck className="h-6 w-6" aria-hidden="true" />
+                      <ClientIcon icon={Truck} className="h-6 w-6" />
                       Partenariat
-                      <ArrowRight className="h-6 w-6" aria-hidden="true" />
+                      <ClientIcon icon={ArrowRight} className="h-6 w-6" />
                     </LargeButton>
                   </Link>
                   <a href="tel:+33123456791">
@@ -244,7 +245,7 @@ const AccessibleHeroSection = (): React.JSX.Element => {
                       ariaLabel="Contacter notre équipe technique"
                       className="w-full sm:w-auto"
                     >
-                      <Phone className="h-6 w-6" aria-hidden="true" />
+                      <ClientIcon icon={Phone} className="h-6 w-6" />
                       Support technique
                     </LargeButton>
                   </a>
@@ -263,7 +264,7 @@ const AccessibleHeroSection = (): React.JSX.Element => {
                   className="inline-flex items-center gap-3 text-3xl font-bold text-blue-600 hover:text-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/50 rounded-lg px-4 py-2 transition-colors"
                   aria-label="Appeler le 01 23 45 67 89 pour réserver"
                 >
-                  <Phone className="h-8 w-8" aria-hidden="true" />
+                  <ClientIcon icon={Phone} className="h-8 w-8" />
                   01 23 45 67 89
                 </a>
                 <p className="text-gray-600 mt-2">
@@ -385,7 +386,7 @@ const AccessibleHeroSection = (): React.JSX.Element => {
               href="tel:+33123456789"
               className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold text-lg underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2 py-1"
             >
-              <Phone className="h-5 w-5" aria-hidden="true" />
+              <ClientIcon icon={Phone} className="h-5 w-5" />
               Appelez le 01 23 45 67 89
             </a>
           </div>

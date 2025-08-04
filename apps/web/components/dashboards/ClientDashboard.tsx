@@ -6,6 +6,7 @@ import { Phone, Calendar, User, FileText, Clock, MapPin } from "lucide-react";
 import { SeniorCard } from "@/components/accessible/SeniorCard";
 import { LargeButton } from "@/components/accessible/LargeButton";
 import { EmergencyButton } from "@/components/accessible/EmergencyButton";
+import { ClientIcon } from "@/components/accessible/ClientIcon";
 
 /**
  * ClientDashboard - Dashboard ultra-simplifié pour les clients
@@ -118,13 +119,13 @@ const ClientDashboard = ({ userName = "Utilisateur" }: ClientDashboardProps) => 
               <div className="space-y-4">
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <div className="flex items-center gap-3 mb-3">
-                    <Clock className="h-6 w-6 text-blue-600" aria-hidden="true" />
+                    <ClientIcon icon={Clock} className="h-6 w-6 text-blue-600" />
                     <span className="text-xl font-semibold text-blue-900">
                       {mockData.nextBooking.date} à {mockData.nextBooking.time}
                     </span>
                   </div>
                   <div className="flex items-center gap-3 mb-2">
-                    <MapPin className="h-5 w-5 text-blue-600" aria-hidden="true" />
+                    <ClientIcon icon={MapPin} className="h-5 w-5 text-blue-600" />
                     <span className="text-lg text-blue-800">
                       {mockData.nextBooking.destination}
                     </span>
@@ -139,7 +140,7 @@ const ClientDashboard = ({ userName = "Utilisateur" }: ClientDashboardProps) => 
               </div>
             ) : (
               <div className="text-center py-8">
-                <Calendar className="h-16 w-16 text-gray-300 mx-auto mb-4" aria-hidden="true" />
+                <ClientIcon icon={Calendar} className="h-16 w-16 text-gray-300 mx-auto mb-4" />
                 <p className="text-xl text-gray-500 mb-4">
                   Aucun transport prévu
                 </p>
@@ -168,7 +169,7 @@ const ClientDashboard = ({ userName = "Utilisateur" }: ClientDashboardProps) => 
                 className="w-full justify-start"
                 onClick={handleNewBooking}
               >
-                <Calendar className="h-6 w-6" aria-hidden="true" />
+                <ClientIcon icon={Calendar} className="h-6 w-6" />
                 Réserver un transport
               </LargeButton>
               
@@ -178,7 +179,7 @@ const ClientDashboard = ({ userName = "Utilisateur" }: ClientDashboardProps) => 
                 className="w-full justify-start"
                 onClick={handleViewBookings}
               >
-                <FileText className="h-6 w-6" aria-hidden="true" />
+                <ClientIcon icon={FileText} className="h-6 w-6" />
                 Voir mes réservations
               </LargeButton>
               
@@ -188,7 +189,7 @@ const ClientDashboard = ({ userName = "Utilisateur" }: ClientDashboardProps) => 
                 className="w-full justify-start"
                 onClick={handleManageProfile}
               >
-                <User className="h-6 w-6" aria-hidden="true" />
+                <ClientIcon icon={User} className="h-6 w-6" />
                 Mon profil
               </LargeButton>
             </div>
@@ -246,7 +247,7 @@ const ClientDashboard = ({ userName = "Utilisateur" }: ClientDashboardProps) => 
                     className="flex items-center justify-center w-12 h-12 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/50"
                     aria-label={`Appeler ${contact.name}`}
                   >
-                    <Phone className="h-6 w-6" aria-hidden="true" />
+                    <ClientIcon icon={Phone} className="h-6 w-6" />
                   </a>
                 </div>
               ))}
@@ -267,14 +268,14 @@ const ClientDashboard = ({ userName = "Utilisateur" }: ClientDashboardProps) => 
                 href="tel:+33123456789"
                 className="flex items-center justify-center gap-3 p-4 bg-green-50 hover:bg-green-100 rounded-lg border-2 border-green-200 transition-colors focus:outline-none focus:ring-4 focus:ring-green-500/50"
               >
-                <Phone className="h-6 w-6 text-green-600" aria-hidden="true" />
+                <ClientIcon icon={Phone} className="h-6 w-6 text-green-600" />
                 <span className="text-lg font-semibold text-green-800">
                   01 23 45 67 89
                 </span>
               </a>
               
               <div className="flex items-center justify-center gap-3 p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
-                <Clock className="h-6 w-6 text-blue-600" aria-hidden="true" />
+                <ClientIcon icon={Clock} className="h-6 w-6 text-blue-600" />
                 <span className="text-lg text-blue-800">
                   7j/7 - 24h/24
                 </span>

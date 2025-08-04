@@ -36,7 +36,7 @@ const StatsSection = (): React.JSX.Element => {
             Ambulib en chiffres
           </h2>
           <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-            Découvrez l'impact d'Ambulib sur le transport médical en France.
+            Découvrez l&apos;impact d&apos;Ambulib sur le transport médical en France.
           </p>
         </div>
 

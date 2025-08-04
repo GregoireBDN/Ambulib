@@ -111,7 +111,7 @@ const SeniorCard = React.forwardRef<HTMLElement, SeniorCardProps>(
     };
 
     const cardProps = {
-      ref: ref as any,
+      ref,
       className: cn(
         // Styles de base
         "block w-full rounded-xl border-2 shadow-lg transition-all duration-200",

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Phone, AlertTriangle } from "lucide-react";
+import { ClientIcon } from "./ClientIcon";
 
 /**
  * EmergencyButton - Bouton d'urgence ultra-accessible
@@ -125,7 +126,7 @@ const EmergencyButton = React.forwardRef<HTMLButtonElement, EmergencyButtonProps
             role="alert"
             aria-live="assertive"
           >
-            <AlertTriangle className="h-6 w-6 text-yellow-600 mx-auto mb-2" aria-hidden="true" />
+            <ClientIcon icon={AlertTriangle} className="h-6 w-6 text-yellow-600 mx-auto mb-2" />
             <p className="text-lg font-semibold text-yellow-800 mb-3">
               {confirmationMessage}
             </p>
@@ -154,7 +155,7 @@ const EmergencyButton = React.forwardRef<HTMLButtonElement, EmergencyButtonProps
               autoFocus
               {...props}
             >
-              <Icon className="h-6 w-6" aria-hidden="true" />
+              <ClientIcon icon={Icon} className="h-6 w-6" />
               CONFIRMER
             </button>
 
@@ -209,7 +210,7 @@ const EmergencyButton = React.forwardRef<HTMLButtonElement, EmergencyButtonProps
         aria-describedby={`${emergencyText.toLowerCase()}-help`}
         {...props}
       >
-        <Icon className="h-8 w-8 shrink-0" aria-hidden="true" />
+        <ClientIcon icon={Icon} className="h-8 w-8 shrink-0" />
         <span className="font-black">{emergencyText}</span>
       </button>
     );

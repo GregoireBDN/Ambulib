@@ -1,5 +1,3 @@
-import { getSession } from "@/lib/session";
-import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Truck, ArrowLeft } from "lucide-react";

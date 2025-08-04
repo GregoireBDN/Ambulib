@@ -125,7 +125,7 @@ export default async function AnalyticsPage(): Promise<React.JSX.Element> {
                 <li>• Utilisez Tab pour naviguer entre les boutons</li>
                 <li>• Cliquez &quot;Tableau&quot; pour voir les données</li>
                 <li>• Le résumé explique les points clés</li>
-                <li>• Tous les graphiques sont lisibles par les lecteurs d'écran</li>
+                <li>• Tous les graphiques sont lisibles par les lecteurs d&apos;écran</li>
               </ul>
             </div>
             <div>

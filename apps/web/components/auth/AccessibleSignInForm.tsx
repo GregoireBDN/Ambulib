@@ -45,7 +45,7 @@ const AccessibleSignInForm = () => {
             className="inline-flex items-center gap-2 text-lg text-gray-600 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg px-2 py-1"
           >
             <ArrowLeft className="h-5 w-5" aria-hidden="true" />
-            Retour à l'accueil
+            Retour à l&apos;accueil
           </Link>
         </div>
 
@@ -147,7 +147,7 @@ const AccessibleSignInForm = () => {
             {/* Lien vers inscription */}
             <div className="text-center p-6 bg-gray-50 rounded-lg">
               <p className="text-lg text-gray-700 mb-4">
-                Vous n'avez pas encore de compte ?
+                Vous n&apos;avez pas encore de compte ?
               </p>
               <Link href="/auth/signup">
                 <LargeButton
@@ -166,7 +166,7 @@ const AccessibleSignInForm = () => {
         {/* Aide et support */}
         <div className="mt-8 text-center">
           <p className="text-gray-600 mb-4">
-            Besoin d'aide avec votre connexion ?
+            Besoin d&apos;aide avec votre connexion ?
           </p>
           <Link
             href="tel:+33123456789"

@@ -102,7 +102,7 @@ const TestimonialsSection = (): React.JSX.Element => {
                   <Quote className="h-8 w-8 text-blue-200" />
                 </div>
                 <p className="text-gray-700 leading-relaxed italic">
-                  "{testimonial.content}"
+                  &ldquo;{testimonial.content}&rdquo;
                 </p>
               </CardContent>
             </Card>

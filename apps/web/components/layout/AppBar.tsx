@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Menu, X, User, Settings, Bell, Home } from "lucide-react";
 import { Role } from "@/lib/type";
+import { ClientIcon } from "@/components/accessible/ClientIcon";
 import { LargeButton } from "@/components/accessible/LargeButton";
 import { EmergencyButton } from "@/components/accessible/EmergencyButton";
 import { UserMenuDropdown } from "@/components/user";
@@ -45,13 +46,7 @@ interface AccessibleAppBarProps {
 const AccessibleAppBar = ({ session }: AccessibleAppBarProps): React.JSX.Element => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [announcements, setAnnouncements] = React.useState<string>("");
-  const [isClient, setIsClient] = React.useState(false);
   const router = useRouter();
-
-  // Éviter l'erreur d'hydratation
-  React.useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   // Gestion du menu mobile avec gestion des focus
   const toggleMobileMenu = (): void => {
@@ -210,7 +205,7 @@ const AccessibleAppBar = ({ session }: AccessibleAppBarProps): React.JSX.Element
                     className="inline-flex items-center gap-2 px-4 py-3 rounded-lg text-lg font-medium text-gray-700 hover:text-blue-900 hover:bg-blue-50 focus:outline-none focus:ring-4 focus:ring-blue-500/50 focus:ring-offset-2 transition-all duration-200 min-h-[44px]"
                     aria-describedby={`nav-${item.href.replace('/', '')}`}
                   >
-                    {isClient && <Icon className="h-5 w-5" aria-hidden="true" />}
+                    <ClientIcon icon={Icon} className="h-5 w-5" />
                     {item.label}
                     <span id={`nav-${item.href.replace('/', '')}`} className="sr-only">
                       {item.description}
@@ -247,7 +242,7 @@ const AccessibleAppBar = ({ session }: AccessibleAppBarProps): React.JSX.Element
                     size="default"
                     ariaLabel="Se connecter à votre compte Ambulib"
                   >
-                    {isClient && <User className="h-5 w-5" aria-hidden="true" />}
+                    <ClientIcon icon={User} className="h-5 w-5" />
                     Connexion
                   </LargeButton>
                 </Link>
@@ -262,13 +257,10 @@ const AccessibleAppBar = ({ session }: AccessibleAppBarProps): React.JSX.Element
                 aria-label={isMobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
                 onClick={toggleMobileMenu}
               >
-                {isClient && (
-                  isMobileMenuOpen ? (
-                    <X className="h-6 w-6" aria-hidden="true" />
-                  ) : (
-                    <Menu className="h-6 w-6" aria-hidden="true" />
-                  )
-                )}
+                <ClientIcon 
+                  icon={isMobileMenuOpen ? X : Menu} 
+                  className="h-6 w-6" 
+                />
               </button>
             </div>
           </div>
@@ -310,7 +302,7 @@ const AccessibleAppBar = ({ session }: AccessibleAppBarProps): React.JSX.Element
                     onClick={() => setIsMobileMenuOpen(false)}
                     aria-describedby={`mobile-nav-${item.href.replace('/', '')}`}
                   >
-                    {isClient && <Icon className="h-6 w-6" aria-hidden="true" />}
+                    <ClientIcon icon={Icon} className="h-6 w-6" />
                     {item.label}
                     <span id={`mobile-nav-${item.href.replace('/', '')}`} className="sr-only">
                       {item.description}
@@ -338,7 +330,7 @@ const AccessibleAppBar = ({ session }: AccessibleAppBarProps): React.JSX.Element
                       className="w-full"
                       ariaLabel="Se connecter à votre compte Ambulib"
                     >
-                      {isClient && <User className="h-5 w-5" aria-hidden="true" />}
+                      <ClientIcon icon={User} className="h-5 w-5" />
                       Connexion
                     </LargeButton>
                   </Link>

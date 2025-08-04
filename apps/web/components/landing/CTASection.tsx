@@ -1,5 +1,6 @@
 import { Button } from "@repo/ui";
 import { ArrowRight, Phone, Mail } from "lucide-react";
+import { ClientIcon } from "@/components/accessible/ClientIcon";
 import Link from "next/link";
 
 const CTASection = (): React.JSX.Element => {
@@ -20,7 +21,7 @@ const CTASection = (): React.JSX.Element => {
             <Button variant="cta-white" size="cta" asChild>
               <Link href="/auth/signup">
                 Commencer maintenant
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ClientIcon icon={ArrowRight} className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             <Button variant="cta-outline-white" size="cta" asChild>
@@ -31,7 +32,7 @@ const CTASection = (): React.JSX.Element => {
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <div className="flex items-center justify-center mb-4">
-                <Phone className="h-8 w-8 text-white" />
+                <ClientIcon icon={Phone} className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-white mb-2">
                 Support 24/7
@@ -44,7 +45,7 @@ const CTASection = (): React.JSX.Element => {
 
             <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
               <div className="flex items-center justify-center mb-4">
-                <Mail className="h-8 w-8 text-white" />
+                <ClientIcon icon={Mail} className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold text-white mb-2">
                 Contactez-nous

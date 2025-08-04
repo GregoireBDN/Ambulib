@@ -1,7 +1,7 @@
 import { authFetch } from "@/lib/authFetch";
 import { BACKEND_URL } from "@/lib/constants";
 import { deleteSession } from "@/lib/session";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 // Route GET pour les redirections directes
 export async function GET() {
@@ -18,7 +18,7 @@ export async function GET() {
 }
 
 // Route POST pour les appels fetch depuis le client
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     // Essaie de notifier le backend, mais continue même en cas d'échec
     try {

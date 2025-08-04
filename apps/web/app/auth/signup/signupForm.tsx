@@ -13,7 +13,7 @@ import {
 } from "@repo/ui";
 import Link from "next/link";
 import { Button } from "@repo/ui";
-import { Eye, EyeOff, User, Building } from "lucide-react";
+import { Eye, EyeOff, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const SignUpForm = () => {

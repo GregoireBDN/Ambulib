@@ -1,4 +1,4 @@
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui";
+import { Button, Card, CardContent, CardHeader, CardTitle } from "@repo/ui";
 import {
   ArrowRight,
   LayoutDashboard,
