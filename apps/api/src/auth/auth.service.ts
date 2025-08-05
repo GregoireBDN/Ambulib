@@ -2,6 +2,7 @@ import {
   ConflictException,
   Inject,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from '../user/dto/create-user.dto';
@@ -15,6 +16,8 @@ import { Role, AuthProvider } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
@@ -23,19 +26,18 @@ export class AuthService {
   ) {}
 
   async registerUser(createUserDto: CreateUserDto) {
-    console.log('AuthService.registerUser called with:', createUserDto);
+    this.logger.log(`Registering new user with email: ${createUserDto.email}`);
 
     try {
-      console.log('Checking if user exists...');
       const user = await this.userService.findByEmail(createUserDto.email);
-      console.log(
-        'User check result:',
-        user ? 'User exists' : 'User does not exist',
-      );
 
-      if (user) throw new ConflictException('User already exists!');
+      if (user) {
+        this.logger.warn(
+          `Registration failed: User with email ${createUserDto.email} already exists`,
+        );
+        throw new ConflictException('User already exists!');
+      }
 
-      console.log('Creating new user...');
       // Pour l'inscription classique, on marque le profil comme complet
       const newUser = await this.userService.create({
         ...createUserDto,
@@ -43,10 +45,9 @@ export class AuthService {
         isProfileComplete: true,
       });
 
-      console.log('User created successfully:', newUser);
+      this.logger.log(`User created successfully with ID: ${newUser.id}`);
 
       // Connecter automatiquement l'utilisateur après l'inscription
-      console.log('Logging in user after registration...');
       const loginResult = await this.login(
         newUser.id,
         newUser.firstName,
@@ -55,14 +56,15 @@ export class AuthService {
         newUser.isProfileComplete,
       );
 
-      console.log('User logged in successfully after registration');
+      this.logger.log(
+        `User ${newUser.id} logged in successfully after registration`,
+      );
       return loginResult;
     } catch (error) {
-      console.error('Error in registerUser:', {
-        message: error.message,
-        stack: error.stack,
-        name: error.name,
-      });
+      this.logger.error(
+        `Error in registerUser for email ${createUserDto.email}:`,
+        error instanceof Error ? error.stack : String(error),
+      );
       throw error;
     }
   }
@@ -132,7 +134,7 @@ export class AuthService {
   }
 
   async validateRefreshToken(userId: number, refreshToken: string) {
-    const user = await this.userService.findOne(userId);
+    const user = await this.userService.findOneInternal(userId);
     if (!user) throw new UnauthorizedException('User not found!');
     if (!user.hashedRefreshToken)
       throw new UnauthorizedException('No refresh token found!');

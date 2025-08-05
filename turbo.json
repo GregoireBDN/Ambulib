@@ -1,31 +1,40 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env.*local", "SESSION_SECRET_KEY", "BACKEND_URL"],
+  "ui": "tui",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**", "build/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "env": ["NODE_ENV", "DATABASE_URL", "BACKEND_URL", "JWT_SECRET", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "SESSION_SECRET_KEY"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "env": ["NODE_ENV", "DATABASE_URL", "BACKEND_URL", "JWT_SECRET", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "SESSION_SECRET_KEY"]
+    },
+    "start:dev": {
+      "cache": false,
+      "persistent": true,
+      "env": ["NODE_ENV", "DATABASE_URL", "BACKEND_URL", "JWT_SECRET", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "SESSION_SECRET_KEY"]
+    },
+    "start": {
+      "cache": false,
+      "persistent": true,
+      "env": ["NODE_ENV", "DATABASE_URL", "BACKEND_URL", "JWT_SECRET", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "SESSION_SECRET_KEY"]
     },
     "lint": {
       "outputs": []
     },
-    "dev": {
-      "cache": false,
-      "persistent": true
-    },
-    "start": {
-      "cache": false,
-      "persistent": true
-    },
-    "start:dev": {
-      "cache": false,
-      "persistent": true
-    },
-    "test": {
+    "check-types": {
       "outputs": []
     },
-    "check-types": {
-      "dependsOn": ["^check-types"]
+    "test": {
+      "outputs": ["coverage/**"],
+      "env": ["NODE_ENV", "DATABASE_URL", "BACKEND_URL", "JWT_SECRET", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "SESSION_SECRET_KEY"]
+    },
+    "test:e2e": {
+      "outputs": [],
+      "env": ["NODE_ENV", "DATABASE_URL", "BACKEND_URL", "JWT_SECRET", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "SESSION_SECRET_KEY"]
     }
   }
 }

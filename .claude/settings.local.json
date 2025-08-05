@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__context7",
+      "mcp__neon",
+      "Bash(rm:*)",
+      "Bash(pnpm:*)",
+      "Bash(git:*)",
+      "Bash(npx prisma db pull:*)",
+      "Bash(npx prisma generate:*)",
+      "Bash(npx prisma migrate:*)",
+      "Bash(curl:*)",
+      "Bash(mkdir:*)",
+      "Bash(sed:*)",
+      "Bash(npx tsc:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(cp:*)",
+      "Bash(ls:*)",
+      "Bash(npx shadcn:*)",
+      "Bash(mv:*)",
+      "Bash(turbo run:*)",
+      "mcp__sequential-thinking__sequentialthinking"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "neon",
+    "context7"
+  ]
+}

@@ -33,7 +33,11 @@ async function bootstrap() {
       'JWT-auth',
     )
     .addTag('auth', "Endpoints d'authentification")
-    .addTag('users', 'Gestion des utilisateurs')
+    .addTag('users', 'Gestion du profil utilisateur')
+    .addTag(
+      'admin',
+      'Administration système - Gestion des utilisateurs et de la flotte',
+    )
     .addTag('health', "Vérification de l'état de l'API")
     .build();
 
@@ -59,4 +63,4 @@ async function bootstrap() {
     `📚 Swagger documentation available at: http://localhost:${process.env.PORT ?? 3001}/api/docs`,
   );
 }
-bootstrap();
+void bootstrap();

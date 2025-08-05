@@ -88,13 +88,5 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  },
-  "targets": {
-    "serve": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "pnpm run dev --filter=api"
-      }
-    }
   }
 }
