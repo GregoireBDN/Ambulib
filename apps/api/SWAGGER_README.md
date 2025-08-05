@@ -172,6 +172,8 @@ const config = new DocumentBuilder()
   .build();
 ```
 
+> >
+
 ## 📚 Ressources
 
 - [Documentation NestJS Swagger](https://docs.nestjs.com/openapi/introduction)

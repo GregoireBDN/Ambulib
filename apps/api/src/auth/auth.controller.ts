@@ -111,7 +111,7 @@ export class AuthController {
     );
   }
 
-  @Roles('ADMIN', 'DRIVER')
+  @Roles('ADMIN', 'AMBULANCE_DRIVER')
   @Get('protected')
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({

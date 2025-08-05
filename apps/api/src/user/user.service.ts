@@ -22,6 +22,7 @@ export class UserService {
           password: hashedPassword,
           age: age ? (typeof age === 'string' ? parseInt(age) : age) : null,
           ...user,
+          updatedAt: new Date(),
         },
       });
       console.log('User created in database:', result);

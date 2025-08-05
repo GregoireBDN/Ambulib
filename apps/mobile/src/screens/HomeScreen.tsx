@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -15,8 +15,36 @@ import {
   GhostButton,
 } from "../components/common/Button";
 import { LinearGradient } from "expo-linear-gradient";
+import { useAuthContext } from "../contexts/AuthContext";
+import { testAuthService } from "../utils/testAuth";
 
 export function HomeScreen({ navigation }: any) {
+  const { user, isAuthenticated, logout } = useAuthContext();
+
+  useEffect(() => {
+    // Test du service d'authentification au démarrage
+    testAuthService();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigation.navigate("Signin");
+    } catch (error) {
+      console.error("Erreur lors de la déconnexion:", error);
+    }
+  };
+
+  const handleSignin = () => {
+    console.log("Navigation vers Signin");
+    navigation.navigate("Signin");
+  };
+
+  const handleSignup = () => {
+    console.log("Navigation vers Signup");
+    navigation.navigate("Signup");
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView
@@ -47,20 +75,37 @@ export function HomeScreen({ navigation }: any) {
               Gérez vos transports sanitaires{"\n"}en toute simplicité
             </Text>
           </View>
-          <PrimaryButton
-            title="Se connecter"
-            onPress={() => navigation.navigate("Signin")}
-            fullWidth
-            size="medium"
-            style={styles.primaryButton}
-          />
-          <SecondaryButton
-            title="Créer un compte"
-            onPress={() => navigation.navigate("Signup")}
-            fullWidth
-            size="medium"
-            style={styles.secondaryButton}
-          />
+          {isAuthenticated ? (
+            <>
+              <Text style={styles.welcomeText}>
+                Bienvenue, {user?.firstName} {user?.lastName} !
+              </Text>
+              <PrimaryButton
+                title="Se déconnecter"
+                onPress={handleLogout}
+                fullWidth
+                size="medium"
+                style={styles.primaryButton}
+              />
+            </>
+          ) : (
+            <>
+              <PrimaryButton
+                title="Se connecter"
+                onPress={handleSignin}
+                fullWidth
+                size="medium"
+                style={styles.primaryButton}
+              />
+              <SecondaryButton
+                title="Créer un compte"
+                onPress={handleSignup}
+                fullWidth
+                size="medium"
+                style={styles.secondaryButton}
+              />
+            </>
+          )}
           <View style={styles.featuresSection}>
             <View style={styles.featuresHeaderContainer}>
               <View style={styles.featuresLine} />
@@ -262,5 +307,12 @@ const styles = StyleSheet.create({
   supportText: {
     color: "#666",
     fontSize: 15,
+  },
+  welcomeText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#2A67E2",
+    textAlign: "center",
+    marginBottom: 16,
   },
 });

@@ -6,6 +6,14 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Configuration CORS pour permettre l'accès depuis l'app mobile
+  app.enableCors({
+    origin: true, // Permet toutes les origines en développement
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  });
+
   // Configuration de Swagger
   const config = new DocumentBuilder()
     .setTitle('Ambulib API')

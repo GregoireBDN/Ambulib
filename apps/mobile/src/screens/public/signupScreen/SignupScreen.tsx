@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Switch,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { PrimaryButton, GhostButton } from "../../../components/common/Button";
 import { Ionicons } from "@expo/vector-icons";
@@ -15,6 +16,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { LinearGradient } from "expo-linear-gradient";
+import { useAuthContext } from "../../../contexts/AuthContext";
 
 // Schéma de validation Yup
 const signupSchema = yup.object({
@@ -55,7 +57,8 @@ export function SignupScreen({ navigation }: any) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
     useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { signup, isLoading } = useAuthContext();
 
   const {
     control,
@@ -77,13 +80,23 @@ export function SignupScreen({ navigation }: any) {
   });
 
   const onSubmit = async (data: SignupFormData) => {
-    setIsLoading(true);
-    // TODO: Envoi des données au backend
-    console.log("Données du formulaire:", data);
-    // Simulation d'une requête API
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsLoading(false);
-    // navigation.navigate("Home");
+    try {
+      await signup({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phoneNumber: data.phone,
+        password: data.password,
+      });
+
+      // Navigation vers l'écran principal après inscription réussie
+      navigation.navigate("Home");
+    } catch (error) {
+      Alert.alert(
+        "Erreur d'inscription",
+        error instanceof Error ? error.message : "Une erreur s'est produite"
+      );
+    }
   };
 
   const formatPhoneNumber = (text: string) => {
@@ -120,7 +133,7 @@ export function SignupScreen({ navigation }: any) {
           end={{ x: 1, y: 0 }}
         >
           <View style={styles.headerContent}>
-            <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
               <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
             </TouchableOpacity>
             <Text style={styles.headerTitle}>Créer un compte</Text>

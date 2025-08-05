@@ -8,24 +8,57 @@ import {
   TouchableOpacity,
   Switch,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { PrimaryButton, GhostButton } from "../../../components/common/Button";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { useAuthContext } from "../../../contexts/AuthContext";
 
 export function SigninScreen({ navigation }: any) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
+
+  const {
+    login,
+    authenticateWithBiometrics,
+    isBiometricAvailable,
+    isBiometricEnabled,
+    isLoading,
+  } = useAuthContext();
 
   const handleSignin = async () => {
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsLoading(false);
-    // Remplacez par votre logique de navigation
-    // navigation.navigate("Home");
+    if (!email || !password) {
+      Alert.alert("Erreur", "Veuillez remplir tous les champs");
+      return;
+    }
+
+    try {
+      await login({ email, password });
+      // La navigation sera gérée par le contexte d'authentification
+      navigation.navigate("Home");
+    } catch (error) {
+      Alert.alert(
+        "Erreur de connexion",
+        error instanceof Error ? error.message : "Une erreur s'est produite"
+      );
+    }
+  };
+
+  const handleBiometricAuth = async () => {
+    try {
+      await authenticateWithBiometrics();
+      navigation.navigate("Home");
+    } catch (error) {
+      Alert.alert(
+        "Erreur biométrique",
+        error instanceof Error
+          ? error.message
+          : "Authentification biométrique échouée"
+      );
+    }
   };
 
   return (
@@ -43,7 +76,7 @@ export function SigninScreen({ navigation }: any) {
             end={{ x: 1, y: 0 }}
           >
             <View style={styles.headerContent}>
-              <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
               </TouchableOpacity>
               <Text style={styles.headerTitle}>Connexion</Text>
@@ -136,25 +169,29 @@ export function SigninScreen({ navigation }: any) {
               <View style={styles.separatorLine} />
             </View>
 
-            <GhostButton
-              title="Touch ID / Face ID"
-              onPress={() => {}}
-              fullWidth
-              leftIcon={
-                <Ionicons name="finger-print" size={20} color="#2563eb" />
-              }
-              style={{ borderColor: "#E0E0E0", backgroundColor: "#F6F8FA" }}
-              textStyle={{ color: "#222" }}
-            />
+            {isBiometricAvailable && (
+              <GhostButton
+                title={
+                  isBiometricEnabled
+                    ? "Touch ID / Face ID"
+                    : "Activer la biométrie"
+                }
+                onPress={handleBiometricAuth}
+                fullWidth
+                leftIcon={
+                  <Ionicons name="finger-print" size={20} color="#2563eb" />
+                }
+                style={{ borderColor: "#E0E0E0", backgroundColor: "#F6F8FA" }}
+                textStyle={{ color: "#222" }}
+              />
+            )}
 
             <View style={styles.footerLinks}>
               <Text style={styles.footerText}>
                 Pas encore de compte ?{" "}
                 <Text
                   style={styles.linkText}
-                  onPress={() => {
-                    /* navigation to signup */
-                  }}
+                  onPress={() => navigation.navigate("Signup")}
                 >
                   Créer un compte
                 </Text>

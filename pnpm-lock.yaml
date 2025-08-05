@@ -186,6 +186,9 @@ importers:
       '@react-navigation/native-stack':
         specifier: ^7.3.13
         version: 7.3.18(@react-navigation/native@7.1.13(react-native@0.79.2(@babel/core@7.27.4)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native-safe-area-context@5.4.1(react-native@0.79.2(@babel/core@7.27.4)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native-screens@4.11.1(react-native@0.79.2(@babel/core@7.27.4)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(react-native@0.79.2(@babel/core@7.27.4)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+      axios:
+        specifier: ^1.6.0
+        version: 1.10.0
       expo:
         specifier: ~53.0.9
         version: 53.0.12(@babel/core@7.27.4)(react-native@0.79.2(@babel/core@7.27.4)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
@@ -198,6 +201,9 @@ importers:
       expo-linking:
         specifier: ~6.2.2
         version: 6.2.2(expo@53.0.12(@babel/core@7.27.4)(react-native@0.79.2(@babel/core@7.27.4)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))
+      expo-local-authentication:
+        specifier: ~13.8.0
+        version: 13.8.0(expo@53.0.12(@babel/core@7.27.4)(react-native@0.79.2(@babel/core@7.27.4)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))
       expo-secure-store:
         specifier: ~12.8.1
         version: 12.8.1(expo@53.0.12(@babel/core@7.27.4)(react-native@0.79.2(@babel/core@7.27.4)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))
@@ -4610,6 +4616,11 @@ packages:
 
   expo-linking@6.2.2:
     resolution: {integrity: sha512-FEe6lP4f7xFT/vjoHRG+tt6EPVtkEGaWNK1smpaUevmNdyCJKqW0PDB8o8sfG6y7fly8ULe8qg3HhKh5J7aqUQ==}
+
+  expo-local-authentication@13.8.0:
+    resolution: {integrity: sha512-h0YA7grVdo3834AS70EUCsalaXrrEnoq+yTvIhRTxiPmzWxUv7rNo5ff+XsIEYNElKPmT/wh/xPV1yo3l3fhGg==}
+    peerDependencies:
+      expo: '*'
 
   expo-module-scripts@4.1.7:
     resolution: {integrity: sha512-+knI8PMsmnwoV96/+QoeAa9e65xaka8YICxEoSockC7CGDkoaf1vQJdRahBL/2pXNT1ZSd73FGnqArdEc5xKzw==}
@@ -13185,6 +13196,11 @@ snapshots:
     transitivePeerDependencies:
       - expo
       - supports-color
+
+  expo-local-authentication@13.8.0(expo@53.0.12(@babel/core@7.27.4)(react-native@0.79.2(@babel/core@7.27.4)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)):
+    dependencies:
+      expo: 53.0.12(@babel/core@7.27.4)(react-native@0.79.2(@babel/core@7.27.4)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0)
+      invariant: 2.2.4
 
   expo-module-scripts@4.1.7(@babel/core@7.27.4)(@jest/types@29.6.3)(@types/eslint@9.6.1)(babel-jest@29.7.0(@babel/core@7.27.4))(eslint@9.29.0(jiti@2.4.2))(expo@53.0.12(@babel/core@7.27.4)(react-native@0.79.2(@babel/core@7.27.4)(@types/react@19.0.14)(react@19.0.0))(react@19.0.0))(jest@29.7.0(@types/node@22.15.32)(ts-node@10.9.2(@swc/core@1.12.5)(@types/node@22.15.32)(typescript@5.8.3)))(prettier@3.5.3)(react-dom@19.1.0(react@19.0.0))(react-native@0.79.2(@babel/core@7.27.4)(@types/react@19.0.14)(react@19.0.0))(react-test-renderer@19.0.0(react@19.0.0))(react@19.0.0)(webpack@5.99.6(@swc/core@1.12.5)):
     dependencies:
