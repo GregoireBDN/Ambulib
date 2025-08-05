@@ -2,23 +2,29 @@
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
   "globalDependencies": ["**/.env.*local"],
+  "concurrency": "15",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**",
-        "dist/**",
-        "build/**"
-      ],
-      "env": ["NODE_ENV", "DATABASE_URL", "JWT_SECRET", "FRONTEND_URL", "BACKEND_URL", "SESSION_SECRET_KEY"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", "build/**"],
+      "env": [
+        "NODE_ENV",
+        "DATABASE_URL",
+        "JWT_SECRET",
+        "FRONTEND_URL",
+        "BACKEND_URL",
+        "SESSION_SECRET_KEY",
+        "CLIENT_URL",
+        "ADMIN_URL",
+        "OPERATIONS_URL"
+      ]
     },
     "dev": {
       "cache": false,
       "persistent": true,
       "env": [
         "NODE_ENV",
-        "DATABASE_URL", 
+        "DATABASE_URL",
         "JWT_SECRET",
         "REFRESH_TOKEN_SECRET",
         "GOOGLE_CLIENT_ID",
@@ -26,7 +32,10 @@
         "CORS_ORIGIN",
         "FRONTEND_URL",
         "BACKEND_URL",
-        "SESSION_SECRET_KEY"
+        "SESSION_SECRET_KEY",
+        "CLIENT_URL",
+        "ADMIN_URL",
+        "OPERATIONS_URL"
       ]
     },
     "start": {
@@ -47,7 +56,10 @@
         "CORS_ORIGIN",
         "FRONTEND_URL",
         "BACKEND_URL",
-        "SESSION_SECRET_KEY"
+        "SESSION_SECRET_KEY",
+        "CLIENT_URL",
+        "ADMIN_URL",
+        "OPERATIONS_URL"
       ]
     },
     "lint": {
