@@ -4,7 +4,7 @@
     "dev": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["pnpm run dev --filter=api", "pnpm run dev --filter=web"],
+        "commands": ["pnpm run dev --filter=api", "pnpm run dev --filter=mobile"],
         "parallel": true,
         "color": true
       }
@@ -13,12 +13,6 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "pnpm run dev --filter=api"
-      }
-    },
-    "dev:web": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "pnpm run dev --filter=web"
       }
     },
     "dev:mobile": {
@@ -44,7 +38,7 @@
       "options": {
         "commands": [
           "pnpm run dev --filter=api",
-          "pnpm run dev --filter=web",
+          "pnpm run dev --filter=mobile",
           "cd apps/api && pnpm prisma studio"
         ],
         "parallel": true,

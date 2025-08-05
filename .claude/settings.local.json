@@ -19,7 +19,8 @@
       "Bash(ls:*)",
       "Bash(npx shadcn:*)",
       "Bash(mv:*)",
-      "Bash(turbo run:*)"
+      "Bash(turbo run:*)",
+      "mcp__sequential-thinking__sequentialthinking"
     ]
   },
   "enableAllProjectMcpServers": true,

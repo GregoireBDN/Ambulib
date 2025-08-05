@@ -1,8 +1,8 @@
-// Export all UI components
+// UI Components
 export * from "./components/ui"
 
-// Export all accessible components  
+// Accessible Components  
 export * from "./components/accessible"
 
-// Export utilities
-export * from "./lib/utils"
+// Utils
+export { cn } from "./lib/utils"
