@@ -11,6 +11,7 @@
     "./styles.css": "./dist/styles.css",
     "./components/ui/*": "./src/components/ui/*.tsx",
     "./components/accessible/*": "./src/components/accessible/*.tsx",
+    "./components/auth/*": "./src/components/auth/*.tsx",
     "./lib/utils": "./src/lib/utils.ts"
   },
   "scripts": {
@@ -18,15 +19,27 @@
     "dev:styles": "npx tailwindcss --config ./tailwind.config.ts --input ./src/styles.css --output ./dist/styles.css --watch",
     "build": "concurrently \"tsc\" \"pnpm build:styles\"",
     "build:styles": "npx tailwindcss --config ./tailwind.config.ts --input ./src/styles.css --output ./dist/styles.css --minify",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "lint": "eslint . --max-warnings 0",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.1.11",
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
+    "@types/jest-axe": "^3.5.9",
+    "@types/node": "^24.2.0",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.0",
     "concurrently": "^9.2.0",
     "eslint": "^9.24.0",
+    "jest": "^29.7.0",
+    "jest-axe": "^10.0.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "ts-jest": "^29.4.1",
     "typescript": "~5.8.3"
   },
   "dependencies": {
