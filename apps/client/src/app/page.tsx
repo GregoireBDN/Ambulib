@@ -1,3 +1,5 @@
+"use client"
+
 import { 
   LargeButton, 
   AccessibleInput, 
@@ -12,12 +14,49 @@ import {
   CardContent,
   Input
 } from "@repo/ui"
+import { useAuth } from "@/contexts/AuthContext"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 export default function HomePage() {
+  const { user, isLoading } = useAuth()
+  const router = useRouter()
+
+  // Redirect authenticated users to dashboard
+  useEffect(() => {
+    if (user && !isLoading) {
+      router.push("/dashboard")
+    }
+  }, [user, isLoading, router])
+
+  const handleSignIn = () => {
+    router.push("/auth/connexion")
+  }
+
+  const handleSignUp = () => {
+    router.push("/auth/inscription")
+  }
+
+  const handleEmergency = () => {
+    // For emergency, allow non-authenticated access
+    router.push("/auth/connexion?redirect=emergency")
+  }
+
+  if (isLoading) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto"></div>
+          <p className="text-muted-foreground">Chargement...</p>
+        </div>
+      </main>
+    )
+  }
+
   return (
     <main className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="space-y-8">
-        {/* En-tête avec contraste élevé */}
+        {/* En-tête avec contraste élevé et authentification */}
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold tracking-tight text-foreground">
             Ambulib Client
@@ -25,29 +64,37 @@ export default function HomePage() {
           <p className="text-xl text-muted-foreground leading-relaxed">
             Votre service d'ambulance accessible et sécurisé
           </p>
+          
+          {/* Boutons d'authentification */}
+          <div className="flex justify-center gap-4 mt-6">
+            <LargeButton onClick={handleSignIn}>
+              Se connecter
+            </LargeButton>
+            <LargeButton variant="outline" onClick={handleSignUp}>
+              Créer un compte
+            </LargeButton>
+          </div>
         </div>
 
         {/* Bouton d'urgence bien visible */}
         <div className="flex justify-center">
-          <EmergencyButton>
+          <EmergencyButton onClick={handleEmergency}>
             🚨 URGENCE
           </EmergencyButton>
         </div>
 
-        {/* Services principaux */}
+        {/* Services principaux - Aperçu pour utilisateurs non connectés */}
         <div className="grid gap-6 md:grid-cols-2">
           <SeniorCard 
             title="Réserver une ambulance"
             description="Planifiez votre transport médical en quelques étapes simples"
           >
             <div className="space-y-4">
-              <AccessibleInput
-                label="Votre nom complet"
-                description="Entrez votre nom et prénom"
-                placeholder="Ex: Marie Dupont"
-              />
-              <LargeButton className="w-full">
-                Commencer la réservation
+              <p className="text-base">
+                Connectez-vous pour accéder à votre espace de réservation personnalisé.
+              </p>
+              <LargeButton className="w-full" onClick={handleSignIn}>
+                Se connecter pour réserver
               </LargeButton>
             </div>
           </SeniorCard>
@@ -60,8 +107,8 @@ export default function HomePage() {
               <p className="text-base">
                 Accédez à votre dossier médical et vos prescriptions.
               </p>
-              <LargeButton variant="secondary" className="w-full">
-                Voir mon dossier
+              <LargeButton variant="secondary" className="w-full" onClick={handleSignIn}>
+                Se connecter pour consulter
               </LargeButton>
             </div>
           </SeniorCard>
@@ -74,8 +121,8 @@ export default function HomePage() {
               <p className="text-base">
                 Consultez l'historique de vos transports et les prochains rendez-vous.
               </p>
-              <LargeButton variant="outline" className="w-full">
-                Voir mes trajets
+              <LargeButton variant="outline" className="w-full" onClick={handleSignIn}>
+                Se connecter pour voir
               </LargeButton>
             </div>
           </SeniorCard>
@@ -88,8 +135,8 @@ export default function HomePage() {
               <p className="text-base">
                 Contactez notre équipe disponible 24h/24 et 7j/7.
               </p>
-              <LargeButton variant="secondary" className="w-full">
-                Nous contacter
+              <LargeButton variant="secondary" className="w-full" onClick={handleSignIn}>
+                Accéder au support
               </LargeButton>
             </div>
           </SeniorCard>
