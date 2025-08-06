@@ -22,7 +22,7 @@ interface AuthActions {
   updateProfile: (updates: Partial<User>) => Promise<void>
 }
 
-interface AuthContextValue extends AuthState, AuthActions {}
+export interface AuthContextValue extends AuthState, AuthActions {}
 
 // Actions du reducer
 type AuthAction =
