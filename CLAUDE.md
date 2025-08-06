@@ -6,8 +6,12 @@ This file provides guidance to Claude Code when working with this repository.
 
 Ambulib - Application pour services d'ambulance (Turborepo monorepo):
 
-- **API** (`apps/api`): NestJS backend with PostgreSQL/Prisma
-- **Mobile** (`apps/mobile`): Expo React Native application
+- **API** (`apps/api`): NestJS backend with PostgreSQL/Prisma → [📖 API Documentation](apps/api/CLAUDE.md)
+- **Mobile** (`apps/mobile`): Expo React Native application → [📱 Mobile Documentation](apps/mobile/CLAUDE.md)
+- **Client** (`apps/client`): Next.js app for patients/guardians → [👥 Client Documentation](apps/client/CLAUDE.md)
+- **Fleet** (`apps/fleet`): Next.js app for fleet managers → [🚗 Fleet Documentation](apps/fleet/CLAUDE.md)
+- **Admin** (`apps/admin`): Next.js app for administrators → [⚙️ Admin Documentation](apps/admin/CLAUDE.md)
+- **UI** (`packages/ui`): Shared React components with shadcn/ui → [🎨 UI Documentation](packages/ui/CLAUDE.md)
 
 ## ACCESSIBILITÉ PRIORITAIRE
 
@@ -34,9 +38,12 @@ Ambulib - Application pour services d'ambulance (Turborepo monorepo):
 
 ```bash
 # Main commands
-pnpm dev          # Start all apps
+pnpm dev          # Start all apps (note: UI package will run in watch mode)
 pnpm dev:api      # NestJS API only
 pnpm dev:mobile   # Expo mobile only
+pnpm turbo dev --filter=client   # Client app only
+pnpm turbo dev --filter=fleet    # Fleet manager app only
+pnpm turbo dev --filter=admin    # Admin app only
 
 # Quality checks (REQUIRED before commits)
 pnpm test         # Run tests (80% coverage minimum)
@@ -52,32 +59,15 @@ pnpm swagger      # Generate Swagger documentation
 pnpm full-stack   # Run full stack development
 ```
 
-## Tech Stack
+## Tech Stack Overview
 
-### Backend (apps/api)
+- **Backend**: NestJS + PostgreSQL/Prisma ORM + JWT/OAuth
+- **Mobile**: Expo React Native + NativeWind + React Navigation  
+- **Web Apps**: Next.js 15 + App Router + TypeScript + Tailwind CSS 4.x
+- **UI Package**: React + shadcn/ui + Custom Accessible Components
+- **Monorepo**: Turborepo with shared dependencies and build pipeline
 
-- NestJS with PostgreSQL/Prisma ORM
-- JWT auth + Google OAuth, Argon2 hashing
-- Modular architecture with guards/decorators
-- Key modules: Auth, User, Admin, Booking
-
-### Mobile (apps/mobile)
-
-- Expo React Native application
-- TailwindCSS with NativeWind for styling
-- Navigation with React Navigation
-
-### API Modules Overview
-
-- **Auth**: Authentication with JWT/Google OAuth, role-based access
-- **User**: User profile management, role assignments
-- **Admin**: Administrative functions, user/vehicle management
-- **Booking**: Ambulance booking system with medical information
-- **Prisma**: Database service layer
-
-### Key Database Models
-
-User, Booking, MedicalInfo, TransportTicket, Ambulance, Route, Assignment
+> 📚 **Detailed technical information** is available in each project's CLAUDE.md file
 
 ## Important Environment Variables
 
@@ -90,81 +80,43 @@ GOOGLE_CLIENT_ID=         # OAuth
 GOOGLE_CLIENT_SECRET=     # OAuth
 ```
 
-## Mobile Components Architecture
+## Quick Reference
 
-### Component Structure
+### Working on specific projects
+- **API Backend**: See [apps/api/CLAUDE.md](apps/api/CLAUDE.md) for modules, authentication, database models
+- **Mobile App**: See [apps/mobile/CLAUDE.md](apps/mobile/CLAUDE.md) for React Native, accessibility, navigation
+- **Client Interface**: See [apps/client/CLAUDE.md](apps/client/CLAUDE.md) for senior-focused UI, accessibility features
+- **Fleet Management**: See [apps/fleet/CLAUDE.md](apps/fleet/CLAUDE.md) for operations dashboard, real-time features
+- **Admin Panel**: See [apps/admin/CLAUDE.md](apps/admin/CLAUDE.md) for user management, system configuration
+- **UI Components**: See [packages/ui/CLAUDE.md](packages/ui/CLAUDE.md) for shadcn/ui setup, accessible components
+
+## Monorepo Structure
 
 ```
-apps/mobile/src/
-├── components/
-│   └── common/
-│       └── Button.tsx          # Accessible button component
-├── screens/
-│   ├── HomeScreen.tsx
-│   └── public/
-│       ├── signinScreen/
-│       └── signupScreen/
-├── navigation/
-│   └── AppNavigator.tsx        # React Navigation setup
-└── assets/
-    └── img/                    # App assets and logos
+ambulib/
+├── apps/
+│   ├── api/           # NestJS Backend + PostgreSQL
+│   ├── mobile/        # Expo React Native
+│   ├── client/        # Next.js Patient Interface  
+│   ├── fleet/         # Next.js Fleet Management
+│   └── admin/         # Next.js Admin Panel
+├── packages/
+│   └── ui/           # Shared Components (shadcn/ui + Accessible)
+└── turbo.json        # Monorepo build configuration
 ```
 
-### Accessibility Guidelines for Mobile
-
-- **Touch Target Size**: Minimum 44pt for all interactive elements
-- **Screen Reader Support**: VoiceOver/TalkBack compatibility
-- **High Contrast**: Support for system accessibility settings
-- **Voice Control**: Compatible with voice navigation
-- **Simple Navigation**: Intuitive flow for elderly users
-
-### Mobile Development Best Practices
-
-1. **Accessibility First**: Always implement WCAG 2.1 AA standards
-2. **Platform Conventions**: Follow iOS/Android design guidelines
-3. **Performance**: Optimize for older devices commonly used by seniors
-4. **Offline Support**: Essential features work without internet
-5. **Large Text**: Support dynamic type sizing
-
-## Turborepo Configuration
-
-### Task Pipeline
-
-The `turbo.json` defines:
-
-- **build**: Builds all applications with proper dependency order
-- **dev**: Starts development servers (persistent, no cache)
-- **start:dev**: Alternative development command for API
-- **start**: Start command for mobile app
-- **lint**: Runs ESLint across all packages
-- **test**: Runs unit tests with coverage
-- **test:e2e**: End-to-end testing
-- **check-types**: TypeScript type checking
-
-### Environment Variables
-
-All required environment variables are declared in `turbo.json` for proper cache invalidation:
-`NODE_ENV`, `DATABASE_URL`, `BACKEND_URL`, `JWT_SECRET`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `SESSION_SECRET_KEY`
-
-### Commands to Remember
+### Key Commands
 
 ```bash
-# Development
-pnpm dev                    # Start all apps
-pnpm dev:api               # Start only API
-pnpm dev:mobile            # Start only mobile app
+# Start all in development
+pnpm dev
 
-# Quality checks
-pnpm lint                  # Lint all packages
-pnpm check-types          # Type check all packages
-pnpm test                 # Run all tests
-pnpm test:e2e             # Run e2e tests
+# Start individual apps
+pnpm dev:api                    # Backend only
+pnpm turbo dev --filter=client  # Client app only  
+pnpm turbo dev --filter=fleet   # Fleet app only
+pnpm turbo dev --filter=admin   # Admin app only
 
-# Production
-pnpm build                # Build all packages
-
-# Utilities
-pnpm format               # Format with Prettier
-pnpm studio               # Prisma Studio
-pnpm swagger              # API documentation
+# Quality assurance (REQUIRED before commits)
+pnpm test && pnpm lint && pnpm check-types && pnpm build
 ```
