@@ -13,8 +13,9 @@ import {
 } from "@repo/ui"
 import { useAuth } from "@/contexts/AuthContext"
 import { useRouter } from "next/navigation"
+import ProtectedRoute from "@/components/ProtectedRoute"
 
-export default function DashboardPage() {
+function DashboardContent() {
   const { user, signOut } = useAuth()
   const router = useRouter()
 
@@ -181,5 +182,13 @@ export default function DashboardPage() {
         </div>
       </main>
     </div>
+  )
+}
+
+export default function DashboardPage() {
+  return (
+    <ProtectedRoute>
+      <DashboardContent />
+    </ProtectedRoute>
   )
 }

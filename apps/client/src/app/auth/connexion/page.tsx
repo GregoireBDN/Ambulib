@@ -1,15 +1,17 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { SignInForm } from "@repo/ui"
 import { useAuth } from "@/contexts/AuthContext"
+import SearchParamsWrapper from "@/components/SearchParamsWrapper"
 
-export default function SignInPage() {
+function SignInContent() {
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<any>({})
   const { signIn } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   const handleSubmit = async (data: { email: string; password: string }) => {
     setLoading(true)
@@ -17,7 +19,10 @@ export default function SignInPage() {
     
     try {
       await signIn({ email: data.email, password: data.password })
-      router.push("/dashboard") // Redirect to protected area
+      
+      // Redirect to the original destination or dashboard
+      const redirectTo = searchParams.get('redirect') || '/dashboard'
+      router.push(redirectTo)
     } catch (error: any) {
       setErrors({
         general: [error.message || "Une erreur est survenue lors de la connexion"]
@@ -89,5 +94,13 @@ export default function SignInPage() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function SignInPage() {
+  return (
+    <SearchParamsWrapper>
+      <SignInContent />
+    </SearchParamsWrapper>
   )
 }

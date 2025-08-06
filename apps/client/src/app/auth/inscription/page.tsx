@@ -1,9 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { SignUpForm } from "@repo/ui"
 import { useAuth } from "@/contexts/AuthContext"
+import SearchParamsWrapper from "@/components/SearchParamsWrapper"
 
 interface SignUpData {
   firstName: string
@@ -15,11 +16,12 @@ interface SignUpData {
   phone?: string
 }
 
-export default function SignUpPage() {
+function SignUpContent() {
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<any>({})
   const { signUp } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   const handleSubmit = async (data: SignUpData) => {
     setLoading(true)
@@ -35,7 +37,10 @@ export default function SignUpPage() {
         postalCode: data.zipCode,
         phoneNumber: data.phone
       })
-      router.push("/dashboard") // Redirect to protected area after successful signup
+      
+      // Redirect to the original destination or dashboard
+      const redirectTo = searchParams.get('redirect') || '/dashboard'
+      router.push(redirectTo)
     } catch (error: any) {
       // Handle validation errors
       if (error.validation) {
@@ -107,5 +112,13 @@ export default function SignUpPage() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function SignUpPage() {
+  return (
+    <SearchParamsWrapper>
+      <SignUpContent />
+    </SearchParamsWrapper>
   )
 }
