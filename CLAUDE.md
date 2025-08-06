@@ -62,7 +62,7 @@ pnpm full-stack   # Run full stack development
 ## Tech Stack Overview
 
 - **Backend**: NestJS + PostgreSQL/Prisma ORM + JWT/OAuth
-- **Mobile**: Expo React Native + NativeWind + React Navigation  
+- **Mobile**: Expo React Native + NativeWind + React Navigation
 - **Web Apps**: Next.js 15 + App Router + TypeScript + Tailwind CSS 4.x
 - **UI Package**: React + shadcn/ui + Custom Accessible Components
 - **Monorepo**: Turborepo with shared dependencies and build pipeline
@@ -83,12 +83,14 @@ GOOGLE_CLIENT_SECRET=     # OAuth
 ## Quick Reference
 
 ### Working on specific projects
+
 - **API Backend**: See [apps/api/CLAUDE.md](apps/api/CLAUDE.md) for modules, authentication, database models
 - **Mobile App**: See [apps/mobile/CLAUDE.md](apps/mobile/CLAUDE.md) for React Native, accessibility, navigation
 - **Client Interface**: See [apps/client/CLAUDE.md](apps/client/CLAUDE.md) for senior-focused UI, accessibility features
 - **Fleet Management**: See [apps/fleet/CLAUDE.md](apps/fleet/CLAUDE.md) for operations dashboard, real-time features
 - **Admin Panel**: See [apps/admin/CLAUDE.md](apps/admin/CLAUDE.md) for user management, system configuration
 - **UI Components**: See [packages/ui/CLAUDE.md](packages/ui/CLAUDE.md) for shadcn/ui setup, accessible components
+- **Shared Packages**: See [packages/CLAUDE.md](packages/CLAUDE.md) for ESLint config, TypeScript config, and UI package overview
 
 ## Monorepo Structure
 
@@ -97,11 +99,13 @@ ambulib/
 ├── apps/
 │   ├── api/           # NestJS Backend + PostgreSQL
 │   ├── mobile/        # Expo React Native
-│   ├── client/        # Next.js Patient Interface  
+│   ├── client/        # Next.js Patient Interface
 │   ├── fleet/         # Next.js Fleet Management
 │   └── admin/         # Next.js Admin Panel
-├── packages/
-│   └── ui/           # Shared Components (shadcn/ui + Accessible)
+├── packages/          # Shared packages → [📦 Packages Documentation](packages/CLAUDE.md)
+│   ├── ui/           # Shared Components (shadcn/ui + Accessible)
+│   ├── eslint-config/        # ESLint configuration partagée
+│   └── typescript-config/    # TypeScript configuration partagée
 └── turbo.json        # Monorepo build configuration
 ```
 
@@ -113,7 +117,7 @@ pnpm dev
 
 # Start individual apps
 pnpm dev:api                    # Backend only
-pnpm turbo dev --filter=client  # Client app only  
+pnpm turbo dev --filter=client  # Client app only
 pnpm turbo dev --filter=fleet   # Fleet app only
 pnpm turbo dev --filter=admin   # Admin app only
 
