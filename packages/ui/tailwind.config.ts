@@ -1,8 +1,17 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: ["./src/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
@@ -38,11 +47,31 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Couleurs spécifiques à l'accessibilité
+        emergency: {
+          DEFAULT: "hsl(0, 84%, 60%)",
+          foreground: "hsl(0, 0%, 100%)",
+        },
+        accessible: {
+          high: "hsl(210, 40%, 8%)",
+          medium: "hsl(215, 25%, 27%)",
+          low: "hsl(215, 14%, 34%)",
+        }
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      fontFamily: {
+        sans: ["var(--font-sans)"],
+      },
+      // Tailles d'éléments pour l'accessibilité
+      minHeight: {
+        touch: "44px", // Taille minimum pour les éléments tactiles
+      },
+      minWidth: {
+        touch: "44px",
       },
     },
   },

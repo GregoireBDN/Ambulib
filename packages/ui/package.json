@@ -4,32 +4,37 @@
   "private": true,
   "exports": {
     "./styles/globals.css": "./src/styles/globals.css",
+    "./styles.css": "./dist/styles.css",
     "./components/ui/*": "./src/components/ui/*.tsx",
     "./components/accessible/*": "./src/components/accessible/*.tsx",
     "./lib/utils": "./src/lib/utils.ts"
   },
   "scripts": {
-    "dev": "tsc --watch",
-    "build": "tsc",
+    "dev": "concurrently \"tsc --watch\" \"pnpm dev:styles\"",
+    "dev:styles": "npx tailwindcss --config ./tailwind.config.ts --input ./src/styles.css --output ./dist/styles.css --watch",
+    "build": "concurrently \"tsc\" \"pnpm build:styles\"",
+    "build:styles": "npx tailwindcss --config ./tailwind.config.ts --input ./src/styles.css --output ./dist/styles.css --minify",
     "lint": "eslint . --max-warnings 0",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
+    "@tailwindcss/cli": "^4.1.11",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.0",
+    "concurrently": "^9.2.0",
     "eslint": "^9.24.0",
     "typescript": "~5.8.3"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",
+    "@tailwindcss/postcss": "4.1.10",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "lucide-react": "^0.460.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "tailwind-merge": "^2.2.0",
-    "tailwindcss": "4.1.10",
-    "@tailwindcss/postcss": "4.1.10"
+    "tailwindcss": "4.1.10"
   },
   "peerDependencies": {
     "react": "19.0.0",
