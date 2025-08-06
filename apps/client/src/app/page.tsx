@@ -2,7 +2,15 @@ import {
   LargeButton, 
   AccessibleInput, 
   EmergencyButton, 
-  SeniorCard 
+  SeniorCard,
+  // Composants shadcn/ui de base
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  Input
 } from "@repo/ui"
 
 export default function HomePage() {
@@ -86,6 +94,28 @@ export default function HomePage() {
             </div>
           </SeniorCard>
         </div>
+
+        {/* Test composants shadcn/ui de base */}
+        <Card className="mt-8">
+          <CardHeader>
+            <CardTitle>Test des composants shadcn/ui</CardTitle>
+            <CardDescription>
+              Vérification que les composants de base fonctionnent correctement
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex gap-4">
+              <Input placeholder="Entrez votre recherche..." className="flex-1" />
+              <Button>Rechercher</Button>
+              <Button variant="secondary">Annuler</Button>
+            </div>
+            <div className="flex gap-2">
+              <Button size="sm" variant="outline">Petit</Button>
+              <Button size="default">Normal</Button>
+              <Button size="lg" variant="destructive">Grand</Button>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Information d'accessibilité */}
         <div className="mt-8 p-4 bg-muted rounded-lg">
