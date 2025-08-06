@@ -80,9 +80,13 @@ export class AdminService {
     }
 
     return this.prisma.ambulance.create({
-      data: dto,
+      data: {
+        ...dto,
+        companyId: 1, // TODO: Récupérer companyId dynamiquement
+      },
       include: {
         driver: true,
+        company: true,
       },
     });
   }

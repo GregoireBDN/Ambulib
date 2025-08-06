@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
+import { CompanyController } from './controllers/company.controller';
+import { CompanyService } from './services/company.service';
 import { UserService } from '../user/user.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { LocalStrategy } from './strategies/local.strategy';
@@ -15,6 +17,7 @@ import { GoogleStrategy } from './strategies/google.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
 import { RolesGuard } from './guards/roles/roles.guard';
+import { TenantGuard } from './guards/tenant/tenant.guard';
 @Module({
   imports: [
     JwtModule.registerAsync(jwtConfig.asProvider()),
@@ -22,15 +25,17 @@ import { RolesGuard } from './guards/roles/roles.guard';
     ConfigModule.forFeature(refreshConfig),
     ConfigModule.forFeature(googleOAuthConfig),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, CompanyController],
   providers: [
     AuthService,
+    CompanyService,
     UserService,
     PrismaService,
     LocalStrategy,
     JwtStrategy,
     RefreshStrategy,
     GoogleStrategy,
+    TenantGuard,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

@@ -7,12 +7,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Company {
+  id               Int           @id @default(autoincrement())
+  name             String
+  email            String        @unique
+  phoneNumber      String?
+  address          String?
+  city             String?
+  postalCode       String?
+  licenseNumber    String?       @unique
+  status           CompanyStatus @default(PENDING)
+  registrationDate DateTime      @default(now())
+  approvedAt       DateTime?
+  notes            String?
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  users            User[]
+  ambulances       Ambulance[]
+}
+
 model User {
   email              String            @unique
   password           String
   id                 Int               @id @default(autoincrement())
   hashedRefreshToken String?
   role               Role              @default(CLIENT)
+  companyId          Int?
   age                Int?
   firstName          String
   lastName           String
@@ -24,6 +44,7 @@ model User {
   postalCode         String?
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
+  company            Company?          @relation(fields: [companyId], references: [id])
   dependent          Dependent[]
   emergencyContact   EmergencyContact?
   bookings           Booking[]
@@ -72,6 +93,13 @@ enum Role {
   FLEET_MANAGER
   AMBULANCE_DRIVER
   CLIENT
+}
+
+enum CompanyStatus {
+  PENDING
+  APPROVED
+  SUSPENDED
+  REJECTED
 }
 
 enum SpecialRequirements {
@@ -169,6 +197,7 @@ model TransportTicket {
 
 model Ambulance {
   id              Int             @id @default(autoincrement())
+  companyId       Int
   licensePlate    String          @unique
   vehicleModel    String
   vehicleYear     Int
@@ -181,6 +210,7 @@ model Ambulance {
   notes           String?
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
+  company         Company         @relation(fields: [companyId], references: [id])
   driver          User?           @relation("AmbulanceDriver", fields: [driverId], references: [id])
   assignments     Assignment[]
 }

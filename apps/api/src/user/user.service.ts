@@ -15,14 +15,10 @@ export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
-    console.log('UserService.create called with:', createUserDto);
     try {
       const { password, age, ...user } = createUserDto;
-      console.log('Hashing password...');
       const hashedPassword = await hash(password);
-      console.log('Password hashed successfully');
 
-      console.log('Creating user in database...');
       const result = await this.prisma.user.create({
         data: {
           password: hashedPassword,
@@ -31,34 +27,21 @@ export class UserService {
           updatedAt: new Date(),
         },
       });
-      console.log('User created in database:', result);
       return result;
     } catch (error) {
-      console.error('Error in UserService.create:', {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : 'No stack trace',
-        name: error instanceof Error ? error.name : 'Unknown error type',
-      });
       throw error;
     }
   }
 
   async findByEmail(email: string) {
-    console.log('UserService.findByEmail called with:', email);
     try {
       const result = await this.prisma.user.findUnique({
         where: {
           email,
         },
       });
-      console.log('UserService.findByEmail result:', result);
       return result;
     } catch (error) {
-      console.error('Error in UserService.findByEmail:', {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : 'No stack trace',
-        name: error instanceof Error ? error.name : 'Unknown error type',
-      });
       throw error;
     }
   }

@@ -171,10 +171,12 @@ describe('AdminService', () => {
       (prisma.ambulance.create as jest.Mock).mockResolvedValue({
         ...mockAmbulance,
         ...createAmbulanceDto,
+        companyId: 1,
         driver: mockUser,
+        company: { id: 1, name: 'Test Company' },
       });
 
-      const result = await service.createAmbulance(createAmbulanceDto);
+      await service.createAmbulance(createAmbulanceDto);
 
       expect(prisma.ambulance.findUnique).toHaveBeenCalledWith({
         where: { licensePlate: createAmbulanceDto.licensePlate },
@@ -183,8 +185,14 @@ describe('AdminService', () => {
         where: { id: createAmbulanceDto.driverId, role: Role.AMBULANCE_DRIVER },
       });
       expect(prisma.ambulance.create).toHaveBeenCalledWith({
-        data: createAmbulanceDto,
-        include: { driver: true },
+        data: {
+          ...createAmbulanceDto,
+          companyId: 1,
+        },
+        include: {
+          driver: true,
+          company: true,
+        },
       });
     });
 

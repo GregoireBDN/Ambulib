@@ -30,6 +30,9 @@ describe('UserService', () => {
     isEmailVerified: false,
     emailVerificationToken: null,
     emailVerificationExpires: null,
+    companyId: null, // CLIENT n'appartient à aucune entreprise
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 
   const mockCreateUserDto: CreateUserDto = {
@@ -92,6 +95,7 @@ describe('UserService', () => {
           address: mockCreateUserDto.address,
           city: mockCreateUserDto.city,
           postalCode: mockCreateUserDto.postalCode,
+          updatedAt: expect.any(Date),
         },
       });
       expect(result).toEqual(mockUser);

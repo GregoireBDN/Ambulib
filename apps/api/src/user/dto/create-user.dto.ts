@@ -3,6 +3,7 @@ import {
   IsString,
   IsOptional,
   IsBoolean,
+  IsNumber,
   Matches,
   MinLength,
 } from 'class-validator';
@@ -61,4 +62,8 @@ export class CreateUserDto {
   @IsOptional()
   @IsBoolean()
   isProfileComplete?: boolean;
+
+  @IsOptional()
+  @IsNumber()
+  companyId?: number;
 }

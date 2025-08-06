@@ -16,6 +16,7 @@ describe('AuthController', () => {
     email: 'test@example.com',
     role: Role.CLIENT,
     isProfileComplete: true,
+    companyId: null,
   };
 
   const mockAuthResponse = {
@@ -24,6 +25,7 @@ describe('AuthController', () => {
     lastName: 'Doe',
     role: Role.CLIENT,
     isProfileComplete: true,
+    companyId: undefined,
     accessToken: 'accessToken',
     refreshToken: 'refreshToken',
   };
@@ -193,6 +195,7 @@ describe('AuthController', () => {
         isEmailVerified: false,
         emailVerificationToken: null,
         emailVerificationExpires: null,
+        companyId: null,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -225,6 +228,7 @@ describe('AuthController', () => {
         isEmailVerified: false,
         emailVerificationToken: null,
         emailVerificationExpires: null,
+        companyId: null,
         createdAt: new Date(),
         updatedAt: new Date(),
       };

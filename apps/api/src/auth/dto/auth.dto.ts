@@ -1,6 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, IsOptional, IsBoolean } from 'class-validator';
-import { AuthProvider } from '@prisma/client';
+import {
+  IsEmail,
+  IsString,
+  IsOptional,
+  IsBoolean,
+  IsNumber,
+} from 'class-validator';
+import { AuthProvider, Role } from '@prisma/client';
 
 export class SignupDto {
   @ApiProperty({
@@ -166,6 +172,52 @@ export class CompleteProfileDto {
   postalCode?: string;
 }
 
+export class CreateCompanyUserDto {
+  @ApiProperty({
+    description: "Prénom de l'utilisateur",
+    example: 'Pierre',
+  })
+  @IsString()
+  firstName: string;
+
+  @ApiProperty({
+    description: "Nom de famille de l'utilisateur",
+    example: 'Dubois',
+  })
+  @IsString()
+  lastName: string;
+
+  @ApiProperty({
+    description: "Adresse email de l'utilisateur",
+    example: 'pierre.dubois@ambulances-paris.fr',
+  })
+  @IsEmail()
+  email: string;
+
+  @ApiProperty({
+    description: "Mot de passe de l'utilisateur",
+    example: 'motdepasse123',
+  })
+  @IsString()
+  password: string;
+
+  @ApiProperty({
+    description: "Rôle de l'utilisateur dans l'entreprise",
+    enum: Role,
+    example: Role.AMBULANCE_DRIVER,
+  })
+  role: Role;
+
+  @ApiProperty({
+    description: 'Numéro de téléphone',
+    example: '+33123456789',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  phoneNumber?: string;
+}
+
 export class AuthResponseDto {
   @ApiProperty({ description: "ID de l'utilisateur" })
   id: number;
@@ -181,6 +233,9 @@ export class AuthResponseDto {
 
   @ApiProperty({ description: "Rôle de l'utilisateur" })
   role: string;
+
+  @ApiProperty({ description: "ID de l'entreprise", required: false })
+  companyId?: number;
 
   @ApiProperty({ description: "Token d'accès JWT" })
   accessToken: string;

@@ -69,20 +69,7 @@ export class AuthController {
     description: 'Données invalides ou email déjà utilisé',
   })
   registerUser(@Body() createUserDto: CreateUserDto) {
-    console.log('Signup request received:', createUserDto);
-    try {
-      console.log('Calling authService.registerUser...');
-      const result = this.authService.registerUser(createUserDto);
-      console.log('Signup successful:', result);
-      return result;
-    } catch (error) {
-      console.error('Signup error details:', {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : 'No stack trace',
-        name: error instanceof Error ? error.name : 'Unknown error type',
-      });
-      throw error;
-    }
+    return this.authService.registerUser(createUserDto);
   }
 
   @Public()

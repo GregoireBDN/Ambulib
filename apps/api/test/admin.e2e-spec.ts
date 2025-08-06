@@ -45,6 +45,7 @@ describe('AdminController (e2e)', () => {
           lastName: 'User',
           role: 'ADMIN',
           isProfileComplete: true,
+          companyId: null,
         },
       });
 
@@ -132,6 +133,7 @@ describe('AdminController (e2e)', () => {
           lastName: 'Manager',
           role: 'FLEET_MANAGER',
           isProfileComplete: true,
+          companyId: null,
         },
       });
 
@@ -146,6 +148,7 @@ describe('AdminController (e2e)', () => {
           lastName: 'Driver',
           role: 'AMBULANCE_DRIVER',
           isProfileComplete: true,
+          companyId: null,
         },
       });
 
@@ -155,6 +158,7 @@ describe('AdminController (e2e)', () => {
     it('should be able to create ambulances', async () => {
       const ambulance = await prisma.ambulance.create({
         data: {
+          companyId: 1,
           licensePlate: 'TEST123',
           vehicleModel: 'Ford Transit',
           vehicleYear: 2023,
@@ -176,6 +180,7 @@ describe('AdminController (e2e)', () => {
           lastName: 'Client',
           role: 'CLIENT',
           isProfileComplete: true,
+          companyId: null,
         },
       });
 

@@ -36,6 +36,7 @@ describe('AuthService', () => {
     isEmailVerified: false,
     emailVerificationToken: null,
     emailVerificationExpires: null,
+    companyId: null, // CLIENT n'appartient à aucune entreprise
     createdAt: new Date(),
     updatedAt: new Date(),
     notes: null,
@@ -151,6 +152,7 @@ describe('AuthService', () => {
         lastName: mockUser.lastName,
         role: mockUser.role,
         isProfileComplete: mockUser.isProfileComplete,
+        companyId: mockUser.companyId,
       });
     });
 
@@ -238,6 +240,7 @@ describe('AuthService', () => {
         id: mockUser.id,
         role: mockUser.role,
         isProfileComplete: mockUser.isProfileComplete,
+        companyId: mockUser.companyId,
       });
     });
 
