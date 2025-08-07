@@ -72,21 +72,22 @@ function AuthProviderWithCookies({ children }: { children: React.ReactNode }) {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [isInitialized, setIsInitialized] = useState(false)
-
   useEffect(() => {
     // Initialize the API client once when the app starts
     if (typeof window !== 'undefined') {
-      initializeApiClient({
-        baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000",
-        timeout: 10000
-      })
-      setIsInitialized(true)
+      try {
+        initializeApiClient({
+          baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000",
+          timeout: 10000
+        })
+      } catch (error) {
+        console.error('Failed to initialize API client:', error)
+      }
     }
   }, [])
 
-  // Don't render AuthProvider until client-side initialization is complete
-  if (typeof window === 'undefined' || !isInitialized) {
+  // For SSR, render children without auth context
+  if (typeof window === 'undefined') {
     return <div>{children}</div>
   }
 
@@ -116,25 +117,25 @@ export function useAuth(): AuthContextValue {
     }
   }
   
-  // Try to use the enhanced context first
+  // Try to use the enhanced context 
   const enhancedContext = useContext(AuthContextEnhanced)
   if (enhancedContext) {
     return enhancedContext
   }
   
-  // If enhanced context is not available, provide a loading state
-  // This handles the case where the provider is not yet initialized
+  // If no context is available, this means we're outside the provider
+  // Return a safe default state instead of staying in loading forever
   return {
     user: null,
-    isLoading: true,
+    isLoading: false, // Important: Don't stay loading forever!
     error: null,
-    isInitialized: false,
-    signUp: async () => { throw new Error('Auth not initialized yet') },
-    signIn: async () => { throw new Error('Auth not initialized yet') },
-    signOut: async () => { throw new Error('Auth not initialized yet') },
+    isInitialized: true,
+    signUp: async () => { throw new Error('AuthProvider not found') },
+    signIn: async () => { throw new Error('AuthProvider not found') },
+    signOut: async () => { throw new Error('AuthProvider not found') },
     refreshToken: async () => null,
     clearError: () => {},
-    updateProfile: async () => { throw new Error('Auth not initialized yet') }
+    updateProfile: async () => { throw new Error('AuthProvider not found') }
   }
 }
 
