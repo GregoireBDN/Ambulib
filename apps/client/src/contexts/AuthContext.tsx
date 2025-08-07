@@ -1,23 +1,22 @@
 "use client"
 
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState, useCallback } from "react"
 import { AuthProvider as AuthProviderBase, useAuth as useAuthBase, initializeApiClient, type AuthContextValue } from "@repo/auth/client"
 import { setAuthCookies, clearAuthCookies, getAuthCookies } from "@/lib/cookies"
-
-const AuthContext = createContext<any>(null)
 
 interface AuthProviderProps {
   children: React.ReactNode
 }
 
-// Custom Auth Context that wraps the base provider with cookie handling
+// Enhanced Auth Context that handles cookies
 const AuthContextEnhanced = createContext<AuthContextValue | null>(null)
 
+// Auth provider with cookie integration  
 function AuthProviderWithCookies({ children }: { children: React.ReactNode }) {
   const auth = useAuthBase()
   
-  // Override signIn to save tokens to cookies
-  const signIn: AuthContextValue['signIn'] = async (credentials) => {
+  // Enhanced signIn that saves to cookies
+  const signIn = useCallback<AuthContextValue['signIn']>(async (credentials) => {
     const result = await auth.signIn(credentials)
     
     // Save tokens to cookies for middleware access
@@ -32,10 +31,10 @@ function AuthProviderWithCookies({ children }: { children: React.ReactNode }) {
     })
     
     return result
-  }
+  }, [auth])
   
-  // Override signUp to save tokens to cookies
-  const signUp: AuthContextValue['signUp'] = async (userData) => {
+  // Enhanced signUp that saves to cookies
+  const signUp = useCallback<AuthContextValue['signUp']>(async (userData) => {
     const result = await auth.signUp(userData)
     
     // Save tokens to cookies for middleware access
@@ -50,23 +49,23 @@ function AuthProviderWithCookies({ children }: { children: React.ReactNode }) {
     })
     
     return result
-  }
+  }, [auth])
   
-  // Override signOut to clear cookies
-  const signOut: AuthContextValue['signOut'] = async () => {
+  // Enhanced signOut that clears cookies
+  const signOut = useCallback<AuthContextValue['signOut']>(async () => {
     await auth.signOut()
     clearAuthCookies()
+  }, [auth])
+  
+  const enhancedAuth: AuthContextValue = {
+    ...auth,
+    signIn,
+    signUp,
+    signOut,
   }
   
   return (
-    <AuthContextEnhanced.Provider
-      value={{
-        ...auth,
-        signIn,
-        signUp,
-        signOut,
-      }}
-    >
+    <AuthContextEnhanced.Provider value={enhancedAuth}>
       {children}
     </AuthContextEnhanced.Provider>
   )
@@ -117,13 +116,26 @@ export function useAuth(): AuthContextValue {
     }
   }
   
-  // Use the enhanced context that includes cookie handling
-  const context = useContext(AuthContextEnhanced)
-  if (!context) {
-    return useAuthBase() // Fallback to base provider
+  // Try to use the enhanced context first
+  const enhancedContext = useContext(AuthContextEnhanced)
+  if (enhancedContext) {
+    return enhancedContext
   }
   
-  return context
+  // If enhanced context is not available, provide a loading state
+  // This handles the case where the provider is not yet initialized
+  return {
+    user: null,
+    isLoading: true,
+    error: null,
+    isInitialized: false,
+    signUp: async () => { throw new Error('Auth not initialized yet') },
+    signIn: async () => { throw new Error('Auth not initialized yet') },
+    signOut: async () => { throw new Error('Auth not initialized yet') },
+    refreshToken: async () => null,
+    clearError: () => {},
+    updateProfile: async () => { throw new Error('Auth not initialized yet') }
+  }
 }
 
 export type { User } from "@repo/auth"
