@@ -72,16 +72,26 @@ function AuthProviderWithCookies({ children }: { children: React.ReactNode }) {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  const [isApiInitialized, setIsApiInitialized] = useState(false)
+
   useEffect(() => {
     // Initialize the API client once when the app starts
     if (typeof window !== 'undefined') {
       try {
+        console.log('Initializing API client...')
         initializeApiClient({
           baseUrl: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000",
           timeout: 10000
         })
+        console.log('API client initialized successfully')
+        setIsApiInitialized(true)
       } catch (error) {
         console.error('Failed to initialize API client:', error)
+        // Still set as initialized to prevent infinite loading, but with a delay
+        setTimeout(() => {
+          console.log('Setting as initialized after error')
+          setIsApiInitialized(true)
+        }, 1000)
       }
     }
   }, [])
@@ -89,6 +99,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // For SSR, render children without auth context
   if (typeof window === 'undefined') {
     return <div>{children}</div>
+  }
+
+  // Wait for API client initialization before rendering auth providers
+  if (!isApiInitialized) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto"></div>
+          <p className="text-muted-foreground">Chargement...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
