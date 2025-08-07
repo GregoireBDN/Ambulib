@@ -42,6 +42,7 @@ export default function HomePage() {
     router.push("/auth/connexion?redirect=emergency")
   }
 
+  // Show loading state briefly if needed
   if (isLoading) {
     return (
       <main className="min-h-screen flex items-center justify-center">

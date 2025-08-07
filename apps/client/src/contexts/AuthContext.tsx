@@ -72,11 +72,14 @@ function AuthProviderWithCookies({ children }: { children: React.ReactNode }) {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [isApiInitialized, setIsApiInitialized] = useState(false)
+  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
+    // Mark as client-side to avoid hydration mismatch
+    setIsClient(true)
+    
     // Initialize the API client once when the app starts
-    if (typeof window !== 'undefined') {
+    const initializeAPI = async () => {
       try {
         console.log('Initializing API client...')
         initializeApiClient({
@@ -84,25 +87,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
           timeout: 10000
         })
         console.log('API client initialized successfully')
-        setIsApiInitialized(true)
       } catch (error) {
         console.error('Failed to initialize API client:', error)
-        // Still set as initialized to prevent infinite loading, but with a delay
-        setTimeout(() => {
-          console.log('Setting as initialized after error')
-          setIsApiInitialized(true)
-        }, 1000)
+        // Continue anyway - the app should still work
       }
     }
+    
+    initializeAPI()
   }, [])
 
-  // For SSR, render children without auth context
-  if (typeof window === 'undefined') {
-    return <div>{children}</div>
-  }
-
-  // Wait for API client initialization before rendering auth providers
-  if (!isApiInitialized) {
+  // Show consistent loading only during SSR and initial hydration
+  if (!isClient) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center space-y-4">
@@ -113,6 +108,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     )
   }
 
+  // Once client-side, always render the auth providers
   return (
     <AuthProviderBase>
       <AuthProviderWithCookies>
@@ -127,7 +123,7 @@ export function useAuth(): AuthContextValue {
   if (typeof window === 'undefined') {
     return {
       user: null,
-      isLoading: true,
+      isLoading: false, // Don't block during SSR
       error: null,
       isInitialized: false,
       signUp: async () => { throw new Error('SSR: Auth not available') },
@@ -149,7 +145,7 @@ export function useAuth(): AuthContextValue {
   // Return a safe default state instead of staying in loading forever
   return {
     user: null,
-    isLoading: false, // Important: Don't stay loading forever!
+    isLoading: false, // Don't stay loading forever!
     error: null,
     isInitialized: true,
     signUp: async () => { throw new Error('AuthProvider not found') },
