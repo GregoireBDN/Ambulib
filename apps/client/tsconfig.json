@@ -6,7 +6,9 @@
     "paths": {
       "@/*": ["./src/*"],
       "@repo/ui": ["../../packages/ui/src"],
-      "@repo/auth": ["../../packages/auth/src"]
+      "@repo/auth": ["../../packages/auth/src"],
+      "@repo/auth/server": ["../../packages/auth/src/server"],
+      "@repo/auth/client": ["../../packages/auth/src/client"]
     }
   },
   "include": [
