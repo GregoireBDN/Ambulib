@@ -15,21 +15,21 @@ export default function ProtectedRoute({
   fallback,
   redirectTo = "/auth/connexion" 
 }: ProtectedRouteProps) {
-  const { user, isLoading, isInitialized } = useAuth()
+  const { user, isLoading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
     // Only redirect if we're sure the user is not authenticated
-    if (isInitialized && !isLoading && !user) {
+    if (!isLoading && !user) {
       // Add current path as redirect parameter
       const currentPath = window.location.pathname
       const redirectUrl = `${redirectTo}?redirect=${encodeURIComponent(currentPath)}`
       router.push(redirectUrl)
     }
-  }, [user, isLoading, isInitialized, router, redirectTo])
+  }, [user, isLoading, router, redirectTo])
 
   // Show loading state while checking authentication
-  if (!isInitialized || isLoading) {
+  if (isLoading) {
     return (
       fallback || (
         <div className="min-h-screen flex items-center justify-center">
