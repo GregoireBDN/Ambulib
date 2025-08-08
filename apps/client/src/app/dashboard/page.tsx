@@ -2,7 +2,6 @@
 
 import { 
   LargeButton, 
-  AccessibleInput, 
   EmergencyButton, 
   SeniorCard,
   Button,
@@ -13,18 +12,19 @@ import {
 } from "@repo/ui"
 import { useAuth } from "@/contexts/AuthContext"
 import { useRouter } from "next/navigation"
-import ProtectedRoute from "@/components/ProtectedRoute"
+import { signOutAction } from "@/lib/auth-actions"
+import ProtectedLayout from "@/components/ProtectedLayout"
 
 function DashboardContent() {
-  const { user, signOut } = useAuth()
+  const { user } = useAuth()
   const router = useRouter()
 
   const handleSignOut = async () => {
     try {
-      await signOut()
-      router.push("/")
+      console.log('🚪 Déconnexion en cours...')
+      await signOutAction()
     } catch (error) {
-      console.error("Sign-out error:", error)
+      console.error("Erreur lors de la déconnexion:", error)
     }
   }
 
@@ -50,7 +50,7 @@ function DashboardContent() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       {/* Header avec informations utilisateur */}
       <header className="bg-card border-b border-border">
         <div className="container mx-auto px-4 py-4">
@@ -187,8 +187,8 @@ function DashboardContent() {
 
 export default function DashboardPage() {
   return (
-    <ProtectedRoute>
+    <ProtectedLayout>
       <DashboardContent />
-    </ProtectedRoute>
+    </ProtectedLayout>
   )
 }

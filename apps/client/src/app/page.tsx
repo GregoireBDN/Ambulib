@@ -2,32 +2,17 @@
 
 import { 
   LargeButton, 
-  AccessibleInput, 
   EmergencyButton, 
   SeniorCard,
   // Composants shadcn/ui de base
-  Button,
   Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  Input
+  CardContent
 } from "@repo/ui"
-import { useAuth } from "@/contexts/AuthContext"
+import PublicLayout from "@/components/PublicLayout"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
 
 export default function HomePage() {
-  const { user, isLoading } = useAuth()
   const router = useRouter()
-
-  // Redirect authenticated users to dashboard
-  useEffect(() => {
-    if (user && !isLoading) {
-      router.push("/dashboard")
-    }
-  }, [user, isLoading, router])
 
   const handleSignIn = () => {
     router.push("/auth/connexion")
@@ -38,25 +23,14 @@ export default function HomePage() {
   }
 
   const handleEmergency = () => {
-    // For emergency, allow non-authenticated access
+    // For emergency, redirect to auth first
     router.push("/auth/connexion?redirect=emergency")
   }
 
-  // Show loading state briefly if needed
-  if (isLoading) {
-    return (
-      <main className="min-h-screen flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto"></div>
-          <p className="text-muted-foreground">Chargement...</p>
-        </div>
-      </main>
-    )
-  }
-
   return (
-    <main className="container mx-auto px-4 py-8 max-w-4xl">
-      <div className="space-y-8">
+    <PublicLayout>
+      <main className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="space-y-8">
         {/* En-tête avec contraste élevé et authentification */}
         <div className="text-center space-y-6">
           <div className="space-y-4">
@@ -277,6 +251,7 @@ export default function HomePage() {
           </p>
         </div>
       </div>
-    </main>
+      </main>
+    </PublicLayout>
   )
 }
