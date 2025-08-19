@@ -40,8 +40,17 @@ yarn-error.log*
 .DS_Store
 *.pem
 
-# VSCode
+# IDEs et éditeurs
 .vscode
+.cursor/
+.windsurfrules
+
+# Storybook
+storybook.log
+*.log
+
+# Design iterations temporaires
+.superdesign/
 
 
 
