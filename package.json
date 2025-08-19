@@ -1,5 +1,5 @@
 {
-  "name": "ambulib",
+  "name": "havrid",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -19,7 +19,9 @@
     "fix": "manypkg fix",
     "full-stack": "pnpm nx run full-stack",
     "studio": "pnpm nx run studio",
-    "swagger": "pnpm nx run swagger"
+    "swagger": "pnpm nx run swagger",
+    "storybook": "turbo run storybook",
+    "storybook:ui": "turbo run storybook --filter=@repo/ui"
   },
   "devDependencies": {
     "@manypkg/cli": "^0.24.0",

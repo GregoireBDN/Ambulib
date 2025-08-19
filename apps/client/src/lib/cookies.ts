@@ -50,7 +50,7 @@ export function deleteCookie(name: string) {
 }
 
 // Helper functions for auth-specific cookies
-export function setAuthCookies(accessToken: string, refreshToken: string, userData?: any) {
+export function setAuthCookies(accessToken: string, refreshToken: string, userData?: unknown) {
   console.log('🍪 Setting auth cookies:', {
     accessToken: accessToken.substring(0, 20) + '...',
     refreshToken: refreshToken.substring(0, 20) + '...',

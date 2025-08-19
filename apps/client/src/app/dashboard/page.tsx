@@ -1,9 +1,6 @@
 "use client"
 
 import { 
-  LargeButton, 
-  EmergencyButton, 
-  SeniorCard,
   Button,
   Card,
   CardHeader,
@@ -81,68 +78,96 @@ function DashboardContent() {
         <div className="space-y-8">
           {/* Bouton d'urgence bien visible */}
           <div className="flex justify-center">
-            <EmergencyButton onClick={handleEmergency}>
+            <Button variant="emergency" onClick={handleEmergency}>
               🚨 APPEL D'URGENCE
-            </EmergencyButton>
+            </Button>
           </div>
 
           {/* Services principaux */}
           <div className="grid gap-6 md:grid-cols-2">
-            <SeniorCard 
-              title="Réserver une ambulance"
-              description="Planifiez votre transport médical en quelques étapes simples"
+            <Card 
+              variant="senior" 
             >
-              <div className="space-y-4">
-                <p className="text-base">
-                  Réservez votre transport pour vos rendez-vous médicaux.
+              <CardHeader className="pb-4">
+                <CardTitle senior>Réserver une ambulance</CardTitle>
+                <p className="text-base text-foreground/80 leading-relaxed">
+                  Planifiez votre transport médical en quelques étapes simples
                 </p>
-                <LargeButton className="w-full" onClick={handleBooking}>
-                  Nouvelle réservation
-                </LargeButton>
-              </div>
-            </SeniorCard>
+              </CardHeader>
+              <CardContent senior>
+                <div className="space-y-4">
+                  <p className="text-base">
+                    Réservez votre transport pour vos rendez-vous médicaux.
+                  </p>
+                  <Button variant="senior" size="2xl" className="w-full" onClick={handleBooking}>
+                    Nouvelle réservation
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
 
-            <SeniorCard 
-              title="Mes informations médicales"
-              description="Consultez et mettez à jour vos informations médicales"
+            <Card 
+              variant="senior" 
             >
-              <div className="space-y-4">
-                <p className="text-base">
-                  Accédez à votre dossier médical et vos prescriptions.
+              <CardHeader className="pb-4">
+                <CardTitle senior>Mes informations médicales</CardTitle>
+                <p className="text-base text-foreground/80 leading-relaxed">
+                  Consultez et mettez à jour vos informations médicales
                 </p>
-                <LargeButton variant="secondary" className="w-full" onClick={handleMedicalInfo}>
-                  Voir mon dossier
-                </LargeButton>
-              </div>
-            </SeniorCard>
+              </CardHeader>
+              <CardContent senior>
+                <div className="space-y-4">
+                  <p className="text-base">
+                    Accédez à votre dossier médical et vos prescriptions.
+                  </p>
+                  <Button variant="secondary" size="2xl" className="w-full" onClick={handleMedicalInfo}>
+                    Voir mon dossier
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
 
-            <SeniorCard 
-              title="Mes trajets"
-              description="Suivez vos trajets passés et à venir"
+            <Card 
+              variant="senior" 
             >
-              <div className="space-y-4">
-                <p className="text-base">
-                  Consultez l'historique de vos transports et les prochains rendez-vous.
+              <CardHeader className="pb-4">
+                <CardTitle senior>Mes trajets</CardTitle>
+                <p className="text-base text-foreground/80 leading-relaxed">
+                  Suivez vos trajets passés et à venir
                 </p>
-                <LargeButton variant="outline" className="w-full" onClick={handleTrips}>
-                  Voir mes trajets
-                </LargeButton>
-              </div>
-            </SeniorCard>
+              </CardHeader>
+              <CardContent senior>
+                <div className="space-y-4">
+                  <p className="text-base">
+                    Consultez l'historique de vos transports et les prochains rendez-vous.
+                  </p>
+                  <Button variant="outline" size="2xl" className="w-full" onClick={handleTrips}>
+                    Voir mes trajets
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
 
-            <SeniorCard 
-              title="Aide et contact"
-              description="Besoin d'assistance ? Nous sommes là pour vous aider"
+            <Card 
+              variant="senior" 
             >
-              <div className="space-y-4">
-                <p className="text-base">
-                  Contactez notre équipe disponible 24h/24 et 7j/7.
+              <CardHeader className="pb-4">
+                <CardTitle senior>Aide et contact</CardTitle>
+                <p className="text-base text-foreground/80 leading-relaxed">
+                  Besoin d'assistance ? Nous sommes là pour vous aider
                 </p>
-                <LargeButton variant="secondary" className="w-full" onClick={handleContact}>
-                  Nous contacter
-                </LargeButton>
-              </div>
-            </SeniorCard>
+              </CardHeader>
+              <CardContent senior>
+                <div className="space-y-4">
+                  <p className="text-base">
+                    Contactez notre équipe disponible 24h/24 et 7j/7.
+                  </p>
+                  <Button variant="secondary" size="2xl" className="w-full" onClick={handleContact}>
+                    Nous contacter
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Informations du compte */}

@@ -1,3 +1,47 @@
 @import "tailwindcss";
+@import "@repo/ui/styles/theme.css";
 @import "@repo/ui/styles/globals.css";
 @import "@repo/ui/styles.css";
+
+/* Styles spécifiques pour la landing page médicale */
+.medical-gradient {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #ffffff 100%);
+}
+
+.medical-card-hover {
+  transition: all 0.3s ease;
+}
+
+.medical-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Support pour le mode contraste élevé */
+@media (prefers-contrast: high) {
+  .medical-gradient {
+    background: #ffffff;
+    border: 2px solid #000000;
+  }
+}
+
+/* Animation douce pour les éléments focus */
+*:focus-visible {
+  outline: 3px solid hsl(var(--primary));
+  outline-offset: 3px;
+  transition: outline 0.2s ease;
+}
+
+/* Amélioration de la lisibilité pour les seniors */
+.senior-text {
+  line-height: 1.6;
+  letter-spacing: 0.025em;
+}
+
+/* Zones tactiles étendues pour mobile */
+@media (max-width: 768px) {
+  .touch-friendly {
+    min-height: 48px;
+    min-width: 48px;
+  }
+}

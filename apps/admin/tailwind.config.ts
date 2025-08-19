@@ -1,52 +1,33 @@
-/** @type {import("tailwindcss").Config} */
+/**
+ * Configuration Tailwind CSS pour l'Application Admin HavRid
+ * 
+ * Cette configuration utilise le preset partagé du package UI pour garantir
+ * la cohérence du design system et l'accessibilité WCAG 2.1 Level AA.
+ * 
+ * @type {import("tailwindcss").Config}
+ */
 module.exports = {
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    "../../packages/ui/src/**/*.{js,ts,jsx,tsx}",
-  ],
+  // Utilisation du preset partagé qui contient toute la configuration commune
+  presets: [require("@repo/ui/tailwind.config.preset.js")],
+  
+  // Configurations spécifiques à l'app admin (si nécessaires)
   theme: {
     extend: {
+      // Personnalisations spécifiques à l'interface admin
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
+        'admin-danger': 'hsl(0, 70%, 50%)',          // Rouge pour actions dangereuses
+        'admin-warning': 'hsl(38, 92%, 50%)',        // Orange pour avertissements
+        'admin-success': 'hsl(84, 81%, 44%)',        // Vert pour succès
+        'admin-info': 'hsl(199, 89%, 48%)',          // Bleu pour informations
       },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+      // Espacements spéciaux pour les tableaux admin
+      spacing: {
+        'admin-table': '0.75rem',
+        'admin-form': '1.25rem',
       },
     },
   },
+  
+  // Plugins spécifiques à l'app admin (si nécessaires)
   plugins: [],
-}
+};

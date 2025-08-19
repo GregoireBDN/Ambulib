@@ -35,6 +35,11 @@
     "test:e2e": {
       "outputs": [],
       "env": ["NODE_ENV", "DATABASE_URL", "BACKEND_URL", "JWT_SECRET", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "SESSION_SECRET_KEY"]
+    },
+    "storybook": {
+      "cache": false,
+      "persistent": true,
+      "outputs": ["storybook-static/**"]
     }
   }
 }

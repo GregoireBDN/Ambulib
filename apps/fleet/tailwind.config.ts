@@ -1,52 +1,29 @@
-/** @type {import("tailwindcss").Config} */
+/**
+ * Configuration Tailwind CSS pour l'Application Fleet Manager HavRid
+ * 
+ * Cette configuration utilise le preset partagé du package UI pour garantir
+ * la cohérence du design system et l'accessibilité WCAG 2.1 Level AA.
+ * 
+ * @type {import("tailwindcss").Config}
+ */
 module.exports = {
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx,mdx}",
-    "../../packages/ui/src/**/*.{js,ts,jsx,tsx}",
-  ],
+  // Utilisation du preset partagé qui contient toute la configuration commune
+  presets: [require("@repo/ui/tailwind.config.preset.js")],
+  
+  // Configurations spécifiques à l'app fleet (si nécessaires)
   theme: {
     extend: {
+      // Personnalisations spécifiques à la gestion de flotte
+      // Par exemple: couleurs spéciales pour les statuts d'ambulances
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-      },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        'fleet-available': 'hsl(120, 60%, 50%)',     // Vert pour disponible
+        'fleet-busy': 'hsl(45, 100%, 50%)',          // Jaune pour occupé
+        'fleet-emergency': 'hsl(0, 84%, 60%)',       // Rouge pour urgence
+        'fleet-maintenance': 'hsl(210, 50%, 50%)',   // Bleu pour maintenance
       },
     },
   },
+  
+  // Plugins spécifiques à l'app fleet (si nécessaires)
   plugins: [],
-}
+};

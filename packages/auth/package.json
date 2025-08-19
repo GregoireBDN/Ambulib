@@ -2,7 +2,7 @@
   "name": "@repo/auth",
   "version": "0.1.0",
   "private": true,
-  "description": "Package d'authentification partagé pour Ambulib",
+  "description": "Package d'authentification partagé pour HavRid",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -61,7 +61,7 @@
     "authentication",
     "jwt",
     "oauth",
-    "ambulib",
+    "havrid",
     "monorepo"
   ]
 }

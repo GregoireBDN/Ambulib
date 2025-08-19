@@ -82,14 +82,16 @@ export async function signInAction(
     // Revalider les pages qui utilisent la session
     revalidatePath('/', 'layout')
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Erreur de connexion:', error)
     
     let errorMessage = 'Erreur lors de la connexion'
-    if (error.message?.includes('User not found')) {
-      errorMessage = 'Aucun compte trouvé avec cette adresse email'
-    } else if (error.message?.includes('Unauthorized')) {
-      errorMessage = 'Email ou mot de passe incorrect'
+    if (error instanceof Error) {
+      if (error.message?.includes('User not found')) {
+        errorMessage = 'Aucun compte trouvé avec cette adresse email'
+      } else if (error.message?.includes('Unauthorized')) {
+        errorMessage = 'Email ou mot de passe incorrect'
+      }
     }
 
     return {
@@ -152,15 +154,15 @@ export async function signUpAction(
     // Revalider les pages qui utilisent la session
     revalidatePath('/', 'layout')
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Erreur d\'inscription:', error)
     
     let errorMessage = 'Erreur lors de l\'inscription'
-    if (error.validation) {
+    if (error && typeof error === 'object' && 'validation' in error) {
       return {
         success: false,
         error: 'Erreurs de validation',
-        fieldErrors: error.validation
+        fieldErrors: (error as any).validation
       }
     }
 

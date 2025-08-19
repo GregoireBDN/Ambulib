@@ -1,12 +1,12 @@
 "use client"
 
 import { 
-  LargeButton, 
-  EmergencyButton, 
-  SeniorCard,
   // Composants shadcn/ui de base
   Card,
-  CardContent
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Button
 } from "@repo/ui"
 import PublicLayout from "@/components/PublicLayout"
 import { useRouter } from "next/navigation"
@@ -69,12 +69,12 @@ export default function HomePage() {
           
           {/* Boutons d'authentification */}
           <div className="flex flex-col sm:flex-row justify-center gap-4 mt-8">
-            <LargeButton onClick={handleSignUp} className="text-lg px-8 py-4 min-h-[60px]">
+            <Button variant="senior" size="2xl" onClick={handleSignUp} className="text-lg px-8 py-4 min-h-[60px]">
               Créer mon compte gratuit
-            </LargeButton>
-            <LargeButton variant="outline" onClick={handleSignIn} className="text-lg px-8 py-4 min-h-[60px]">
+            </Button>
+            <Button variant="outline" size="2xl" onClick={handleSignIn} className="text-lg px-8 py-4 min-h-[60px]">
               J'ai déjà un compte
-            </LargeButton>
+            </Button>
           </div>
         </div>
 
@@ -88,9 +88,9 @@ export default function HomePage() {
             cliquez sur le bouton ci-dessous pour un accès prioritaire
           </p>
           <div className="flex justify-center">
-            <EmergencyButton onClick={handleEmergency}>
+            <Button variant="emergency" onClick={handleEmergency}>
               🚨 APPEL D'URGENCE
-            </EmergencyButton>
+            </Button>
           </div>
           <p className="text-sm text-red-600">
             Pour les urgences vitales, appelez immédiatement le 15 (SAMU)
@@ -109,73 +109,93 @@ export default function HomePage() {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2">
-            <SeniorCard 
-              title="Réservation d'ambulance"
-              description="Transport médical sécurisé vers vos rendez-vous"
-            >
-              <div className="space-y-4">
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <p>• Réservation en ligne simplifiée</p>
-                  <p>• Choix de la date et de l'heure</p>
-                  <p>• Confirmation instantanée</p>
-                  <p>• Personnel médical qualifié</p>
+            <Card variant="senior">
+              <CardHeader className="pb-4">
+                <CardTitle senior>Réservation d'ambulance</CardTitle>
+                <p className="text-base text-foreground/80 leading-relaxed">
+                  Transport médical sécurisé vers vos rendez-vous
+                </p>
+              </CardHeader>
+              <CardContent senior>
+                <div className="space-y-4">
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    <p>• Réservation en ligne simplifiée</p>
+                    <p>• Choix de la date et de l'heure</p>
+                    <p>• Confirmation instantanée</p>
+                    <p>• Personnel médical qualifié</p>
+                  </div>
+                  <Button variant="senior" size="2xl" className="w-full" onClick={handleSignUp}>
+                    Créer un compte pour réserver
+                  </Button>
                 </div>
-                <LargeButton className="w-full" onClick={handleSignUp}>
-                  Créer un compte pour réserver
-                </LargeButton>
-              </div>
-            </SeniorCard>
+              </CardContent>
+            </Card>
 
-            <SeniorCard 
-              title="Suivi médical personnalisé"
-              description="Accès sécurisé à vos informations de santé"
-            >
-              <div className="space-y-4">
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <p>• Dossier médical sécurisé</p>
-                  <p>• Historique des prescriptions</p>
-                  <p>• Notes médicales importantes</p>
-                  <p>• Partage avec les professionnels</p>
+            <Card variant="senior">
+              <CardHeader className="pb-4">
+                <CardTitle senior>Suivi médical personnalisé</CardTitle>
+                <p className="text-base text-foreground/80 leading-relaxed">
+                  Accès sécurisé à vos informations de santé
+                </p>
+              </CardHeader>
+              <CardContent senior>
+                <div className="space-y-4">
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    <p>• Dossier médical sécurisé</p>
+                    <p>• Historique des prescriptions</p>
+                    <p>• Notes médicales importantes</p>
+                    <p>• Partage avec les professionnels</p>
+                  </div>
+                  <Button variant="secondary" size="2xl" className="w-full" onClick={handleSignUp}>
+                    Créer un compte pour accéder
+                  </Button>
                 </div>
-                <LargeButton variant="secondary" className="w-full" onClick={handleSignUp}>
-                  Créer un compte pour accéder
-                </LargeButton>
-              </div>
-            </SeniorCard>
+              </CardContent>
+            </Card>
 
-            <SeniorCard 
-              title="Historique et planification"
-              description="Gardez une trace de tous vos trajets"
-            >
-              <div className="space-y-4">
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <p>• Historique complet des trajets</p>
-                  <p>• Prochains rendez-vous</p>
-                  <p>• Rappels automatiques</p>
-                  <p>• Exportation des données</p>
+            <Card variant="senior">
+              <CardHeader className="pb-4">
+                <CardTitle senior>Historique et planification</CardTitle>
+                <p className="text-base text-foreground/80 leading-relaxed">
+                  Gardez une trace de tous vos trajets
+                </p>
+              </CardHeader>
+              <CardContent senior>
+                <div className="space-y-4">
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    <p>• Historique complet des trajets</p>
+                    <p>• Prochains rendez-vous</p>
+                    <p>• Rappels automatiques</p>
+                    <p>• Exportation des données</p>
+                  </div>
+                  <Button variant="outline" size="2xl" className="w-full" onClick={handleSignUp}>
+                    Créer un compte pour suivre
+                  </Button>
                 </div>
-                <LargeButton variant="outline" className="w-full" onClick={handleSignUp}>
-                  Créer un compte pour suivre
-                </LargeButton>
-              </div>
-            </SeniorCard>
+              </CardContent>
+            </Card>
 
-            <SeniorCard 
-              title="Support 24h/24"
-              description="Une équipe dédiée à votre service"
-            >
-              <div className="space-y-4">
-                <div className="space-y-2 text-sm text-muted-foreground">
-                  <p>• Assistance téléphonique 24h/24</p>
-                  <p>• Chat en ligne disponible</p>
-                  <p>• Aide pour les urgences</p>
-                  <p>• Support technique personnalisé</p>
+            <Card variant="senior">
+              <CardHeader className="pb-4">
+                <CardTitle senior>Support 24h/24</CardTitle>
+                <p className="text-base text-foreground/80 leading-relaxed">
+                  Une équipe dédiée à votre service
+                </p>
+              </CardHeader>
+              <CardContent senior>
+                <div className="space-y-4">
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    <p>• Assistance téléphonique 24h/24</p>
+                    <p>• Chat en ligne disponible</p>
+                    <p>• Aide pour les urgences</p>
+                    <p>• Support technique personnalisé</p>
+                  </div>
+                  <Button variant="secondary" size="2xl" className="w-full" onClick={handleSignUp}>
+                    Créer un compte pour contacter
+                  </Button>
                 </div>
-                <LargeButton variant="secondary" className="w-full" onClick={handleSignUp}>
-                  Créer un compte pour contacter
-                </LargeButton>
-              </div>
-            </SeniorCard>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
@@ -233,12 +253,12 @@ export default function HomePage() {
               Rejoignez des milliers de clients satisfaits et simplifiez vos déplacements médicaux dès aujourd'hui.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6">
-              <LargeButton onClick={handleSignUp} className="text-lg px-8 py-4">
+              <Button variant="senior" size="2xl" onClick={handleSignUp} className="text-lg px-8 py-4">
                 Créer mon compte maintenant
-              </LargeButton>
-              <LargeButton variant="outline" onClick={handleSignIn} className="text-lg px-8 py-4">
+              </Button>
+              <Button variant="outline" size="2xl" onClick={handleSignIn} className="text-lg px-8 py-4">
                 J'ai déjà un compte
-              </LargeButton>
+              </Button>
             </div>
           </div>
         </div>
