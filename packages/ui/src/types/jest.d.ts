@@ -2,6 +2,6 @@ import { AxeMatchers } from 'jest-axe'
 
 declare global {
   namespace jest {
-    interface Matchers<R> extends AxeMatchers {}
+    interface Matchers<_R> extends AxeMatchers {}
   }
 }
