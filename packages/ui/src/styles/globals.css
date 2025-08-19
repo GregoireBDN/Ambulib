@@ -8,43 +8,42 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 214.3 31.8% 91.4%;
     --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
+    --muted: 217.2 32.6% 95.5%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
+    --accent: 166.2 76.0% 46.9%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --ring: 217.2 91.2% 59.8%;
     --radius: 0.5rem;
+    
+    /* Couleurs médicales personnalisées */
+    --medical-blue: 217.2 91.2% 59.8%;
+    --medical-blue-dark: 224.3 76.3% 48.0%;
+    --medical-green: 166.2 76.0% 46.9%;
+    --medical-green-light: 166.2 76.0% 86.9%;
+    --trust-badge: 43.3 96.4% 56.3%;
+    --trust-badge-foreground: 222.2 84% 4.9%;
+    
+    /* Palette Havrid authentique - Couleurs extraites du SVG original */
+    --havrid-blue-1: 199 49% 46%; /* #1189c9 */
+    --havrid-blue-2: 199 49% 47%; /* #1288c7 */
+    --havrid-blue-3: 199 49% 48%; /* #1387c6 */
+    --havrid-blue-4: 195 77% 57%; /* #2dbbeb */
+    --havrid-blue-5: 195 77% 58%; /* #2cbbec */
+    --havrid-green-primary: 152 43% 39%; /* #1aa06d */
+    --havrid-green-secondary: 152 49% 42%; /* #1ba372 */
+    --havrid-green-accent: 186 64% 42%; /* #239a94 */
+    --havrid-green-teal: 181 42% 40%; /* #1a8d91 */
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-  }
+  /* Mode sombre supprimé - Interface médicale optimisée pour mode clair uniquement */
 }
 
 @layer base {
@@ -70,6 +69,76 @@
   
   .hover\:bg-primary\/90:hover {
     background-color: hsl(var(--primary) / 0.9);
+  }
+  
+  /* Couleurs médicales personnalisées */
+  .bg-medical-blue {
+    background-color: hsl(var(--medical-blue));
+  }
+  
+  .bg-medical-blue-dark {
+    background-color: hsl(var(--medical-blue-dark));
+  }
+  
+  .text-medical-blue {
+    color: hsl(var(--medical-blue));
+  }
+  
+  .bg-medical-green {
+    background-color: hsl(var(--medical-green));
+  }
+  
+  .bg-medical-green-light {
+    background-color: hsl(var(--medical-green-light));
+  }
+  
+  .text-medical-green {
+    color: hsl(var(--medical-green));
+  }
+  
+  .bg-trust-badge {
+    background-color: hsl(var(--trust-badge));
+  }
+  
+  .text-trust-badge-foreground {
+    color: hsl(var(--trust-badge-foreground));
+  }
+  
+  /* Classes Havrid authentiques */
+  .bg-havrid-blue-1 {
+    background-color: hsl(var(--havrid-blue-1));
+  }
+  
+  .bg-havrid-blue-4 {
+    background-color: hsl(var(--havrid-blue-4));
+  }
+  
+  .bg-havrid-blue-5 {
+    background-color: hsl(var(--havrid-blue-5));
+  }
+  
+  .bg-havrid-green-primary {
+    background-color: hsl(var(--havrid-green-primary));
+  }
+  
+  .bg-havrid-green-secondary {
+    background-color: hsl(var(--havrid-green-secondary));
+  }
+  
+  .text-havrid-blue-1 {
+    color: hsl(var(--havrid-blue-1));
+  }
+  
+  .text-havrid-blue-4 {
+    color: hsl(var(--havrid-blue-4));
+  }
+  
+  .text-havrid-green-primary {
+    color: hsl(var(--havrid-green-primary));
+  }
+  
+  .text-havrid-green-secondary {
+    color: hsl(var(--havrid-green-secondary));
   }
   
   .bg-destructive {

@@ -1,0 +1,100 @@
+/**
+ * HavRid Medical UI - Point d'entrée CSS minimaliste
+ * 
+ * Ce fichier importe uniquement theme.css qui contient toute la configuration
+ * OKLCH scientifique avec Tailwind CSS v4 @theme
+ * 
+ * Approche: CSS-first pour performance et maintenabilité optimales
+ */
+
+/* === IMPORTATION DU SYSTÈME SCIENTIFIQUE === */
+@import "./theme.css";
+
+/* === COMPATIBILITÉ SHADCN/UI === */
+@import "tailwindcss";
+
+/* === STYLES DE BASE ESSENTIELS === */
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-size: 16px;
+    line-height: 1.6;
+    font-family: var(--font-sans);
+  }
+
+  /* Focus indicators accessibles */
+  *:focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+}
+
+/* === CLASSES D'ACCESSIBILITÉ SPÉCIALISÉES === */
+@layer components {
+  .touch-target {
+    min-height: var(--size-touch);
+    min-width: var(--size-touch);
+  }
+
+  .focus-ring-emergency:focus-visible {
+    outline: 3px solid var(--color-error-700);
+    outline-offset: 3px;
+  }
+
+  .screen-reader-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .screen-reader-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0.5rem;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    background-color: var(--color-background);
+    border: 2px solid var(--color-primary-700);
+  }
+}
+
+/* === RESPONSIVE ET ACCESSIBILITÉ === */
+
+/* Support contraste élevé */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: var(--color-neutral-800);
+    --color-ring: var(--color-neutral-900);
+  }
+}
+
+/* Réduction de mouvement */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Force mode clair pour interface médicale senior */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Forcer les couleurs claires même en mode sombre système */
+    color-scheme: light;
+  }
+}

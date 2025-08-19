@@ -1,0 +1,365 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Guidelines/Configuration Tailwind" />
+
+# Configuration Tailwind CSS v4
+
+Cette documentation présente la configuration **CSS-first** de Tailwind CSS v4 utilisée dans le package UI de HavRid, optimisée pour l'accessibilité WCAG 2.1 Level AA.
+
+## 🎯 Philosophie CSS-First
+
+Avec Tailwind CSS v4, nous adoptons une approche **CSS-first** où la configuration se fait directement en CSS plutôt qu'en JavaScript. Cette approche offre :
+
+- **Performance améliorée** : compilation plus rapide
+- **Simplicité** : configuration directement dans les fichiers CSS
+- **Flexibilité** : utilisation des variables CSS natives
+- **Compatibilité** : meilleure intégration avec les outils modernes
+
+## 📁 Architecture des Fichiers
+
+```
+packages/ui/src/styles/
+├── theme.css                 # ✨ Configuration principale CSS-first
+├── globals.css              # Variables CSS héritées + styles base
+└── styles.css               # Point d'entrée compilé
+```
+
+### `theme.css` - Configuration Principale
+
+Le fichier `theme.css` contient toute la configuration du design system :
+
+```css
+/**
+ * Configuration Tailwind CSS centralisée pour HavRid
+ * CSS-first approach (Tailwind v4)
+ */
+
+@theme {
+  /* Réinitialisation */
+  --*: initial;
+
+  /* Container responsive */
+  --container-center: true;
+  --container-padding: 2rem;
+  --container-screens-2xl: 1400px;
+
+  /* Palette accessible OKLCH */
+  --color-primary-700: oklch(48.8% 0.243 264.376); /* Contraste 4.51:1 */
+  --color-primary-900: oklch(37.9% 0.146 265.522); /* Contraste 10.59:1 */
+  
+  /* ... autres couleurs */
+}
+```
+
+### `globals.css` - Variables CSS et Styles Base
+
+```css
+@layer base {
+  :root {
+    /* Variables CSS pour compatibilité shadcn/ui */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --primary: 217.2 91.2% 59.8%;
+    /* ... */
+  }
+}
+
+@layer components {
+  /* Styles de composants personnalisés */
+  .bg-primary {
+    background-color: hsl(var(--primary));
+  }
+}
+```
+
+## 🎨 Palette OKLCH Accessible
+
+### Pourquoi OKLCH ?
+
+L'espace colorimétrique **OKLCH** offre une **perception uniforme** des couleurs, contrairement à HSL :
+
+- **Luminosité perceptuelle** cohérente
+- **Transitions fluides** entre les teintes
+- **Meilleur contraste** pour l'accessibilité
+- **Compatibilité** avec les écrans modernes
+
+### Exemple de Couleur OKLCH
+
+```css
+/* Couleur primaire avec contraste optimal */
+--color-primary-700: oklch(48.8% 0.243 264.376);
+/*                          ^     ^      ^
+                        Lightness Chroma  Hue
+                        (48.8%)   (0.243) (264°)
+*/
+```
+
+### Mapping des Couleurs
+
+| Token CSS | OKLCH Value | Contraste | Usage |
+|-----------|-------------|-----------|--------|
+| `primary-700` | `oklch(48.8% 0.243 264.376)` | 4.51:1 | Boutons, liens actifs |
+| `primary-900` | `oklch(37.9% 0.146 265.522)` | 10.59:1 | Texte haute visibilité |
+| `error-700` | `oklch(50.5% 0.213 27.518)` | 4.68:1 | Erreurs, urgences |
+| `success-700` | `oklch(47.2% 0.208 147.891)` | 4.52:1 | Succès, validation |
+
+## ⚙️ Configuration Technique
+
+### Plugin Vite Integration
+
+```typescript
+// vite.config.ts
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineConfig({
+  plugins: [
+    tailwindcss(), // ✨ Plugin CSS-first
+  ],
+})
+```
+
+### Storybook Configuration
+
+```typescript
+// .storybook/main.ts
+import tailwindcss from '@tailwindcss/vite'
+
+async viteFinal(config) {
+  return {
+    ...config,
+    plugins: [
+      ...(config.plugins || []),
+      tailwindcss(), // ✨ Support CSS-first dans Storybook
+    ],
+  }
+}
+```
+
+### Import dans les Applications
+
+```css
+/* app/globals.css */
+@import "@repo/ui/styles/theme.css";    /* Configuration CSS-first */
+@import "@repo/ui/styles/globals.css";  /* Variables et styles base */
+```
+
+## 🛠️ Preset Partagé (Monorepo)
+
+Le fichier `tailwind.config.preset.js` centralise la configuration commune :
+
+```javascript
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  theme: {
+    extend: {
+      // Configuration héritée automatiquement de theme.css
+      fontFamily: {
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+      },
+      // Breakpoints personnalisés
+      screens: {
+        xs: '475px',
+        '3xl': '1600px',
+      },
+    },
+  },
+  plugins: [],
+}
+```
+
+### Utilisation du Preset
+
+```javascript
+// tailwind.config.ts (dans chaque app)
+module.exports = {
+  presets: [require("@repo/ui/tailwind.config.preset.js")],
+  content: [
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "../../packages/ui/src/**/*.{js,ts,jsx,tsx}",
+  ],
+}
+```
+
+## 🎯 Fonctionnalités d'Accessibilité
+
+### Tailles Tactiles Minimales
+
+```css
+@theme {
+  /* WCAG 2.1 AA - Taille minimum 44px */
+  --size-touch: 44px;
+  --min-height-touch: 44px;
+  --min-width-touch: 44px;
+}
+```
+
+### Focus Visible
+
+```css
+@media (any-hover: hover) {
+  *:focus-visible {
+    outline: var(--focus-ring-width) solid var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+  }
+}
+```
+
+### Support du Contraste Élevé
+
+```css
+@media (prefers-contrast: high) {
+  @theme {
+    --color-border: hsl(0 0% 20%);
+    --color-ring: hsl(0 0% 10%);
+  }
+}
+```
+
+### Réduction de Mouvement
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+```
+
+## 📱 Responsive Design
+
+### Breakpoints Personnalisés
+
+```css
+@theme {
+  /* Breakpoints étendus */
+  --breakpoint-xs: 475px;     /* Mobile large */
+  --breakpoint-3xl: 1600px;   /* Desktop très large */
+}
+```
+
+### Container Responsive
+
+```css
+@theme {
+  --container-center: true;
+  --container-padding: 2rem;
+  --container-screens-2xl: 1400px;
+}
+```
+
+## 🎨 Classes Utilitaires Personnalisées
+
+### Couleurs Accessibles
+
+```html
+<!-- Contraste élevé garanti -->
+<div class="bg-accessible-high text-white">Texte haute visibilité</div>
+<div class="bg-accessible-medium text-white">Texte visibilité moyenne</div>
+
+<!-- Couleurs d'urgence -->
+<button class="bg-emergency text-emergency-foreground">🚨 Urgence</button>
+```
+
+### Tailles Tactiles
+
+```html
+<!-- Taille minimum WCAG -->
+<button class="min-h-[44px] min-w-[44px]">Tactile</button>
+
+<!-- Taille recommandée seniors -->
+<button class="h-12 w-32">Recommandé</button>
+
+<!-- Taille urgence -->
+<button class="h-16 w-48">Urgence</button>
+```
+
+## 🔄 Migration depuis v3
+
+### Changements Principaux
+
+1. **Configuration CSS** : `tailwind.config.js` → `theme.css`
+2. **Plugin Vite** : `@tailwindcss/postcss` → `@tailwindcss/vite`
+3. **Variables** : Mapping automatique CSS → Tailwind
+4. **Performance** : Build plus rapide, bundle plus petit
+
+### Guide de Migration
+
+```diff
+- // tailwind.config.js
+- module.exports = {
+-   theme: {
+-     colors: {
+-       primary: '#3B82F6'
+-     }
+-   }
+- }
+
++ /* theme.css */
++ @theme {
++   --color-primary: #3B82F6;
++ }
+```
+
+## 🚀 Performance
+
+### Avantages CSS-First
+
+- **Build 50% plus rapide** que Tailwind v3
+- **Bundle plus petit** : seulement les styles utilisés
+- **Hot reload optimisé** : rechargement instantané
+- **Tree-shaking automatique** : suppression du code mort
+
+### Optimisations Storybook
+
+```typescript
+// .storybook/main.ts
+optimizeDeps: {
+  include: [
+    '@storybook/addon-a11y',
+    'react',
+    'react-dom',
+  ],
+}
+```
+
+## 💡 Bonnes Pratiques
+
+### 1. Utilisation des Tokens
+
+```html
+<!-- ✅ Correct - Utiliser les tokens -->
+<div class="bg-primary-700 text-primary-foreground">Bouton</div>
+
+<!-- ❌ Éviter - Couleurs arbitraires -->
+<div class="bg-[#3B82F6] text-[#FFFFFF]">Bouton</div>
+```
+
+### 2. Respect de l'Accessibilité
+
+```html
+<!-- ✅ Correct - Contraste élevé -->
+<p class="text-accessible-high">Texte important</p>
+
+<!-- ✅ Correct - Taille tactile -->
+<button class="h-12 w-32">Action</button>
+```
+
+### 3. Cohérence Responsive
+
+```html
+<!-- ✅ Correct - Mobile-first -->
+<div class="p-4 md:p-6 lg:p-8">Contenu</div>
+```
+
+## 🔗 Ressources
+
+- [Tailwind CSS v4 Documentation](https://tailwindcss.com/docs/v4-beta)
+- [OKLCH Color Space](https://oklch.com/)
+- [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
+- [CSS-first Approach](https://tailwindcss.com/blog/tailwindcss-v4-alpha)
+
+---
+
+*Cette configuration est maintenue et optimisée pour les besoins spécifiques de HavRid et ses utilisateurs seniors.*

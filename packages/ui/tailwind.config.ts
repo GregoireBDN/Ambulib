@@ -1,80 +1,18 @@
 import type { Config } from "tailwindcss";
 
+/**
+ * Configuration Tailwind CSS simplifiée pour HavRid Medical UI
+ * 
+ * Cette configuration minimaliste s'appuie entièrement sur le fichier theme.css
+ * qui contient toutes les définitions de couleurs OKLCH et variables CSS.
+ * 
+ * Approche: "CSS-first" de Tailwind v4 - les couleurs sont définies dans @theme
+ */
 const config: Config = {
   content: [
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
-  theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
-    extend: {
-      colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-        // Couleurs spécifiques à l'accessibilité
-        emergency: {
-          DEFAULT: "hsl(0, 84%, 60%)",
-          foreground: "hsl(0, 0%, 100%)",
-        },
-        accessible: {
-          high: "hsl(210, 40%, 8%)",
-          medium: "hsl(215, 25%, 27%)",
-          low: "hsl(215, 14%, 34%)",
-        }
-      },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
-      fontFamily: {
-        sans: ["var(--font-sans)"],
-      },
-      // Tailles d'éléments pour l'accessibilité
-      minHeight: {
-        touch: "44px", // Taille minimum pour les éléments tactiles
-      },
-      minWidth: {
-        touch: "44px",
-      },
-    },
-  },
+  // Aucune configuration de thème - tout est dans theme.css avec @theme
   plugins: [],
 }
 
