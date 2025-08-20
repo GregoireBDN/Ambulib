@@ -162,7 +162,7 @@ export async function signUpAction(
       return {
         success: false,
         error: 'Erreurs de validation',
-        fieldErrors: (error as any).validation
+        fieldErrors: (error as { validation: Record<string, string> }).validation
       }
     }
 

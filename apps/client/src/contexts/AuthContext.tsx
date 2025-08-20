@@ -2,11 +2,25 @@
 
 import { createContext, useContext, useEffect, useState } from "react"
 import { User } from "@/lib/auth"
+import { parseSessionCookie, createCookieListener } from "@/lib/session-utils"
+
+interface SignUpData {
+  email: string
+  password: string
+  firstName: string
+  lastName: string
+  phone?: string
+  birthDate?: string
+  socialSecurity?: string
+}
 
 interface AuthContextValue {
   user: User | null
   isLoading: boolean
   error: string | null
+  signIn: (email: string, password: string) => Promise<void>
+  signUp: (data: SignUpData) => Promise<void>
+  signOut: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -22,45 +36,152 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    // Récupérer la session depuis le cookie côté client
-    // Note: En production, utilisez plutôt un endpoint API pour récupérer la session
-    async function loadSession() {
+    // Lecture DIRECTE du cookie - synchronisation instantanée avec middleware
+    // Plus d'appels API = plus de race conditions !
+    let isMounted = true
+    
+    function loadSessionFromCookie() {
+      if (!isMounted) return
+      
       try {
         setIsLoading(true)
         setError(null)
 
-        // Appel à un endpoint API pour récupérer la session
-        const response = await fetch('/api/auth/session', {
-          credentials: 'include',
-        })
-
-        if (response.ok) {
-          const sessionData = await response.json()
-          // sessionData.user sera null si pas de session active
-          setUser(sessionData.user || null)
-        } else {
-          throw new Error('Erreur lors de la récupération de la session')
-        }
+        // Lecture directe du cookie (même logique que middleware)
+        const sessionData = parseSessionCookie()
+        setUser(sessionData?.user || null)
+        
+        console.log('📍 Session chargée depuis cookie:', sessionData?.user?.email || 'aucune session')
       } catch (err) {
-        console.error('Erreur lors du chargement de la session:', err)
-        setError('Impossible de charger la session utilisateur')
+        console.error('Erreur lors de la lecture du cookie:', err)
         setUser(null)
       } finally {
-        setIsLoading(false)
+        if (isMounted) {
+          setIsLoading(false)
+        }
       }
     }
 
-    loadSession()
+    // Chargement initial instantané
+    loadSessionFromCookie()
+
+    // Écouter les changements de cookies pour synchronisation temps réel
+    const unsubscribe = createCookieListener((session) => {
+      if (isMounted) {
+        setUser(session?.user || null)
+        console.log('🔄 Session mise à jour depuis cookie:', session?.user?.email || 'session expirée')
+      }
+    })
+
+    // Cleanup function
+    return () => {
+      isMounted = false
+      unsubscribe()
+    }
   }, [])
 
   // Les Server Actions gèrent automatiquement la mise à jour 
   // de la session après login/logout via redirect, donc pas besoin
   // de rafraîchissement manuel qui causerait des requêtes répétitives
 
+  const signIn = async (email: string, password: string) => {
+    try {
+      setIsLoading(true)
+      setError(null)
+
+      console.log('🔑 Tentative de connexion pour:', email)
+      
+      const response = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ email, password }),
+      })
+
+      console.log('📡 Réponse API status:', response.status, response.statusText)
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Erreur inconnue' }))
+        console.error('❌ Erreur API:', errorData)
+        setError(errorData.error || 'Identifiants incorrects')
+        throw new Error(errorData.error || 'Erreur lors de la connexion')
+      }
+
+      const userData = await response.json()
+      console.log('✅ Connexion réussie pour:', userData.user?.email)
+      setUser(userData.user)
+      
+      // Laisser le middleware gérer la redirection après la mise à jour de l'état
+      // Pas de redirection programmatique ici pour éviter les conflits
+    } catch (err) {
+      console.error('🚨 Erreur lors de la connexion:', err)
+      if (!error) {
+        setError('Erreur de connexion. Vérifiez vos identifiants.')
+      }
+      throw err
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const signUp = async (data: SignUpData) => {
+    try {
+      setIsLoading(true)
+      setError(null)
+
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(data),
+      })
+
+      if (!response.ok) {
+        throw new Error('Erreur lors de l\'inscription')
+      }
+
+      const userData = await response.json()
+      setUser(userData.user)
+    } catch (err) {
+      console.error('Erreur lors de l\'inscription:', err)
+      setError('Erreur lors de la création du compte')
+      throw err
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const signOut = async () => {
+    try {
+      setIsLoading(true)
+      setError(null)
+
+      await fetch('/api/auth/signout', {
+        method: 'POST',
+        credentials: 'include',
+      })
+
+      setUser(null)
+    } catch (err) {
+      console.error('Erreur lors de la déconnexion:', err)
+      setError('Erreur lors de la déconnexion')
+      throw err
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const value: AuthContextValue = {
     user,
     isLoading,
-    error
+    error,
+    signIn,
+    signUp,
+    signOut
   }
 
   return (

@@ -1,59 +1,37 @@
 "use client"
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/AuthContext"
 
 interface ProtectedRouteProps {
   children: React.ReactNode
   fallback?: React.ReactNode
-  redirectTo?: string
 }
 
 export default function ProtectedRoute({ 
   children, 
-  fallback,
-  redirectTo = "/auth/connexion" 
+  fallback
 }: ProtectedRouteProps) {
   const { user, isLoading } = useAuth()
-  const router = useRouter()
 
-  useEffect(() => {
-    // Only redirect if we're sure the user is not authenticated
-    if (!isLoading && !user) {
-      // Add current path as redirect parameter
-      const currentPath = window.location.pathname
-      const redirectUrl = `${redirectTo}?redirect=${encodeURIComponent(currentPath)}`
-      router.push(redirectUrl)
-    }
-  }, [user, isLoading, router, redirectTo])
-
-  // Show loading state while checking authentication
+  // Loading ultra-rapide car lecture cookie = synchrone
   if (isLoading) {
     return (
       fallback || (
         <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center space-y-4">
-            <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto"></div>
-            <p className="text-muted-foreground">Vérification de votre connexion...</p>
+          <div className="text-center space-y-4" role="status" aria-live="polite">
+            <div 
+              className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto"
+              aria-hidden="true"
+            ></div>
+            <p className="text-muted-foreground">Initialisation...</p>
+            <span className="sr-only">Chargement en cours</span>
           </div>
         </div>
       )
     )
   }
 
-  // Show loading state if user is not authenticated (will redirect)
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full mx-auto"></div>
-          <p className="text-muted-foreground">Redirection vers la page de connexion...</p>
-        </div>
-      </div>
-    )
-  }
-
-  // User is authenticated, render the protected content
+  // Middleware gère les redirections automatiquement
+  // On fait confiance au middleware et on affiche le contenu
   return <>{children}</>
 }
