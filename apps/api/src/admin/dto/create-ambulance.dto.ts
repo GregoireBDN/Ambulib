@@ -15,7 +15,7 @@ export class CreateAmbulanceDto {
     example: 'Mercedes Sprinter',
   })
   @IsString()
-  vehicleModel: string;
+  model: string;
 
   @ApiProperty({
     description: 'Année du véhicule',
@@ -26,7 +26,7 @@ export class CreateAmbulanceDto {
   @IsInt()
   @Min(1900)
   @Max(new Date().getFullYear() + 1)
-  vehicleYear: number;
+  year: number;
 
   @ApiProperty({
     description: 'Capacité de transport (nombre de patients)',

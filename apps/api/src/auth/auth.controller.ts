@@ -19,6 +19,7 @@ import { Role } from '@prisma/client';
 import { Public } from './decorators/public.decorator';
 import { Roles } from './decorators/roles.decorator';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
+import { UserService } from '../user/user.service';
 import {
   ApiTags,
   ApiOperation,
@@ -51,7 +52,10 @@ interface RequestWithUser extends Request {
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService
+  ) {}
 
   @Public()
   @Post('signup')
@@ -237,6 +241,70 @@ export class AuthController {
     @Body() profileData: Partial<CreateUserDto>,
   ) {
     return this.authService.completeProfile(req.user.id, profileData);
+  }
+
+  @Public()
+  @Post('check-email')
+  @ApiOperation({
+    summary: "Vérifier la disponibilité d'un email",
+    description: "Vérifie si un email est déjà utilisé dans le système",
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          format: 'email',
+          example: 'user@example.com',
+        },
+      },
+      required: ['email'],
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Email vérifié avec succès',
+    schema: {
+      type: 'object',
+      properties: {
+        available: {
+          type: 'boolean',
+          description: 'true si email disponible, false si déjà utilisé',
+        },
+        message: {
+          type: 'string',
+          description: 'Message explicatif',
+        },
+      },
+    },
+  })
+  @ApiBadRequestResponse({
+    description: 'Email manquant ou format invalide',
+  })
+  async checkEmail(@Body('email') email: string) {
+    if (!email) {
+      throw new Error('Email requis');
+    }
+
+    try {
+      const existingUser = await this.userService.findByEmail(email);
+      
+      if (existingUser) {
+        return {
+          available: false,
+          message: 'Cette adresse email est déjà utilisée',
+        };
+      }
+
+      return {
+        available: true,
+        message: 'Cette adresse email est disponible',
+      };
+    } catch (error) {
+      console.error('Erreur lors de la vérification email:', error);
+      throw new Error('Erreur lors de la vérification');
+    }
   }
 
   @Post('signout')

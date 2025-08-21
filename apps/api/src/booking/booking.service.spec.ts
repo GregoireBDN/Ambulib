@@ -46,19 +46,17 @@ describe('BookingService', () => {
   const mockBooking = {
     id: 1,
     clientId: 1,
-    dependentId: null,
     pickupAddress: '123 rue de la Santé',
     destinationAddress: 'Hôpital Saint-Louis',
-    pickupCity: 'Paris',
-    destinationCity: 'Paris',
-    pickupPostalCode: '75010',
-    destinationPostalCode: '75010',
-    scheduledDateTime: new Date('2024-12-25T14:30:00Z'),
-    bookingType: BookingType.SCHEDULED,
+    pickupDateTime: new Date('2024-12-25T14:30:00Z'),
+    appointmentDateTime: new Date('2024-12-25T15:00:00Z'),
+    returnTrip: false,
+    returnDateTime: null,
+    bookingType: BookingType.MEDICAL_APPOINTMENT,
     status: BookingStatus.PENDING,
     specialRequirements: [SpecialRequirements.NEEDS_OXYGEN],
     notes: 'Patient avec mobilité réduite',
-    estimatedDuration: 60,
+    totalCost: 45.0,
     createdAt: new Date(),
     updatedAt: new Date(),
     client: {
@@ -67,7 +65,6 @@ describe('BookingService', () => {
       phoneNumber: '+33123456789',
       email: 'john@test.com',
     },
-    dependent: null,
     transportTickets: [],
     assignments: [],
   };
@@ -105,8 +102,8 @@ describe('BookingService', () => {
       destinationCity: 'Paris',
       pickupPostalCode: '75010',
       destinationPostalCode: '75010',
-      scheduledDateTime: futureDate.toISOString(),
-      bookingType: BookingType.SCHEDULED,
+      pickupDateTime: futureDate.toISOString(),
+      bookingType: BookingType.MEDICAL_APPOINTMENT,
       specialRequirements: [SpecialRequirements.NEEDS_OXYGEN],
       notes: 'Patient avec mobilité réduite',
       estimatedDuration: 60,
@@ -125,7 +122,7 @@ describe('BookingService', () => {
         data: {
           ...createBookingDto,
           clientId: 1,
-          scheduledDateTime: new Date(createBookingDto.scheduledDateTime),
+          pickupDateTime: new Date(createBookingDto.pickupDateTime),
         },
         include: expect.any(Object),
       });
@@ -153,7 +150,7 @@ describe('BookingService', () => {
 
     it('should throw BadRequestException for scheduled booking without date', async () => {
       mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
-      const invalidDto = { ...createBookingDto, scheduledDateTime: undefined };
+      const invalidDto = { ...createBookingDto, pickupDateTime: undefined };
 
       await expect(service.create(1, invalidDto)).rejects.toThrow(
         new BadRequestException(
@@ -166,7 +163,7 @@ describe('BookingService', () => {
       mockPrismaService.user.findUnique.mockResolvedValue(mockUser);
       const pastDateDto = {
         ...createBookingDto,
-        scheduledDateTime: '2023-01-01T10:00:00Z',
+        pickupDateTime: '2023-01-01T10:00:00Z',
       };
 
       await expect(service.create(1, pastDateDto)).rejects.toThrow(
@@ -432,7 +429,7 @@ describe('BookingService', () => {
     });
 
     it('should validate future date for rescheduling', async () => {
-      const pastDateUpdate = { scheduledDateTime: '2023-01-01T10:00:00Z' };
+      const pastDateUpdate = { pickupDateTime: '2023-01-01T10:00:00Z' };
 
       await expect(
         service.update(1, 1, Role.ADMIN, pastDateUpdate),

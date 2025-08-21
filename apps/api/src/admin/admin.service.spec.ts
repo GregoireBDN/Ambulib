@@ -156,8 +156,8 @@ describe('AdminService', () => {
   describe('createAmbulance', () => {
     const createAmbulanceDto = {
       licensePlate: 'XYZ789',
-      vehicleModel: 'Ford Transit',
-      vehicleYear: 2023,
+      model: 'Ford Transit',
+      year: 2023,
       capacity: 1,
       driverId: 1,
     };
@@ -264,10 +264,6 @@ describe('AdminService', () => {
         include: {
           emergencyContact: true,
           dependent: true,
-          bookings: {
-            take: 5,
-            orderBy: { createdAt: 'desc' },
-          },
         },
       });
       expect(result).toBeDefined();

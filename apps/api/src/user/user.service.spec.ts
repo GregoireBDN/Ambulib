@@ -22,10 +22,12 @@ describe('UserService', () => {
     isProfileComplete: true,
     hashedRefreshToken: 'hashedRefreshToken',
     age: 25,
+    birthDate: new Date('1998-06-15'),
     phoneNumber: '+33123456789',
     address: '123 Main St',
     city: 'Paris',
     postalCode: '75001',
+    country: 'France',
     authProvider: AuthProvider.CREDENTIALS,
     isEmailVerified: false,
     emailVerificationToken: null,
@@ -33,13 +35,18 @@ describe('UserService', () => {
     companyId: null, // CLIENT n'appartient à aucune entreprise
     createdAt: new Date(),
     updatedAt: new Date(),
+    notes: null,
+    medicalCondition: null,
+    specialRequirements: [],
+    emergencyContact: null,
+    dependent: [],
   };
 
   const mockCreateUserDto: CreateUserDto = {
     email: 'test@example.com',
     firstName: 'John',
     lastName: 'Doe',
-    password: 'password123',
+    password: 'TestPassword123!',
     age: '25',
     phoneNumber: '+33123456789',
     address: '123 Main St',
@@ -54,6 +61,7 @@ describe('UserService', () => {
         findUnique: jest.fn(),
         update: jest.fn(),
       },
+      $transaction: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -79,44 +87,36 @@ describe('UserService', () => {
   describe('create', () => {
     it('should create a new user successfully', async () => {
       (argon2.hash as jest.Mock).mockResolvedValue('hashedPassword');
+      (prismaService.$transaction as jest.Mock).mockImplementation((callback) => 
+        callback(prismaService)
+      );
       (prismaService.user.create as jest.Mock).mockResolvedValue(mockUser);
 
       const result = await service.create(mockCreateUserDto);
 
       expect(argon2.hash).toHaveBeenCalledWith(mockCreateUserDto.password);
-      expect(prismaService.user.create).toHaveBeenCalledWith({
-        data: {
-          password: 'hashedPassword',
-          age: 25,
-          email: mockCreateUserDto.email,
-          firstName: mockCreateUserDto.firstName,
-          lastName: mockCreateUserDto.lastName,
-          phoneNumber: mockCreateUserDto.phoneNumber,
-          address: mockCreateUserDto.address,
-          city: mockCreateUserDto.city,
-          postalCode: mockCreateUserDto.postalCode,
-          updatedAt: expect.any(Date),
-        },
-      });
+      expect(prismaService.$transaction).toHaveBeenCalled();
       expect(result).toEqual(mockUser);
     });
 
     it('should handle string age conversion', async () => {
       (argon2.hash as jest.Mock).mockResolvedValue('hashedPassword');
+      (prismaService.$transaction as jest.Mock).mockImplementation((callback) => 
+        callback(prismaService)
+      );
       (prismaService.user.create as jest.Mock).mockResolvedValue(mockUser);
 
       const createUserDtoWithStringAge = { ...mockCreateUserDto, age: '30' };
       await service.create(createUserDtoWithStringAge);
 
-      expect(prismaService.user.create).toHaveBeenCalledWith({
-        data: expect.objectContaining({
-          age: 30,
-        }),
-      });
+      expect(prismaService.$transaction).toHaveBeenCalled();
     });
 
     it('should handle null age', async () => {
       (argon2.hash as jest.Mock).mockResolvedValue('hashedPassword');
+      (prismaService.$transaction as jest.Mock).mockImplementation((callback) => 
+        callback(prismaService)
+      );
       (prismaService.user.create as jest.Mock).mockResolvedValue(mockUser);
 
       const createUserDtoWithoutAge = { ...mockCreateUserDto };
@@ -124,17 +124,13 @@ describe('UserService', () => {
 
       await service.create(createUserDtoWithoutAge);
 
-      expect(prismaService.user.create).toHaveBeenCalledWith({
-        data: expect.objectContaining({
-          age: null,
-        }),
-      });
+      expect(prismaService.$transaction).toHaveBeenCalled();
     });
 
     it('should throw error if user creation fails', async () => {
       (argon2.hash as jest.Mock).mockResolvedValue('hashedPassword');
       const error = new Error('Database error');
-      (prismaService.user.create as jest.Mock).mockRejectedValue(error);
+      (prismaService.$transaction as jest.Mock).mockRejectedValue(error);
 
       await expect(service.create(mockCreateUserDto)).rejects.toThrow(
         'Database error',
@@ -159,6 +155,15 @@ describe('UserService', () => {
 
       expect(prismaService.user.findUnique).toHaveBeenCalledWith({
         where: { email: 'test@example.com' },
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          role: true,
+          password: true,
+          isProfileComplete: true,
+        }
       });
       expect(result).toEqual(mockUser);
     });

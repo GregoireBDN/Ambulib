@@ -77,12 +77,12 @@ export class CreateBookingDto {
   })
   @IsOptional()
   @IsDateString()
-  scheduledDateTime?: string;
+  pickupDateTime?: string;
 
   @ApiProperty({
     description: 'Type de réservation',
     enum: BookingType,
-    example: BookingType.SCHEDULED,
+    example: BookingType.MEDICAL_APPOINTMENT,
   })
   @IsEnum(BookingType)
   bookingType: BookingType;

@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { UserService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { Role } from '@prisma/client';
 import { Response } from 'express';
@@ -17,6 +18,8 @@ describe('AuthController', () => {
     role: Role.CLIENT,
     isProfileComplete: true,
     companyId: null,
+    birthDate: new Date('1990-01-01'),
+    country: 'France',
   };
 
   const mockAuthResponse = {
@@ -34,7 +37,7 @@ describe('AuthController', () => {
     firstName: 'John',
     lastName: 'Doe',
     email: 'test@example.com',
-    password: 'password123',
+    password: 'TestPassword123!',
   };
 
   const mockRequest = {
@@ -53,6 +56,14 @@ describe('AuthController', () => {
             refreshToken: jest.fn(),
             completeProfile: jest.fn(),
             signOut: jest.fn(),
+          },
+        },
+        {
+          provide: UserService,
+          useValue: {
+            findOne: jest.fn(),
+            update: jest.fn(),
+            create: jest.fn(),
           },
         },
       ],

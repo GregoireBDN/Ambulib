@@ -66,4 +66,49 @@ export class CreateUserDto {
   @IsOptional()
   @IsNumber()
   companyId?: number;
+
+  // Nouveaux champs du FormStepper
+  @IsOptional()
+  @IsString()
+  birthDate?: string;
+
+  @IsOptional()
+  @IsString()
+  socialSecurity?: string;
+
+  @IsOptional()
+  @IsString()
+  allergies?: string;
+
+  @IsOptional()
+  @IsString()
+  medications?: string;
+
+  @IsOptional()
+  @IsString()
+  mobility?: string;
+
+  @IsOptional()
+  @IsString()
+  mobilityDetails?: string;
+
+  @IsOptional()
+  @IsString()
+  doctorName?: string;
+
+  @IsOptional()
+  @IsString()
+  doctorPhone?: string;
+
+  @IsOptional()
+  @IsString()
+  emergencyContactName?: string;
+
+  @IsOptional()
+  @IsString()
+  emergencyContactPhone?: string;
+
+  @IsOptional()
+  @IsString()
+  emergencyContactRelation?: string;
 }

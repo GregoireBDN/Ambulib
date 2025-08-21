@@ -16,17 +16,82 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto) {
     try {
-      const { password, age, ...user } = createUserDto;
+      const { 
+        password, 
+        age, 
+        birthDate,
+        socialSecurity,
+        allergies, 
+        medications, 
+        mobility,
+        mobilityDetails,
+        doctorName, 
+        doctorPhone,
+        emergencyContactName,
+        emergencyContactPhone,
+        emergencyContactRelation,
+        ...userData 
+      } = createUserDto;
+      
       const hashedPassword = await hash(password);
 
-      const result = await this.prisma.user.create({
-        data: {
-          password: hashedPassword,
-          age: age ? (typeof age === 'string' ? parseInt(age) : age) : null,
-          ...user,
-          updatedAt: new Date(),
-        },
+      // Calculer l'âge à partir de la date de naissance si fournie
+      let calculatedAge = age ? (typeof age === 'string' ? parseInt(age) : age) : null;
+      if (birthDate && !calculatedAge) {
+        const birth = new Date(birthDate);
+        const today = new Date();
+        calculatedAge = today.getFullYear() - birth.getFullYear();
+      }
+
+      // Créer l'utilisateur avec une transaction pour gérer les relations
+      const result = await this.prisma.$transaction(async (prisma) => {
+        // 1. Créer l'utilisateur principal
+        const user = await prisma.user.create({
+          data: {
+            password: hashedPassword,
+            age: calculatedAge,
+            ...userData,
+            updatedAt: new Date(),
+          },
+        });
+
+        // 2. Créer les informations médicales si fournies
+        if (allergies || medications || socialSecurity || doctorName || doctorPhone) {
+          await prisma.medicalInfo.create({
+            data: {
+              userId: user.id,
+              allergies: allergies || null,
+              medications: medications || null,
+              medicalConditions: mobility && mobility !== 'none' 
+                ? `Mobilité réduite: ${mobility}${mobilityDetails ? ` - ${mobilityDetails}` : ''}` 
+                : null,
+              doctorName: doctorName || null,
+              doctorPhone: doctorPhone || null,
+              insuranceNumber: socialSecurity || null, // Utiliser le champ existant
+            },
+          });
+        }
+
+        // 3. Créer le contact d'urgence si fourni
+        if (emergencyContactName && emergencyContactPhone && emergencyContactRelation) {
+          // Séparer le nom complet en prénom et nom
+          const [firstName, ...lastNameParts] = emergencyContactName.split(' ');
+          const lastName = lastNameParts.join(' ') || firstName;
+
+          await prisma.emergencyContact.create({
+            data: {
+              userId: user.id,
+              firstName: firstName,
+              lastName: lastName,
+              phoneNumber: emergencyContactPhone,
+              relationship: emergencyContactRelation,
+            },
+          });
+        }
+
+        return user;
       });
+
       return result;
     } catch (error) {
       throw error;
@@ -39,6 +104,15 @@ export class UserService {
         where: {
           email,
         },
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          role: true,
+          password: true,
+          isProfileComplete: true,
+        }
       });
       return result;
     } catch (error) {

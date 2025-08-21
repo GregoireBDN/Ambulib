@@ -151,10 +151,6 @@ export class AdminService {
       include: {
         emergencyContact: true,
         dependent: true,
-        bookings: {
-          take: 5,
-          orderBy: { createdAt: 'desc' },
-        },
       },
     });
 
@@ -234,7 +230,7 @@ export class AdminService {
             booking: true,
           },
           take: 10,
-          orderBy: { createdAt: 'desc' },
+          orderBy: { id: 'desc' },
         },
       },
     });

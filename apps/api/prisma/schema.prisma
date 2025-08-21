@@ -7,32 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Company {
-  id               Int           @id @default(autoincrement())
-  name             String
-  email            String        @unique
-  phoneNumber      String?
-  address          String?
-  city             String?
-  postalCode       String?
-  licenseNumber    String?       @unique
-  status           CompanyStatus @default(PENDING)
-  registrationDate DateTime      @default(now())
-  approvedAt       DateTime?
-  notes            String?
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-  users            User[]
-  ambulances       Ambulance[]
-}
-
 model User {
   email              String            @unique
   password           String
   id                 Int               @id @default(autoincrement())
   hashedRefreshToken String?
   role               Role              @default(CLIENT)
-  companyId          Int?
   age                Int?
   firstName          String
   lastName           String
@@ -40,18 +20,20 @@ model User {
   address            String?
   authProvider       AuthProvider      @default(CREDENTIALS)
   city               String?
+  country            String?           @default("France")
   isProfileComplete  Boolean           @default(false)
   postalCode         String?
+  birthDate          DateTime?
+  companyId          Int?
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
-  company            Company?          @relation(fields: [companyId], references: [id])
+  ambulance          Ambulance?        @relation("AmbulanceDriver")
+  driverAssignments  Assignment[]      @relation("DriverAssignments")
+  clientBookings     Booking[]         @relation("ClientBookings")
   dependent          Dependent[]
   emergencyContact   EmergencyContact?
-  bookings           Booking[]
-  medicalInfo        MedicalInfo[]
-  assignedRoutes     Assignment[]      @relation("DriverAssignments")
-  createdAssignments Assignment[]      @relation("CreatedByUser")
-  ambulances         Ambulance[]       @relation("AmbulanceDriver")
+  medicalInfo        MedicalInfo?
+  company            Company?          @relation(fields: [companyId], references: [id])
 }
 
 model EmergencyContact {
@@ -66,20 +48,112 @@ model EmergencyContact {
 }
 
 model Dependent {
-  id          Int           @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   firstName   String
   lastName    String
   age         Int?
   userId      Int?
   address     String?
   city        String?
+  country     String? @default("France")
   phoneNumber String?
   postalCode  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
   user        User?   @relation(fields: [userId], references: [id])
-  bookings    Booking[]
-  medicalInfo MedicalInfo[]
+}
+
+model Category {
+  id    Int     @id @default(autoincrement())
+  slug  String  @unique
+  title String
+  img   String?
+}
+
+model MedicalInfo {
+  id                Int     @id @default(autoincrement())
+  userId            Int     @unique
+  allergies         String?
+  medications       String?
+  medicalConditions String?
+  doctorName        String?
+  doctorPhone       String?
+  insuranceNumber   String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Company {
+  id            Int           @id @default(autoincrement())
+  name          String
+  licenseNumber String        @unique
+  address       String
+  phoneNumber   String
+  email         String
+  status        CompanyStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  ambulances    Ambulance[]
+  users         User[]
+}
+
+model Ambulance {
+  id           Int             @id @default(autoincrement())
+  licensePlate String          @unique
+  model        String
+  year         Int
+  capacity     Int
+  status       AmbulanceStatus @default(AVAILABLE)
+  companyId    Int
+  driverId     Int?            @unique
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  company      Company         @relation(fields: [companyId], references: [id])
+  driver       User?           @relation("AmbulanceDriver", fields: [driverId], references: [id])
+  assignments  Assignment[]
+}
+
+model Booking {
+  id                  Int                   @id @default(autoincrement())
+  clientId            Int
+  pickupAddress       String
+  destinationAddress  String
+  pickupDateTime      DateTime
+  appointmentDateTime DateTime?
+  returnTrip          Boolean               @default(false)
+  returnDateTime      DateTime?
+  status              BookingStatus         @default(PENDING)
+  bookingType         BookingType
+  specialRequirements SpecialRequirements[]
+  notes               String?
+  totalCost           Float?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  assignments         Assignment[]
+  client              User                  @relation("ClientBookings", fields: [clientId], references: [id])
+  transportTickets    TransportTicket[]
+}
+
+model Assignment {
+  id          Int              @id @default(autoincrement())
+  bookingId   Int
+  ambulanceId Int
+  driverId    Int
+  status      AssignmentStatus @default(ASSIGNED)
+  assignedAt  DateTime         @default(now())
+  startedAt   DateTime?
+  completedAt DateTime?
+  ambulance   Ambulance        @relation(fields: [ambulanceId], references: [id])
+  booking     Booking          @relation(fields: [bookingId], references: [id])
+  driver      User             @relation("DriverAssignments", fields: [driverId], references: [id])
+}
+
+model TransportTicket {
+  id           Int       @id @default(autoincrement())
+  bookingId    Int
+  ticketNumber String    @unique
+  issueDate    DateTime  @default(now())
+  validUntil   DateTime
+  isUsed       Boolean   @default(false)
+  usedAt       DateTime?
+  booking      Booking   @relation(fields: [bookingId], references: [id])
 }
 
 enum AuthProvider {
@@ -102,31 +176,27 @@ enum CompanyStatus {
   REJECTED
 }
 
-enum SpecialRequirements {
-  NEEDS_OXYGEN
-  NEEDS_LYING_TRANSPORT
-  ALLERGIES
-  MEDICATIONS
+enum AmbulanceStatus {
+  AVAILABLE
+  IN_USE
+  MAINTENANCE
+  OUT_OF_SERVICE
 }
 
 enum BookingStatus {
   PENDING
   CONFIRMED
+  ASSIGNED
   IN_PROGRESS
   COMPLETED
   CANCELLED
 }
 
 enum BookingType {
-  SCHEDULED
+  MEDICAL_APPOINTMENT
+  HOSPITAL_TRANSFER
   EMERGENCY
-}
-
-enum AmbulanceStatus {
-  AVAILABLE
-  IN_USE
-  MAINTENANCE
-  OUT_OF_SERVICE
+  ROUTINE_TRANSPORT
 }
 
 enum AssignmentStatus {
@@ -137,100 +207,9 @@ enum AssignmentStatus {
   CANCELLED
 }
 
-model Booking {
-  id                Int             @id @default(autoincrement())
-  clientId          Int
-  dependentId       Int?
-  pickupAddress     String
-  destinationAddress String
-  pickupCity        String
-  destinationCity   String
-  pickupPostalCode  String?
-  destinationPostalCode String?
-  scheduledDateTime DateTime?
-  bookingType       BookingType     @default(SCHEDULED)
-  status            BookingStatus   @default(PENDING)
-  specialRequirements SpecialRequirements[]
-  notes             String?
-  estimatedDuration Int?
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
-  client            User            @relation(fields: [clientId], references: [id])
-  dependent         Dependent?      @relation(fields: [dependentId], references: [id])
-  transportTickets  TransportTicket[]
-  assignments       Assignment[]
-}
-
-model MedicalInfo {
-  id                Int      @id @default(autoincrement())
-  userId            Int
-  dependentId       Int?
-  allergies         String?
-  medications       String?
-  medicalConditions String?
-  emergencyInstructions String?
-  bloodType         String?
-  doctorName        String?
-  doctorPhone       String?
-  insuranceNumber   String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  user              User     @relation(fields: [userId], references: [id])
-  dependent         Dependent? @relation(fields: [dependentId], references: [id])
-}
-
-model TransportTicket {
-  id            Int      @id @default(autoincrement())
-  bookingId     Int
-  ticketNumber  String   @unique
-  issueDate     DateTime @default(now())
-  validUntil    DateTime?
-  ticketType    String
-  value         Float?
-  isUsed        Boolean  @default(false)
-  usedAt        DateTime?
-  notes         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  booking       Booking  @relation(fields: [bookingId], references: [id])
-}
-
-model Ambulance {
-  id              Int             @id @default(autoincrement())
-  companyId       Int
-  licensePlate    String          @unique
-  vehicleModel    String
-  vehicleYear     Int
-  capacity        Int             @default(1)
-  status          AmbulanceStatus @default(AVAILABLE)
-  driverId        Int?
-  lastMaintenance DateTime?
-  nextMaintenance DateTime?
-  mileage         Int?
-  notes           String?
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  company         Company         @relation(fields: [companyId], references: [id])
-  driver          User?           @relation("AmbulanceDriver", fields: [driverId], references: [id])
-  assignments     Assignment[]
-}
-
-model Assignment {
-  id                Int              @id @default(autoincrement())
-  bookingId         Int
-  ambulanceId       Int
-  driverId          Int
-  createdById       Int
-  status            AssignmentStatus @default(ASSIGNED)
-  assignedAt        DateTime         @default(now())
-  acceptedAt        DateTime?
-  startedAt         DateTime?
-  completedAt       DateTime?
-  notes             String?
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
-  booking           Booking          @relation(fields: [bookingId], references: [id])
-  ambulance         Ambulance        @relation(fields: [ambulanceId], references: [id])
-  driver            User             @relation("DriverAssignments", fields: [driverId], references: [id])
-  createdBy         User             @relation("CreatedByUser", fields: [createdById], references: [id])
+enum SpecialRequirements {
+  NEEDS_OXYGEN
+  NEEDS_LYING_TRANSPORT
+  ALLERGIES
+  MEDICATIONS
 }

@@ -54,7 +54,6 @@ export class AuthService {
         newUser.lastName,
         newUser.role,
         newUser.isProfileComplete,
-        newUser.companyId || undefined,
       );
 
       this.logger.log(
@@ -85,7 +84,6 @@ export class AuthService {
       firstName: user.firstName,
       lastName: user.lastName,
       role: user.role,
-      companyId: user.companyId,
       isProfileComplete: user.isProfileComplete,
     };
   }
@@ -96,7 +94,6 @@ export class AuthService {
     lastName: string,
     role: Role,
     isProfileComplete: boolean,
-    companyId?: number,
   ) {
     const { accessToken, refreshToken } = await this.generateTokens(userId);
     const hashedRT = await hash(refreshToken);
@@ -106,7 +103,6 @@ export class AuthService {
       firstName,
       lastName,
       role,
-      companyId,
       isProfileComplete,
       accessToken,
       refreshToken,
@@ -132,7 +128,6 @@ export class AuthService {
     const currentUser = {
       id: user.id,
       role: user.role,
-      companyId: user.companyId,
       isProfileComplete: user.isProfileComplete,
     };
     return currentUser;

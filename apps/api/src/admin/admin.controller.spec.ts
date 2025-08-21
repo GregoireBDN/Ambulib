@@ -16,10 +16,12 @@ describe('AdminController', () => {
     lastName: 'Doe',
     role: Role.FLEET_MANAGER,
     age: null,
+    birthDate: new Date('1998-06-15'),
     phoneNumber: null,
     address: null,
     city: null,
     postalCode: null,
+    country: 'France',
     authProvider: 'CREDENTIALS' as any,
     isProfileComplete: true,
     isEmailVerified: false,
@@ -29,6 +31,8 @@ describe('AdminController', () => {
     notes: null,
     medicalCondition: null,
     specialRequirements: [],
+    emergencyContact: null,
+    dependent: [],
     createdAt: new Date(),
     updatedAt: new Date(),
   };
@@ -36,16 +40,12 @@ describe('AdminController', () => {
   const mockAmbulance = {
     id: 1,
     licensePlate: 'ABC123',
-    vehicleModel: 'Mercedes Sprinter',
-    vehicleYear: 2022,
+    model: 'Mercedes Sprinter',
+    year: 2022,
     capacity: 2,
     status: 'AVAILABLE' as any,
     driverId: null,
     companyId: 1,
-    lastMaintenance: null,
-    nextMaintenance: null,
-    mileage: null,
-    notes: null,
     createdAt: new Date(),
     updatedAt: new Date(),
   };
@@ -84,7 +84,7 @@ describe('AdminController', () => {
     it('should create a fleet manager', async () => {
       const dto = {
         email: 'manager@example.com',
-        password: 'password123',
+        password: 'TestPassword123!',
         firstName: 'Jane',
         lastName: 'Smith',
       };
@@ -102,7 +102,7 @@ describe('AdminController', () => {
     it('should create an ambulance driver', async () => {
       const dto = {
         email: 'driver@example.com',
-        password: 'password123',
+        password: 'TestPassword123!',
         firstName: 'Bob',
         lastName: 'Wilson',
       };
@@ -123,8 +123,8 @@ describe('AdminController', () => {
     it('should create an ambulance', async () => {
       const dto = {
         licensePlate: 'XYZ789',
-        vehicleModel: 'Ford Transit',
-        vehicleYear: 2023,
+        model: 'Ford Transit',
+        year: 2023,
         capacity: 1,
       };
 
@@ -229,10 +229,10 @@ describe('AdminController', () => {
 
   describe('updateAmbulance', () => {
     it('should update ambulance', async () => {
-      const dto = { vehicleModel: 'Updated Model' };
+      const dto = { model: 'Updated Model' };
       const updatedAmbulance = {
         ...mockAmbulance,
-        vehicleModel: 'Updated Model',
+        model: 'Updated Model',
       };
 
       service.updateAmbulance.mockResolvedValue(updatedAmbulance);

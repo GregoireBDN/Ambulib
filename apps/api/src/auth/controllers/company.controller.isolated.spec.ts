@@ -29,7 +29,7 @@ describe('CompanyController - Isolated Logic Tests', () => {
           firstName: 'Admin',
           lastName: 'User',
           email: 'admin@test.com',
-          password: 'password123',
+          password: 'TestPassword123!',
         },
       };
 
@@ -81,7 +81,7 @@ describe('CompanyController - Isolated Logic Tests', () => {
         firstName: 'New',
         lastName: 'User',
         email: 'newuser@test.com',
-        password: 'password123',
+        password: 'TestPassword123!',
         role: Role.AMBULANCE_DRIVER,
       };
 
@@ -107,7 +107,7 @@ describe('CompanyController - Isolated Logic Tests', () => {
         firstName: 'New',
         lastName: 'User',
         email: 'newuser@test.com',
-        password: 'password123',
+        password: 'TestPassword123!',
         role: Role.AMBULANCE_DRIVER,
       };
 
@@ -125,7 +125,7 @@ describe('CompanyController - Isolated Logic Tests', () => {
         firstName: 'New',
         lastName: 'User',
         email: 'newuser@test.com',
-        password: 'password123',
+        password: 'TestPassword123!',
         role: Role.AMBULANCE_DRIVER,
       };
 

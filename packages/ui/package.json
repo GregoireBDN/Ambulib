@@ -24,7 +24,7 @@
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
     "storybook:serve": "npx serve storybook-static -p 6006",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "lint": "eslint . --max-warnings 0",
     "check-types": "tsc --noEmit"

@@ -42,7 +42,7 @@ describe('BookingController', () => {
     pickupPostalCode: '75010',
     destinationPostalCode: '75010',
     scheduledDateTime: new Date('2024-12-25T14:30:00Z'),
-    bookingType: BookingType.SCHEDULED,
+    bookingType: BookingType.MEDICAL_APPOINTMENT,
     status: BookingStatus.PENDING,
     specialRequirements: [SpecialRequirements.NEEDS_OXYGEN],
     notes: 'Patient avec mobilité réduite',
@@ -120,7 +120,7 @@ describe('BookingController', () => {
       pickupPostalCode: '75010',
       destinationPostalCode: '75010',
       scheduledDateTime: '2024-12-25T14:30:00Z',
-      bookingType: BookingType.SCHEDULED,
+      bookingType: BookingType.MEDICAL_APPOINTMENT,
       specialRequirements: [SpecialRequirements.NEEDS_OXYGEN],
       notes: 'Patient avec mobilité réduite',
       estimatedDuration: 60,
@@ -156,7 +156,7 @@ describe('BookingController', () => {
       page: 1,
       limit: 10,
       status: BookingStatus.PENDING,
-      bookingType: BookingType.SCHEDULED,
+      bookingType: BookingType.MEDICAL_APPOINTMENT,
       startDate: '2024-01-01T00:00:00Z',
       endDate: '2024-12-31T23:59:59Z',
     };
@@ -400,7 +400,7 @@ describe('BookingController', () => {
         destinationAddress: 'Hôpital Saint-Louis',
         pickupCity: 'Paris',
         destinationCity: 'Paris',
-        bookingType: BookingType.SCHEDULED,
+        bookingType: BookingType.MEDICAL_APPOINTMENT,
         scheduledDateTime: '2024-12-25T14:30:00Z',
       };
 

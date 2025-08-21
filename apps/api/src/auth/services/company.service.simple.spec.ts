@@ -57,7 +57,7 @@ describe('CompanyService - Simple Tests', () => {
         firstName: 'Admin',
         lastName: 'User',
         email: 'admin@test.com',
-        password: 'password123',
+        password: 'TestPassword123!',
       },
     };
 
@@ -121,7 +121,7 @@ describe('CompanyService - Simple Tests', () => {
       firstName: 'Test',
       lastName: 'User',
       email: 'test@user.com',
-      password: 'password123',
+      password: 'TestPassword123!',
       role: Role.CLIENT, // Invalid role
     };
 
@@ -182,7 +182,7 @@ describe('CompanyService - Simple Tests', () => {
             },
           },
         },
-        orderBy: { registrationDate: 'desc' },
+        orderBy: { createdAt: 'desc' },
       });
     });
   });

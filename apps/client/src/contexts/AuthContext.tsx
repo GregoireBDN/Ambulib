@@ -12,6 +12,17 @@ interface SignUpData {
   phone?: string
   birthDate?: string
   socialSecurity?: string
+  // Nouvelles données enrichies
+  address?: string
+  allergies?: string
+  medications?: string
+  mobility?: string
+  mobilityDetails?: string
+  doctorName?: string
+  doctorPhone?: string
+  emergencyContactName?: string
+  emergencyContactPhone?: string
+  emergencyContactRelation?: string
 }
 
 interface AuthContextValue {
@@ -131,6 +142,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setIsLoading(true)
       setError(null)
 
+      console.log('📝 Tentative d\'inscription pour:', data.email)
+
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: {
@@ -140,15 +153,38 @@ export function AuthProvider({ children }: AuthProviderProps) {
         body: JSON.stringify(data),
       })
 
+      console.log('📡 Réponse API status:', response.status, response.statusText)
+
       if (!response.ok) {
-        throw new Error('Erreur lors de l\'inscription')
+        const errorData = await response.json().catch(() => ({ 
+          error: `Erreur ${response.status}: ${response.statusText}` 
+        }))
+        console.error('❌ Erreur API inscription:', errorData)
+        
+        // Gestion d'erreurs spécifiques
+        let errorMessage = 'Erreur lors de l\'inscription'
+        if (response.status === 409 || errorData.message?.includes('already exists')) {
+          errorMessage = 'User already exists'
+        } else if (response.status === 400) {
+          errorMessage = 'Données de validation incorrectes'
+        } else if (response.status >= 500) {
+          errorMessage = 'Problème serveur temporaire'
+        } else {
+          errorMessage = errorData.message || errorData.error || errorMessage
+        }
+
+        setError(errorMessage)
+        throw new Error(errorMessage)
       }
 
       const userData = await response.json()
+      console.log('✅ Inscription réussie pour:', userData.user?.email)
       setUser(userData.user)
     } catch (err) {
-      console.error('Erreur lors de l\'inscription:', err)
-      setError('Erreur lors de la création du compte')
+      console.error('🚨 Erreur lors de l\'inscription:', err)
+      if (!error) {
+        setError('Erreur lors de la création du compte')
+      }
       throw err
     } finally {
       setIsLoading(false)

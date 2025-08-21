@@ -4,14 +4,14 @@ import { ApiProperty } from '@nestjs/swagger';
 export class ChangePasswordDto {
   @ApiProperty({
     description: 'Mot de passe actuel',
-    example: 'ancienMotDePasse123',
+    example: 'AncienMotDePasse123!',
   })
   @IsString()
   currentPassword: string;
 
   @ApiProperty({
-    description: 'Nouveau mot de passe (minimum 8 caractères)',
-    example: 'nouveauMotDePasse456',
+    description: 'Nouveau mot de passe (minimum 8 caractères avec caractère spécial)',
+    example: 'NouveauMotDePasse456!',
     minLength: 8,
   })
   @IsString()

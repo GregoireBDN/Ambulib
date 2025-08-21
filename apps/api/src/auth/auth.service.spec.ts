@@ -28,10 +28,12 @@ describe('AuthService', () => {
     isProfileComplete: true,
     hashedRefreshToken: 'hashedRefreshToken',
     age: 25,
+    birthDate: new Date('1998-06-15'),
     phoneNumber: '+33123456789',
     address: '123 Main St',
     city: 'Paris',
     postalCode: '75001',
+    country: 'France',
     authProvider: AuthProvider.CREDENTIALS,
     isEmailVerified: false,
     emailVerificationToken: null,
@@ -50,7 +52,7 @@ describe('AuthService', () => {
     email: 'test@example.com',
     firstName: 'John',
     lastName: 'Doe',
-    password: 'password123',
+    password: 'TestPassword123!',
   };
 
   beforeEach(async () => {
@@ -143,7 +145,7 @@ describe('AuthService', () => {
 
       const result = await service.validateLocalUser(
         'test@example.com',
-        'password123',
+        'TestPassword123!',
       );
 
       expect(result).toEqual({
@@ -152,7 +154,6 @@ describe('AuthService', () => {
         lastName: mockUser.lastName,
         role: mockUser.role,
         isProfileComplete: mockUser.isProfileComplete,
-        companyId: mockUser.companyId,
       });
     });
 
@@ -160,7 +161,7 @@ describe('AuthService', () => {
       userService.findByEmail.mockResolvedValue(null);
 
       await expect(
-        service.validateLocalUser('test@example.com', 'password123'),
+        service.validateLocalUser('test@example.com', 'TestPassword123!'),
       ).rejects.toThrow(UnauthorizedException);
     });
 
@@ -177,7 +178,7 @@ describe('AuthService', () => {
       userService.findByEmail.mockResolvedValue({ ...mockUser, password: '' });
 
       await expect(
-        service.validateLocalUser('test@example.com', 'password123'),
+        service.validateLocalUser('test@example.com', 'TestPassword123!'),
       ).rejects.toThrow(UnauthorizedException);
     });
   });
@@ -240,7 +241,6 @@ describe('AuthService', () => {
         id: mockUser.id,
         role: mockUser.role,
         isProfileComplete: mockUser.isProfileComplete,
-        companyId: mockUser.companyId,
       });
     });
 

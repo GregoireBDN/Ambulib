@@ -60,12 +60,9 @@ export class CompanyService {
           data: {
             name: registrationDto.name,
             email: registrationDto.email,
-            phoneNumber: registrationDto.phoneNumber,
-            address: registrationDto.address,
-            city: registrationDto.city,
-            postalCode: registrationDto.postalCode,
-            licenseNumber: registrationDto.licenseNumber,
-            notes: registrationDto.notes,
+            phoneNumber: registrationDto.phoneNumber || '',
+            address: registrationDto.address || '',
+            licenseNumber: registrationDto.licenseNumber || '',
           },
         });
 
@@ -126,9 +123,7 @@ export class CompanyService {
       where: { id: approvalDto.companyId },
       data: {
         status: approvalDto.status,
-        approvedAt:
-          approvalDto.status === CompanyStatus.APPROVED ? new Date() : null,
-        notes: approvalDto.notes,
+        // approvedAt field does not exist in schema
       },
     });
 
@@ -154,7 +149,7 @@ export class CompanyService {
           },
         },
       },
-      orderBy: { registrationDate: 'desc' },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
@@ -177,7 +172,7 @@ export class CompanyService {
           select: {
             id: true,
             licensePlate: true,
-            vehicleModel: true,
+            model: true,
             status: true,
           },
         },
