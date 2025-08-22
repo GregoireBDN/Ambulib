@@ -234,7 +234,7 @@ export class AdminService {
             booking: true,
           },
           take: 10,
-          orderBy: { createdAt: 'desc' },
+          orderBy: { assignedAt: 'desc' },
         },
       },
     });

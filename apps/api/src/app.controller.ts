@@ -1,12 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Public } from './auth/decorators/public.decorator';
 
 @ApiTags('health')
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  @Public()
   @Get()
   @ApiOperation({
     summary: "Vérifier l'état de l'API",

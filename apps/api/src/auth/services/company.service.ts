@@ -154,7 +154,7 @@ export class CompanyService {
           },
         },
       },
-      orderBy: { registrationDate: 'desc' },
+      orderBy: { createdAt: 'desc' },
     });
   }
 
