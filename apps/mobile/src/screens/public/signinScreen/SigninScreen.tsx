@@ -36,6 +36,7 @@ type FormData = {
 
 export function SigninScreen({ navigation }: any) {
   const [rememberMe, setRememberMe] = useState(true);
+  const [enableBiometric, setEnableBiometric] = useState(false);
 
   const {
     control,
@@ -49,15 +50,22 @@ export function SigninScreen({ navigation }: any) {
 
   const {
     login,
+    loginWithBiometricPrompt,
     authenticateWithBiometrics,
     isBiometricAvailable,
     isBiometricEnabled,
+    hasBiometricCredentials,
     isLoading,
   } = useAuthContext();
 
   const handleSignin = async (data: FormData) => {
     try {
-      await login(data);
+      // Utiliser loginWithBiometricPrompt si l'option biométrie est cochée
+      if (enableBiometric && isBiometricAvailable && !hasBiometricCredentials) {
+        await loginWithBiometricPrompt(data, true);
+      } else {
+        await login(data);
+      }
       // La navigation sera gérée par le contexte d'authentification
       navigation.navigate("Home");
     } catch (error) {
@@ -154,6 +162,21 @@ export function SigninScreen({ navigation }: any) {
               </TouchableOpacity>
             </View>
 
+            {isBiometricAvailable && !hasBiometricCredentials && !isBiometricEnabled && (
+              <View style={styles.biometricContainer}>
+                <View style={styles.rememberMeContainer}>
+                  <Switch
+                    value={enableBiometric}
+                    onValueChange={setEnableBiometric}
+                    trackColor={{ false: "#767577", true: "#007AFF" }}
+                    thumbColor={"#f4f3f4"}
+                    ios_backgroundColor="#3e3e3e"
+                  />
+                  <Text style={styles.rememberMeText}>Activer Touch ID / Face ID</Text>
+                </View>
+              </View>
+            )}
+
             <PrimaryButton
               title="Se connecter"
               onPress={handleSubmit(handleSignin)}
@@ -168,13 +191,9 @@ export function SigninScreen({ navigation }: any) {
               <View style={styles.separatorLine} />
             </View>
 
-            {isBiometricAvailable && (
+            {isBiometricAvailable && (hasBiometricCredentials || isBiometricEnabled) && (
               <GhostButton
-                title={
-                  isBiometricEnabled
-                    ? "Touch ID / Face ID"
-                    : "Activer la biométrie"
-                }
+                title="Touch ID / Face ID"
                 onPress={handleBiometricAuth}
                 fullWidth
                 leftIcon={
@@ -250,6 +269,9 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontSize: 14,
     color: "#333",
+  },
+  biometricContainer: {
+    marginBottom: 16,
   },
   forgotPasswordText: {
     fontSize: 14,

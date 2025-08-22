@@ -12,10 +12,12 @@ interface AuthState {
   isLoading: boolean;
   isBiometricAvailable: boolean;
   isBiometricEnabled: boolean;
+  hasBiometricCredentials: boolean;
 }
 
 interface AuthActions {
   login: (credentials: LoginCredentials) => Promise<void>;
+  loginWithBiometricPrompt: (credentials: LoginCredentials, enableBiometric: boolean) => Promise<void>;
   signup: (signupData: SignupData) => Promise<void>;
   logout: () => Promise<void>;
   authenticateWithBiometrics: () => Promise<void>;
@@ -31,6 +33,7 @@ export const useAuth = (): AuthState & AuthActions => {
     isLoading: true,
     isBiometricAvailable: false,
     isBiometricEnabled: false,
+    hasBiometricCredentials: false,
   });
 
   // Utiliser useMemo pour éviter de recréer l'instance à chaque render
@@ -38,12 +41,13 @@ export const useAuth = (): AuthState & AuthActions => {
 
   const checkAuthStatus = useCallback(async () => {
     try {
-      const [isAuthenticated, user, isBiometricAvailable, isBiometricEnabled] =
+      const [isAuthenticated, user, isBiometricAvailable, isBiometricEnabled, hasBiometricCredentials] =
         await Promise.all([
           authService.isAuthenticated(),
           authService.getCurrentUser(),
           authService.isBiometricAvailable(),
           authService.isBiometricEnabled(),
+          authService.hasBiometricCredentials(),
         ]);
 
       setAuthState((prev) => ({
@@ -52,6 +56,7 @@ export const useAuth = (): AuthState & AuthActions => {
         user,
         isBiometricAvailable,
         isBiometricEnabled,
+        hasBiometricCredentials,
         isLoading: false,
       }));
     } catch (error) {
@@ -74,6 +79,26 @@ export const useAuth = (): AuthState & AuthActions => {
           user,
           isAuthenticated: true,
           isLoading: false,
+        }));
+      } catch (error) {
+        setAuthState((prev) => ({ ...prev, isLoading: false }));
+        throw error;
+      }
+    },
+    [authService]
+  );
+
+  const loginWithBiometricPrompt = useCallback(
+    async (credentials: LoginCredentials, enableBiometric: boolean) => {
+      setAuthState((prev) => ({ ...prev, isLoading: true }));
+      try {
+        const { user } = await authService.loginWithBiometricPrompt(credentials, enableBiometric);
+        setAuthState((prev) => ({
+          ...prev,
+          user,
+          isAuthenticated: true,
+          isLoading: false,
+          hasBiometricCredentials: enableBiometric ? true : prev.hasBiometricCredentials,
         }));
       } catch (error) {
         setAuthState((prev) => ({ ...prev, isLoading: false }));
@@ -165,6 +190,7 @@ export const useAuth = (): AuthState & AuthActions => {
   return {
     ...authState,
     login,
+    loginWithBiometricPrompt,
     signup,
     logout,
     authenticateWithBiometrics,
