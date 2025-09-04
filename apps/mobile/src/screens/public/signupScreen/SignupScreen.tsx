@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
-  TextInput,
   TouchableOpacity,
-  Switch,
   SafeAreaView,
   Alert,
 } from "react-native";
-import { PrimaryButton, GhostButton } from "../../../components/common/Button";
+import { PrimaryButton } from "../../../components/common/Button";
+import { FormTextInput } from "../../../components/common/FormTextInput";
 import { Ionicons } from "@expo/vector-icons";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -54,17 +53,12 @@ const signupSchema = yup.object({
 type SignupFormData = yup.InferType<typeof signupSchema>;
 
 export function SignupScreen({ navigation }: any) {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
-    useState(false);
-
   const { signup, isLoading } = useAuthContext();
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<SignupFormData>({
     resolver: yupResolver(signupSchema),
     defaultValues: {
@@ -147,260 +141,86 @@ export function SignupScreen({ navigation }: any) {
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Informations personnelles</Text>
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Prénom *</Text>
-              <Controller
-                control={control}
-                name="firstName"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View style={styles.textInputWrapper}>
-                    <Ionicons
-                      name="person-outline"
-                      size={22}
-                      color="#888"
-                      style={styles.icon}
-                    />
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Votre prénom"
-                      placeholderTextColor="#A9A9A9"
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      autoCapitalize="words"
-                    />
-                  </View>
-                )}
-              />
-              {errors.firstName && (
-                <Text style={styles.errorText}>{errors.firstName.message}</Text>
-              )}
-            </View>
+            <FormTextInput
+              name="firstName"
+              control={control}
+              label="Prénom *"
+              placeholder="Votre prénom"
+              leftIcon="person-outline"
+              autoCapitalize="words"
+              error={errors.firstName?.message}
+            />
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Nom *</Text>
-              <Controller
-                control={control}
-                name="lastName"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View style={styles.textInputWrapper}>
-                    <Ionicons
-                      name="person-outline"
-                      size={22}
-                      color="#888"
-                      style={styles.icon}
-                    />
-                    <TextInput
-                      style={styles.input}
-                      placeholder="Votre nom"
-                      placeholderTextColor="#A9A9A9"
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      autoCapitalize="words"
-                    />
-                  </View>
-                )}
-              />
-              {errors.lastName && (
-                <Text style={styles.errorText}>{errors.lastName.message}</Text>
-              )}
-            </View>
+            <FormTextInput
+              name="lastName"
+              control={control}
+              label="Nom *"
+              placeholder="Votre nom"
+              leftIcon="person-outline"
+              autoCapitalize="words"
+              error={errors.lastName?.message}
+            />
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Email *</Text>
-              <Controller
-                control={control}
-                name="email"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View style={styles.textInputWrapper}>
-                    <Ionicons
-                      name="mail-outline"
-                      size={22}
-                      color="#888"
-                      style={styles.icon}
-                    />
-                    <TextInput
-                      style={styles.input}
-                      placeholder="votre.email@exemple.fr"
-                      placeholderTextColor="#A9A9A9"
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      keyboardType="email-address"
-                      autoCapitalize="none"
-                    />
-                  </View>
-                )}
-              />
-              {errors.email && (
-                <Text style={styles.errorText}>{errors.email.message}</Text>
-              )}
-            </View>
+            <FormTextInput
+              name="email"
+              control={control}
+              label="Email *"
+              placeholder="votre.email@exemple.fr"
+              leftIcon="mail-outline"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              error={errors.email?.message}
+            />
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Téléphone *</Text>
-              <Controller
-                control={control}
-                name="phone"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View style={styles.textInputWrapper}>
-                    <Ionicons
-                      name="call-outline"
-                      size={22}
-                      color="#888"
-                      style={styles.icon}
-                    />
-                    <TextInput
-                      style={styles.input}
-                      placeholder="06 12 34 56 78"
-                      placeholderTextColor="#A9A9A9"
-                      value={value}
-                      onChangeText={(text) => onChange(formatPhoneNumber(text))}
-                      onBlur={onBlur}
-                      keyboardType="phone-pad"
-                    />
-                  </View>
-                )}
-              />
-              {errors.phone && (
-                <Text style={styles.errorText}>{errors.phone.message}</Text>
-              )}
-            </View>
+            <FormTextInput
+              name="phone"
+              control={control}
+              label="Téléphone *"
+              placeholder="06 12 34 56 78"
+              leftIcon="call-outline"
+              keyboardType="phone-pad"
+              formatValue={formatPhoneNumber}
+              error={errors.phone?.message}
+            />
           </View>
 
           {/* Section Sécurité sociale */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Sécurité sociale</Text>
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>
-                Numéro de sécurité sociale *
-              </Text>
-              <Controller
-                control={control}
-                name="socialSecurityNumber"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View style={styles.textInputWrapper}>
-                    <Ionicons
-                      name="card-outline"
-                      size={22}
-                      color="#888"
-                      style={styles.icon}
-                    />
-                    <TextInput
-                      style={styles.input}
-                      placeholder="1 23 45 67 890 123 45"
-                      placeholderTextColor="#A9A9A9"
-                      value={value}
-                      onChangeText={(text) =>
-                        onChange(formatSocialSecurityNumber(text))
-                      }
-                      onBlur={onBlur}
-                      keyboardType="numeric"
-                    />
-                  </View>
-                )}
-              />
-              {errors.socialSecurityNumber && (
-                <Text style={styles.errorText}>
-                  {errors.socialSecurityNumber.message}
-                </Text>
-              )}
-            </View>
+            <FormTextInput
+              name="socialSecurityNumber"
+              control={control}
+              label="Numéro de sécurité sociale *"
+              placeholder="1 23 45 67 890 123 45"
+              leftIcon="card-outline"
+              keyboardType="numeric"
+              formatValue={formatSocialSecurityNumber}
+              error={errors.socialSecurityNumber?.message}
+            />
           </View>
 
           {/* Section Mot de passe */}
           <View style={styles.section}>
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Mot de passe *</Text>
-              <Controller
-                control={control}
-                name="password"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View style={styles.textInputWrapper}>
-                    <Ionicons
-                      name="lock-closed-outline"
-                      size={22}
-                      color="#888"
-                      style={styles.icon}
-                    />
-                    <TextInput
-                      style={styles.input}
-                      placeholder="••••••••"
-                      placeholderTextColor="#A9A9A9"
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      secureTextEntry={!isPasswordVisible}
-                    />
-                    <TouchableOpacity
-                      style={styles.iconTouchable}
-                      onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-                    >
-                      <Ionicons
-                        name={
-                          isPasswordVisible ? "eye-off-outline" : "eye-outline"
-                        }
-                        size={26}
-                        color="#888"
-                      />
-                    </TouchableOpacity>
-                  </View>
-                )}
-              />
-              {errors.password && (
-                <Text style={styles.errorText}>{errors.password.message}</Text>
-              )}
-            </View>
+            <FormTextInput
+              name="password"
+              control={control}
+              label="Mot de passe *"
+              placeholder="••••••••"
+              leftIcon="lock-closed-outline"
+              isPassword={true}
+              error={errors.password?.message}
+            />
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Confirmer le mot de passe *</Text>
-              <Controller
-                control={control}
-                name="confirmPassword"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <View style={styles.textInputWrapper}>
-                    <Ionicons
-                      name="lock-closed-outline"
-                      size={22}
-                      color="#888"
-                      style={styles.icon}
-                    />
-                    <TextInput
-                      style={styles.input}
-                      placeholder="••••••••"
-                      placeholderTextColor="#A9A9A9"
-                      value={value}
-                      onChangeText={onChange}
-                      onBlur={onBlur}
-                      secureTextEntry={!isConfirmPasswordVisible}
-                    />
-                    <TouchableOpacity
-                      style={styles.iconTouchable}
-                      onPress={() =>
-                        setIsConfirmPasswordVisible(!isConfirmPasswordVisible)
-                      }
-                    >
-                      <Ionicons
-                        name={
-                          isConfirmPasswordVisible
-                            ? "eye-off-outline"
-                            : "eye-outline"
-                        }
-                        size={26}
-                        color="#888"
-                      />
-                    </TouchableOpacity>
-                  </View>
-                )}
-              />
-              {errors.confirmPassword && (
-                <Text style={styles.errorText}>
-                  {errors.confirmPassword.message}
-                </Text>
-              )}
-            </View>
+            <FormTextInput
+              name="confirmPassword"
+              control={control}
+              label="Confirmer le mot de passe *"
+              placeholder="••••••••"
+              leftIcon="lock-closed-outline"
+              isPassword={true}
+              error={errors.confirmPassword?.message}
+            />
           </View>
 
           {/* Conditions d'utilisation */}
@@ -503,35 +323,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#333",
     marginBottom: 16,
-  },
-  inputGroup: {
-    marginBottom: 16,
-  },
-  inputLabel: {
-    fontSize: 16,
-    color: "#333",
-    marginBottom: 8,
-    fontWeight: "500",
-  },
-  textInputWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#E0E0E0",
-    borderRadius: 8,
-    backgroundColor: "#F8F9FA",
-  },
-  icon: {
-    paddingLeft: 12,
-  },
-  iconTouchable: {
-    paddingHorizontal: 12,
-  },
-  input: {
-    flex: 1,
-    height: 48,
-    fontSize: 16,
-    paddingHorizontal: 10,
   },
   errorText: {
     color: "#FF3B30",

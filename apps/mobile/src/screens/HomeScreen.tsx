@@ -36,12 +36,10 @@ export function HomeScreen({ navigation }: any) {
   };
 
   const handleSignin = () => {
-    console.log("Navigation vers Signin");
     navigation.navigate("Signin");
   };
 
   const handleSignup = () => {
-    console.log("Navigation vers Signup");
     navigation.navigate("Signup");
   };
 

@@ -135,7 +135,22 @@ export class BookingService {
     const skip = (page - 1) * limit;
 
     // Construction des filtres de base
-    const where: any = {};
+    interface WhereFilter {
+      clientId?: number;
+      assignments?: {
+        some: {
+          driverId: number;
+        };
+      };
+      status?: BookingStatus;
+      bookingType?: BookingType;
+      createdAt?: {
+        gte?: Date;
+        lte?: Date;
+      };
+    }
+
+    const where: WhereFilter = {};
 
     // Filtres par rôle
     if (userRole === Role.CLIENT) {
@@ -232,6 +247,7 @@ export class BookingService {
             email: true,
           },
         },
+        // dependent: true, // Relation non disponible dans le schéma actuel
         transportTickets: true,
         assignments: {
           include: {
@@ -264,8 +280,13 @@ export class BookingService {
     }
 
     if (userRole === Role.AMBULANCE_DRIVER) {
-      // TODO: Check access via assignments when booking-assignment relation exists
-      // For now, ambulance drivers can access any booking
+      const hasAccess =
+        booking.assignments?.some(
+          (assignment) => assignment.driverId === userId,
+        ) || false;
+      if (!hasAccess) {
+        throw new ForbiddenException('Accès non autorisé à cette réservation');
+      }
     }
 
     return booking;
@@ -417,7 +438,16 @@ export class BookingService {
   async getBookingStats(userId: number, userRole: Role) {
     this.logger.log(`Getting booking stats for user ${userId}`);
 
-    const where: any = {};
+    interface StatsWhereFilter {
+      clientId?: number;
+      assignments?: {
+        some: {
+          driverId: number;
+        };
+      };
+    }
+
+    const where: StatsWhereFilter = {};
 
     // Filtres par rôle
     if (userRole === Role.CLIENT) {

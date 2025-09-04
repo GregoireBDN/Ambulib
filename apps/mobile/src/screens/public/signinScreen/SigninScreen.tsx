@@ -4,46 +4,83 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  TextInput,
   TouchableOpacity,
   Switch,
   SafeAreaView,
   Alert,
 } from "react-native";
 import { PrimaryButton, GhostButton } from "../../../components/common/Button";
+import { FormTextInput } from "../../../components/common/FormTextInput";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAuthContext } from "../../../contexts/AuthContext";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const validationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Veuillez entrer un email valide")
+    .required("L'email est requis"),
+  password: yup
+    .string()
+    .min(6, "Le mot de passe doit contenir au moins 6 caractères")
+    .required("Le mot de passe est requis"),
+});
+
+type FormData = {
+  email: string;
+  password: string;
+};
 
 export function SigninScreen({ navigation }: any) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
+  const [enableBiometric, setEnableBiometric] = useState(false);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+    setError,
+  } = useForm<FormData>({
+    resolver: yupResolver(validationSchema),
+    mode: "onChange",
+  });
 
   const {
     login,
+    loginWithBiometricPrompt,
     authenticateWithBiometrics,
     isBiometricAvailable,
     isBiometricEnabled,
+    hasBiometricCredentials,
     isLoading,
   } = useAuthContext();
 
-  const handleSignin = async () => {
-    if (!email || !password) {
-      Alert.alert("Erreur", "Veuillez remplir tous les champs");
-      return;
-    }
-
+  const handleSignin = async (data: FormData) => {
     try {
-      await login({ email, password });
+      // Utiliser loginWithBiometricPrompt si l'option biométrie est cochée
+      if (enableBiometric && isBiometricAvailable && !hasBiometricCredentials) {
+        await loginWithBiometricPrompt(data, true);
+      } else {
+        await login(data);
+      }
       // La navigation sera gérée par le contexte d'authentification
       navigation.navigate("Home");
     } catch (error) {
-      Alert.alert(
-        "Erreur de connexion",
-        error instanceof Error ? error.message : "Une erreur s'est produite"
-      );
+      // Handle server errors by setting field errors or showing alert
+      if (error instanceof Error) {
+        if (error.message.includes("email")) {
+          setError("email", { message: error.message });
+        } else if (error.message.includes("password")) {
+          setError("password", { message: error.message });
+        } else {
+          Alert.alert("Erreur de connexion", error.message);
+        }
+      } else {
+        Alert.alert("Erreur de connexion", "Une erreur s'est produite");
+      }
     }
   };
 
@@ -86,56 +123,26 @@ export function SigninScreen({ navigation }: any) {
           </LinearGradient>
 
           <View style={styles.formContainer}>
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Email</Text>
-              <View style={styles.textInputWrapper}>
-                <Ionicons
-                  name="mail-outline"
-                  size={22}
-                  color="#888"
-                  style={styles.icon}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="votre.email@exemple.fr"
-                  placeholderTextColor="#A9A9A9"
-                  value={email}
-                  onChangeText={setEmail}
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                />
-              </View>
-            </View>
+            <FormTextInput
+              name="email"
+              control={control}
+              label="Email"
+              placeholder="votre.email@exemple.fr"
+              leftIcon="mail-outline"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              error={errors.email?.message}
+            />
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Mot de passe</Text>
-              <View style={styles.textInputWrapper}>
-                <Ionicons
-                  name="lock-closed-outline"
-                  size={22}
-                  color="#888"
-                  style={styles.icon}
-                />
-                <TextInput
-                  style={styles.input}
-                  placeholder="••••••••"
-                  placeholderTextColor="#A9A9A9"
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry={!isPasswordVisible}
-                />
-                <TouchableOpacity
-                  style={styles.iconTouchable}
-                  onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-                >
-                  <Ionicons
-                    name={isPasswordVisible ? "eye-off-outline" : "eye-outline"}
-                    size={26}
-                    color="#888"
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
+            <FormTextInput
+              name="password"
+              control={control}
+              label="Mot de passe"
+              placeholder="••••••••"
+              leftIcon="lock-closed-outline"
+              isPassword={true}
+              error={errors.password?.message}
+            />
 
             <View style={styles.optionsContainer}>
               <View style={styles.rememberMeContainer}>
@@ -155,9 +162,24 @@ export function SigninScreen({ navigation }: any) {
               </TouchableOpacity>
             </View>
 
+            {isBiometricAvailable && !hasBiometricCredentials && !isBiometricEnabled && (
+              <View style={styles.biometricContainer}>
+                <View style={styles.rememberMeContainer}>
+                  <Switch
+                    value={enableBiometric}
+                    onValueChange={setEnableBiometric}
+                    trackColor={{ false: "#767577", true: "#007AFF" }}
+                    thumbColor={"#f4f3f4"}
+                    ios_backgroundColor="#3e3e3e"
+                  />
+                  <Text style={styles.rememberMeText}>Activer Touch ID / Face ID</Text>
+                </View>
+              </View>
+            )}
+
             <PrimaryButton
               title="Se connecter"
-              onPress={handleSignin}
+              onPress={handleSubmit(handleSignin)}
               loading={isLoading}
               fullWidth
               style={styles.signinButton}
@@ -169,13 +191,9 @@ export function SigninScreen({ navigation }: any) {
               <View style={styles.separatorLine} />
             </View>
 
-            {isBiometricAvailable && (
+            {isBiometricAvailable && (hasBiometricCredentials || isBiometricEnabled) && (
               <GhostButton
-                title={
-                  isBiometricEnabled
-                    ? "Touch ID / Face ID"
-                    : "Activer la biométrie"
-                }
+                title="Touch ID / Face ID"
                 onPress={handleBiometricAuth}
                 fullWidth
                 leftIcon={
@@ -237,35 +255,6 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     marginTop: 23,
   },
-  inputGroup: {
-    marginBottom: 20,
-  },
-  inputLabel: {
-    fontSize: 16,
-    color: "#333",
-    marginBottom: 8,
-    fontWeight: "500",
-  },
-  textInputWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#E0E0E0",
-    borderRadius: 8,
-    backgroundColor: "#F8F9FA",
-  },
-  icon: {
-    paddingLeft: 12,
-  },
-  iconTouchable: {
-    paddingHorizontal: 12,
-  },
-  input: {
-    flex: 1,
-    height: 48,
-    fontSize: 16,
-    paddingHorizontal: 10,
-  },
   optionsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -280,6 +269,9 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontSize: 14,
     color: "#333",
+  },
+  biometricContainer: {
+    marginBottom: 16,
   },
   forgotPasswordText: {
     fontSize: 14,

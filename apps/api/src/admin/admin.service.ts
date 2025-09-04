@@ -230,7 +230,7 @@ export class AdminService {
             booking: true,
           },
           take: 10,
-          orderBy: { id: 'desc' },
+          orderBy: { assignedAt: 'desc' },
         },
       },
     });

@@ -12,7 +12,12 @@ interface AuthContextType {
   isLoading: boolean;
   isBiometricAvailable: boolean;
   isBiometricEnabled: boolean;
+  hasBiometricCredentials: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
+  loginWithBiometricPrompt: (
+    credentials: LoginCredentials,
+    enableBiometric: boolean
+  ) => Promise<void>;
   signup: (signupData: SignupData) => Promise<void>;
   logout: () => Promise<void>;
   authenticateWithBiometrics: () => Promise<void>;

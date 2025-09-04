@@ -36,6 +36,7 @@ class AuthService {
   private readonly REFRESH_TOKEN_KEY = "refresh_token";
   private readonly USER_KEY = "user_data";
   private readonly BIOMETRIC_ENABLED_KEY = "biometric_enabled";
+  private readonly BIOMETRIC_CREDENTIALS_KEY = "biometric_credentials";
 
   constructor() {
     this.apiClient = ApiClient.getInstance();
@@ -164,21 +165,52 @@ class AuthService {
         throw new Error("Authentification biométrique échouée");
       }
 
-      // Récupérer les tokens stockés
-      const tokens = await this.getStoredTokens();
-      if (!tokens) {
-        throw new Error("Aucune session trouvée");
-      }
+      // Récupérer les credentials stockés
+      const credentials = await this.getBiometricCredentials();
+      if (credentials) {
+        // Utiliser les credentials stockés pour se connecter
+        return await this.login(credentials);
+      } else {
+        // Fallback: essayer de récupérer les tokens stockés (ancien comportement)
+        const tokens = await this.getStoredTokens();
+        if (!tokens) {
+          throw new Error("Aucune session trouvée");
+        }
 
-      // Vérifier la validité des tokens
-      const user = await this.getCurrentUser();
-      if (!user) {
-        throw new Error("Session utilisateur invalide");
-      }
+        // Vérifier la validité des tokens
+        const user = await this.getCurrentUser();
+        if (!user) {
+          throw new Error("Session utilisateur invalide");
+        }
 
-      return { user, tokens };
+        return { user, tokens };
+      }
     } catch (error) {
       throw this.handleAuthError(error);
+    }
+  }
+
+  // Connexion avec proposition de stockage biométrique
+  async loginWithBiometricPrompt(
+    credentials: LoginCredentials, 
+    enableBiometric: boolean = false
+  ): Promise<{ user: User; tokens: AuthTokens }> {
+    try {
+      // Effectuer la connexion normale
+      const result = await this.login(credentials);
+
+      // Si demandé et que la biométrie est disponible, stocker les credentials
+      if (enableBiometric) {
+        const isAvailable = await this.isBiometricAvailable();
+        if (isAvailable) {
+          await this.storeBiometricCredentials(credentials);
+          await SecureStore.setItemAsync(this.BIOMETRIC_ENABLED_KEY, "true");
+        }
+      }
+
+      return result;
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -225,6 +257,46 @@ class AuthService {
     const hasHardware = await LocalAuthentication.hasHardwareAsync();
     const isEnrolled = await LocalAuthentication.isEnrolledAsync();
     return hasHardware && isEnrolled;
+  }
+
+  // Stocker les credentials pour la biométrie
+  private async storeBiometricCredentials(credentials: LoginCredentials): Promise<void> {
+    try {
+      await SecureStore.setItemAsync(
+        this.BIOMETRIC_CREDENTIALS_KEY,
+        JSON.stringify(credentials),
+        {
+          requireAuthentication: true,
+        }
+      );
+    } catch (error) {
+      console.error("Erreur lors du stockage des credentials biométriques:", error);
+      throw error;
+    }
+  }
+
+  // Récupérer les credentials stockés pour la biométrie
+  private async getBiometricCredentials(): Promise<LoginCredentials | null> {
+    try {
+      const stored = await SecureStore.getItemAsync(this.BIOMETRIC_CREDENTIALS_KEY);
+      if (stored) {
+        return JSON.parse(stored);
+      }
+      return null;
+    } catch (error) {
+      console.error("Erreur lors de la récupération des credentials:", error);
+      return null;
+    }
+  }
+
+  // Vérifier si des credentials biométriques sont stockés
+  async hasBiometricCredentials(): Promise<boolean> {
+    try {
+      const credentials = await this.getBiometricCredentials();
+      return credentials !== null;
+    } catch (error) {
+      return false;
+    }
   }
 
   // Refresh du token
