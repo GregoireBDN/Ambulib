@@ -51,6 +51,21 @@ describe('Validation Schemas', () => {
       }
     })
 
+    it('should reject password without uppercase letter', () => {
+      const invalidData = {
+        firstName: 'Jean',
+        lastName: 'Dupont',
+        email: 'jean@example.com',
+        password: 'motdepasse123!' // pas de majuscule
+      }
+
+      const result = validateFormData(signupSchema, invalidData)
+      expect(result.success).toBe(false)
+      if (!result.success) {
+        expect(result.errors.password).toContain('Le mot de passe doit contenir au moins une majuscule')
+      }
+    })
+
     it('should validate optional fields correctly', () => {
       const dataWithOptionals = {
         firstName: 'Marie',
