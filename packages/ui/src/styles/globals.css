@@ -243,3 +243,143 @@
     }
   }
 }
+
+/* CMDK Command styles - fixes font issues */
+@layer components {
+  /* Original cmdk attributes */
+  [cmdk-root] {
+    font-family: inherit !important;
+  }
+
+  [cmdk-input] {
+    font-family: inherit !important;
+    font-size: inherit !important;
+  }
+
+  [cmdk-list] {
+    font-family: inherit !important;
+    min-height: 200px;
+    height: var(--cmdk-list-height);
+    max-height: 400px;
+    transition: height 100ms ease;
+    overflow-y: auto;
+    scroll-padding-block-start: 8px;
+    scroll-padding-block-end: 8px;
+  }
+
+  [cmdk-item] {
+    font-family: inherit !important;
+    font-size: inherit !important;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: calc(var(--radius) - 2px);
+    transition: all 0.15s ease;
+    background-color: hsl(var(--background));
+    border: 1px solid transparent;
+    margin: 1px 4px;
+  }
+
+  [cmdk-item][aria-selected="true"] {
+    background-color: hsl(var(--primary) / 0.08);
+    color: hsl(var(--primary));
+    border: 1px solid hsl(var(--primary) / 0.2);
+  }
+
+  [cmdk-item]:hover {
+    background-color: hsl(var(--primary) / 0.04);
+    border: 1px solid hsl(var(--primary) / 0.1);
+  }
+
+  [cmdk-item][aria-disabled="true"] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  [cmdk-group-heading] {
+    font-family: inherit !important;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: hsl(var(--muted-foreground));
+    padding: 8px 12px 4px;
+  }
+
+  [cmdk-empty] {
+    font-family: inherit !important;
+    font-size: 0.875rem;
+    color: hsl(var(--muted-foreground));
+    text-align: center;
+    padding: 16px;
+  }
+
+  [cmdk-loading] {
+    font-family: inherit !important;
+    font-size: 0.875rem;
+    color: hsl(var(--muted-foreground));
+    text-align: center;
+    padding: 16px;
+  }
+
+  [cmdk-separator] {
+    height: 1px;
+    background-color: hsl(var(--border));
+    margin: 4px 0;
+  }
+
+  /* Styles pour notre wrapper Command shadcn/ui */
+  [data-slot="command"] {
+    font-family: inherit !important;
+  }
+
+  [data-slot="command-input"] {
+    font-family: inherit !important;
+    font-size: inherit !important;
+  }
+
+  [data-slot="command-list"] {
+    font-family: inherit !important;
+  }
+
+  [data-slot="command-item"] {
+    font-family: inherit !important;
+    font-size: inherit !important;
+  }
+
+  [data-slot="command-group"] {
+    font-family: inherit !important;
+  }
+
+  [data-slot="command-empty"] {
+    font-family: inherit !important;
+  }
+
+  /* Styles spécifiques pour AddressAutocomplete */
+  .address-autocomplete [cmdk-root],
+  .address-autocomplete [cmdk-list],
+  .address-autocomplete [cmdk-item],
+  .address-autocomplete [cmdk-input],
+  .address-autocomplete [cmdk-empty],
+  .address-autocomplete [cmdk-loading] {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif !important;
+    font-size: 14px !important;
+  }
+
+  /* Amélioration du contraste et apparence pour AddressAutocomplete */
+  .address-autocomplete [cmdk-item] {
+    background-color: hsl(var(--background)) !important;
+    border: 1px solid hsl(var(--border)) !important;
+    margin: 2px 6px !important;
+    border-radius: 6px !important;
+  }
+
+  .address-autocomplete [cmdk-item]:hover {
+    background-color: hsl(var(--primary) / 0.06) !important;
+    border-color: hsl(var(--primary) / 0.15) !important;
+  }
+
+  .address-autocomplete [cmdk-item][aria-selected="true"] {
+    background-color: hsl(var(--primary) / 0.1) !important;
+    color: hsl(var(--primary)) !important;
+    border-color: hsl(var(--primary) / 0.3) !important;
+    font-weight: 500 !important;
+  }
+}

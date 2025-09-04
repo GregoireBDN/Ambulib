@@ -103,6 +103,10 @@
   /* États des composants */
   --color-destructive: var(--color-error-700);        /* Actions destructives */
   --color-destructive-foreground: var(--color-white); /* Texte sur destructive */
+  
+  /* Composants flottants */
+  --color-popover: var(--color-white);                /* Fond popovers/menus */
+  --color-popover-foreground: var(--color-neutral-900); /* Texte popovers */
 
   /* === VARIABLES TAILWIND ESSENTIELLES === */
   --font-sans: system-ui, -apple-system, sans-serif;
