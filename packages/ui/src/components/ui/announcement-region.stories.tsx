@@ -4,7 +4,7 @@ import { AnnouncementRegion, useAnnouncement } from './announcement-region'
 import { Button } from './button'
 
 const meta: Meta<typeof AnnouncementRegion> = {
-  title: 'Components/UI/AnnouncementRegion',
+  title: "UI/AnnouncementRegion",
   component: AnnouncementRegion,
   parameters: {
     layout: 'centered',

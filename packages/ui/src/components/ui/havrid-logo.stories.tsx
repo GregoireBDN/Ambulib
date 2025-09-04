@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { HavRidLogo } from './havrid-logo'
 
 const meta: Meta<typeof HavRidLogo> = {
-  title: 'Components/UI/HavRid Logo',
+  title: "UI/HavRid Logo",
   component: HavRidLogo,
   parameters: {
     layout: 'centered',

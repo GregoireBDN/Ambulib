@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from './button'
 
 const meta: Meta<typeof Card> = {
-  title: 'Components/UI/Card',
+  title: "UI/Card",
   component: Card,
   parameters: {
     layout: 'centered',

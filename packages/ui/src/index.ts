@@ -2,6 +2,8 @@
 export { Button, buttonVariants } from "./components/ui/button"
 export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from "./components/ui/card"
 export { Input } from "./components/ui/input"
+export { PhoneInput, type PhoneInputProps } from "./components/ui/phone-input"
+export { SocialSecurityInput, type SocialSecurityInputProps } from "./components/ui/social-security-input"
 export { Label } from "./components/ui/label"
 export { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./components/ui/dialog"
 export { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuPortal, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSeparator, DropdownMenuShortcut, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "./components/ui/dropdown-menu"
@@ -15,12 +17,18 @@ export { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, Tabl
 export { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, NavigationMenuViewport, navigationMenuTriggerStyle } from "./components/ui/navigation-menu"
 export { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerPortal, DrawerTitle, DrawerTrigger } from "./components/ui/drawer"
 export { HavRidLogo } from "./components/ui/havrid-logo"
+export { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut } from "./components/ui/command"
+export { Popover, PopoverContent, PopoverTrigger } from "./components/ui/popover"
+export { Combobox, type ComboboxItem, type ComboboxProps } from "./components/ui/combobox"
+export { AddressCombobox, type AddressComboboxProps } from "./components/ui/address-combobox"
 
 // Accessible Components have been moved to @repo/ui-accessible package
 // For backward compatibility, you can still import them from @repo/ui-accessible
 
 // Utils
 export { cn } from "./lib/utils"
+export { searchAddresses, useDebounce, type AddressFeature } from "./utils/address-api"
+export { useAddressSearch, findAddressByValue, type AddressSearchResult } from "./hooks/useAddressSearch"
 
 // Bulk exports for compatibility
 export * from "./components/ui"

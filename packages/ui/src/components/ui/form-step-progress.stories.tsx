@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { FormStepProgress } from './form-step-progress'
 
 const meta: Meta<typeof FormStepProgress> = {
-  title: 'Components/UI/FormStepProgress',
+  title: "UI/FormStepProgress",
   component: FormStepProgress,
   parameters: {
     layout: 'centered',

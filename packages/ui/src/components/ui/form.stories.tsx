@@ -14,7 +14,7 @@ import { Input } from './input'
 import { Badge } from './badge'
 
 const meta: Meta<typeof Form> = {
-  title: 'Components/UI/Form',
+  title: "UI/Form",
   component: Form,
   parameters: {
     layout: 'centered',

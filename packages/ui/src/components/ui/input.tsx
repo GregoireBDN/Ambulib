@@ -53,12 +53,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     error, 
     validationPattern, 
     id,
+    onChange,
     ...props 
   }, ref) => {
     const generatedId = React.useId()
     const inputId = id || `input-${generatedId}`
     const descriptionId = description ? `${inputId}-description` : undefined
     const errorId = error ? `${inputId}-error` : undefined
+
 
     // Pattern-based validation attributes
     const getValidationAttributes = () => {
@@ -69,7 +71,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           return {
             ...baseAttrs,
             type: 'tel',
-            pattern: '[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}',
+            pattern: '[0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2}',
             placeholder: props.placeholder || '01 23 45 67 89',
             inputMode: 'tel' as const
           }
@@ -178,6 +180,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             aria-required={props.required ? "true" : "false"}
             {...validationAttrs}
             {...props}
+            onChange={onChange}
           />
 
           {/* Error message */}
@@ -225,6 +228,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         aria-invalid={error ? "true" : "false"}
         {...validationAttrs}
         {...props}
+        onChange={onChange}
       />
     )
   }

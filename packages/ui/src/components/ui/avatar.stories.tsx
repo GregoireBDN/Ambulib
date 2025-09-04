@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from './avatar'
 import { Badge } from './badge'
 
 const meta: Meta<typeof Avatar> = {
-  title: 'Components/UI/Avatar',
+  title: "UI/Avatar",
   component: Avatar,
   parameters: {
     layout: 'centered',

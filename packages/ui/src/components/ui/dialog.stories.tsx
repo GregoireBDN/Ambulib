@@ -7,7 +7,7 @@ import { Label } from './label'
 import { Badge } from './badge'
 
 const meta: Meta<typeof Dialog> = {
-  title: 'Components/UI/Dialog',
+  title: "UI/Dialog",
   component: Dialog,
   parameters: {
     layout: 'centered',

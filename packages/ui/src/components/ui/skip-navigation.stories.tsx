@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { SkipNavigation } from './skip-navigation'
 
 const meta: Meta<typeof SkipNavigation> = {
-  title: 'Components/UI/SkipNavigation',
+  title: "UI/SkipNavigation",
   component: SkipNavigation,
   parameters: {
     layout: 'fullscreen',

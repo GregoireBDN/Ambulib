@@ -11,7 +11,7 @@ import {
 import { Badge } from './badge'
 
 const meta: Meta<typeof Breadcrumb> = {
-  title: 'Components/UI/Breadcrumb',
+  title: "UI/Breadcrumb",
   component: Breadcrumb,
   parameters: {
     layout: 'centered',

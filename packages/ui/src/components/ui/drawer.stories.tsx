@@ -16,7 +16,7 @@ import { Label } from './label'
 import { Badge } from './badge'
 
 const meta = {
-  title: 'Components/UI/Drawer',
+  title: "UI/Drawer",
   component: Drawer,
   parameters: {
     layout: 'centered',

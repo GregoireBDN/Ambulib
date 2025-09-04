@@ -4,7 +4,7 @@ import { Input } from './input'
 import { Label } from './label'
 
 const meta: Meta<typeof Input> = {
-  title: 'Components/UI/Input',
+  title: "UI/Input",
   component: Input,
   parameters: {
     layout: 'centered',
@@ -275,6 +275,40 @@ export const DateBirthPattern: Story = {
     docs: {
       description: {
         story: 'Input date avec limites automatiques (max 120 ans).',
+      },
+    },
+  },
+}
+
+export const AllVariantsShowcase: Story = {
+  render: () => (
+    <div className="space-y-6 w-[500px]">
+      <div className="space-y-2">
+        <h3 className="text-lg font-semibold">Comparaison des variants Input</h3>
+        <p className="text-sm text-muted-foreground">
+          Variants pour saisie de texte générale. Utilisez PhoneInput et SocialSecurityInput pour les données spécialisées.
+        </p>
+      </div>
+      
+      <Input
+        variant="default"
+        label="Input standard"
+        placeholder="Texte libre"
+        description="Variant par défaut"
+      />
+      
+      <Input
+        variant="medical"
+        label="Input médical (haute accessibilité)"
+        placeholder="Informations importantes"
+        description="Optimisé pour les personnes âgées et handicapées"
+      />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Comparaison visuelle des variants disponibles. Les composants PhoneInput et SocialSecurityInput sont maintenant disponibles séparément.',
       },
     },
   },
