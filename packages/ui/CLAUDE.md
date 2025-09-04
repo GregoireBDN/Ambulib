@@ -4,11 +4,12 @@ Package de composants UI de base et design system unifié pour HavRid - Optimis�
 
 ## 🎯 Vue d'ensemble
 
-**HavRid Medical UI** est le système de design central du monorepo, spécialement conçu pour les applications de services d'ambulance et soins médicaux. Il fournit 16 composants shadcn/ui accessibles, un système de couleurs OKLCH scientifique, et des patterns optimisés pour les personnes âgées et handicapées.
+**HavRid Medical UI** est le système de design central du monorepo, spécialement conçu pour les applications de services d'ambulance et soins médicaux. Il fournit 18 composants shadcn/ui accessibles, un système de couleurs OKLCH scientifique, et des patterns optimisés pour les personnes âgées et handicapées.
 
 ### Objectifs du Design System
+
 - ✅ **Accessibilité WCAG 2.1 Level AA** : Contraste minimum 4.5:1, navigation clavier, lecteurs d'écran
-- ✅ **Cohérence visuelle** : Tokens unifiés dans tout le monorepo HavRid  
+- ✅ **Cohérence visuelle** : Tokens unifiés dans tout le monorepo HavRid
 - ✅ **Couleurs scientifiques** : Palette OKLCH optimisée pour le contexte médical
 - ✅ **Components shadcn/ui** : 16 composants de base accessibles avec Radix UI
 - ✅ **Base solide** : Foundation pour @repo/ui-accessible (composants seniors avancés)
@@ -17,7 +18,7 @@ Package de composants UI de base et design system unifié pour HavRid - Optimis�
 
 - **Framework**: React 19 avec TypeScript strict
 - **Styling**: Tailwind CSS 4.x avec CSS-first + Variables OKLCH
-- **Base Components**: 17 composants shadcn/ui + logo HavRid avec accessibilité Radix UI
+- **Base Components**: 18 composants shadcn/ui + logo HavRid avec accessibilité Radix UI
 - **Accessibilité**: Radix UI primitives + tests automatisés
 - **Build**: Concurrent (TypeScript + CSS watch) + Storybook intégré
 - **Documentation**: Storybook sur port 6006 + tests a11y automatiques
@@ -25,7 +26,7 @@ Package de composants UI de base et design system unifié pour HavRid - Optimis�
 ## 📊 Table des matières
 
 - [🌈 Design Tokens & Foundations](#design-tokens--foundations)
-- [🧩 Composants shadcn/ui + Logo (17)](#composants-shadcnui)
+- [🧩 Composants shadcn/ui + Logo (18)](#composants-shadcnui)
 - [📜 Guidelines & Best Practices](#guidelines--best-practices)
 - [🚀 Development & Build](#development--build)
 - [🔧 Usage dans les Apps](#usage-dans-les-apps)
@@ -40,47 +41,64 @@ Package de composants UI de base et design system unifié pour HavRid - Optimis�
 Chaque couleur est calibrée pour respecter WCAG 2.1 Level AA (contraste ≥ 4.5:1).
 
 #### 🔵 Palette Primaire (Bleu Médical)
+
 Couleur de confiance et sécurité, base du design system.
 
 ```css
 /* Base : oklch(62.3% 0.214 259.815) */
---color-primary-500: oklch(62.3% 0.214 259.815);  /* Contraste 4.52:1 */
---color-primary-700: oklch(48.8% 0.243 264.376);  /* Contraste 5.83:1 - Recommandé */
---color-primary-900: oklch(37.9% 0.146 265.522);  /* Contraste 10.59:1 - Maximum */
+--color-primary-500: oklch(62.3% 0.214 259.815); /* Contraste 4.52:1 */
+--color-primary-700: oklch(
+  48.8% 0.243 264.376
+); /* Contraste 5.83:1 - Recommandé */
+--color-primary-900: oklch(
+  37.9% 0.146 265.522
+); /* Contraste 10.59:1 - Maximum */
 ```
 
 #### 🟢 Palette Succès (Vert Médical)
+
 Confirmation, santé, validation réussie.
 
 ```css
---color-success-500: oklch(64.8% 0.273 145.430);  /* Contraste 4.51:1 */
---color-success-700: oklch(47.2% 0.208 147.891);  /* Contraste 6.24:1 - Recommandé */
+--color-success-500: oklch(64.8% 0.273 145.43); /* Contraste 4.51:1 */
+--color-success-700: oklch(
+  47.2% 0.208 147.891
+); /* Contraste 6.24:1 - Recommandé */
 ```
 
 #### 🔴 Palette Erreur/Urgence (Rouge Médical)
+
 Alerte, danger, erreurs critiques.
 
 ```css
---color-error-500: oklch(63.7% 0.237 25.331);     /* Contraste 4.68:1 */
---color-error-700: oklch(50.5% 0.213 27.518);     /* Contraste 6.89:1 - Recommandé */
---color-error-900: oklch(39.6% 0.141 25.723);     /* Contraste 12.45:1 - Maximum */
+--color-error-500: oklch(63.7% 0.237 25.331); /* Contraste 4.68:1 */
+--color-error-700: oklch(
+  50.5% 0.213 27.518
+); /* Contraste 6.89:1 - Recommandé */
+--color-error-900: oklch(39.6% 0.141 25.723); /* Contraste 12.45:1 - Maximum */
 ```
 
 #### 🟡 Palette Avertissement (Ambre Médical)
+
 Avertissements doux, attention requise.
 
 ```css
---color-warning-600: oklch(66.6% 0.179 58.318);   /* Contraste 4.74:1 */
---color-warning-700: oklch(55.5% 0.163 48.998);   /* Contraste 7.21:1 - Recommandé */
+--color-warning-600: oklch(66.6% 0.179 58.318); /* Contraste 4.74:1 */
+--color-warning-700: oklch(
+  55.5% 0.163 48.998
+); /* Contraste 7.21:1 - Recommandé */
 ```
 
 #### ⚫ Palette Neutre (Gris Accessible)
+
 Texte, bordures, arrière-plans.
 
 ```css
---color-neutral-600: oklch(44.6% 0.03 256.802);   /* Texte secondaire */
---color-neutral-700: oklch(37.3% 0.034 259.733);  /* Contraste 7.04:1 */
---color-neutral-900: oklch(21% 0.034 264.665);    /* Contraste 15.36:1 - Texte principal */
+--color-neutral-600: oklch(44.6% 0.03 256.802); /* Texte secondaire */
+--color-neutral-700: oklch(37.3% 0.034 259.733); /* Contraste 7.04:1 */
+--color-neutral-900: oklch(
+  21% 0.034 264.665
+); /* Contraste 15.36:1 - Texte principal */
 ```
 
 ### Architecture de tokens
@@ -108,7 +126,7 @@ packages/ui/src/
 
 ```css
 /* Tailles tactiles minimum */
---size-touch: 44px;              /* Minimum WCAG 2.1 Level AA */
+--size-touch: 44px; /* Minimum WCAG 2.1 Level AA */
 
 /* Focus indicators */
 *:focus-visible {
@@ -119,8 +137,8 @@ packages/ui/src/
 /* Support contraste élevé */
 @media (prefers-contrast: high) {
   :root {
-    --border: 220 9% 46%;        /* Contraste renforcé */
-    --ring: 217 33% 17%;         /* Focus plus visible */
+    --border: 220 9% 46%; /* Contraste renforcé */
+    --ring: 217 33% 17%; /* Focus plus visible */
   }
 }
 
@@ -137,11 +155,12 @@ packages/ui/src/
 
 ## 🧩 Composants shadcn/ui + Logo
 
-### Vue d'ensemble (17 composants)
+### Vue d'ensemble (18 composants)
 
 Tous les composants sont basés sur **Radix UI** pour l'accessibilité native et utilisent **class-variance-authority** pour la gestion des variants. Le logo HavRid est inclus comme composant spécialisé avec support multi-tailles.
 
 ### 🟦 Button - Composant de base
+
 **6 variants × 4 sizes = 24 configurations**
 
 ```tsx
@@ -157,30 +176,39 @@ import { Button } from "@repo/ui"
 
 // Tailles disponibles
 <Button size="sm">Petit</Button>                 // 32px hauteur
-<Button size="default">Normal</Button>           // 36px hauteur  
+<Button size="default">Normal</Button>           // 36px hauteur
 <Button size="lg">Large</Button>                // 40px hauteur
 <Button size="icon">⚕</Button>                  // 36×36px carré
 ```
 
 **API & Props:**
+
 ```typescript
 interface ButtonProps {
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link'
-  size?: 'default' | 'sm' | 'lg' | 'icon'
-  asChild?: boolean  // Utilise Radix Slot pour composition
-  disabled?: boolean
-  onClick?: (event: MouseEvent) => void
+  variant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
+  size?: "default" | "sm" | "lg" | "icon";
+  asChild?: boolean; // Utilise Radix Slot pour composition
+  disabled?: boolean;
+  onClick?: (event: MouseEvent) => void;
   // + toutes les props HTML button standard
 }
 ```
 
 **Accessibilité intégrée:**
+
 - ✅ Focus ring visible (2px solid + 2px offset)
 - ✅ Support navigation clavier (Tab, Enter, Space)
 - ✅ États disabled avec aria-disabled
 - ✅ Taille tactile minimum 36×36px (> WCAG 44px avec padding)
 
 ### 📋 Card - Système de conteneurs
+
 **Structure modulaire : Header + Content + Footer**
 
 ```tsx
@@ -214,6 +242,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 ```
 
 ### ⌨️ Input - Champs de saisie médicaux
+
 **États : normal, focus, error, disabled**
 
 ```tsx
@@ -246,10 +275,18 @@ import { Input, Label } from "@repo/ui"
 ```
 
 ### 📝 Form - Validation médicale
+
 **Intégration React Hook Form + Zod**
 
 ```tsx
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@repo/ui"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@repo/ui";
 
 // Pattern médical avec validation
 <Form {...form}>
@@ -269,19 +306,26 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
               {...field}
             />
           </FormControl>
-          <FormMessage />  {/* Erreurs automatiques */}
+          <FormMessage /> {/* Erreurs automatiques */}
         </FormItem>
       )}
     />
   </form>
-</Form>
+</Form>;
 ```
 
 ### 💬 Dialog - Modales accessibles
+
 **Focus trap + gestion ESC + overlay**
 
 ```tsx
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@repo/ui"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@repo/ui";
 
 // Modal de confirmation médicale
 <Dialog>
@@ -300,14 +344,20 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
       </div>
     </div>
   </DialogContent>
-</Dialog>
+</Dialog>;
 ```
 
 ### 📧 Dropdown Menu - Menus contextuels
+
 **Navigation clavier + indicateurs visuels**
 
 ```tsx
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@repo/ui"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@repo/ui";
 
 // Menu actions patient
 <DropdownMenu>
@@ -315,20 +365,17 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
     <Button variant="outline">Actions patient ▼</Button>
   </DropdownMenuTrigger>
   <DropdownMenuContent align="end" className="w-56">
-    <DropdownMenuItem>
-      📝 Voir dossier médical
-    </DropdownMenuItem>
-    <DropdownMenuItem>
-      📞 Contacter patient
-    </DropdownMenuItem>
+    <DropdownMenuItem>📝 Voir dossier médical</DropdownMenuItem>
+    <DropdownMenuItem>📞 Contacter patient</DropdownMenuItem>
     <DropdownMenuItem className="text-destructive">
       ⚙️ Modifier informations
     </DropdownMenuItem>
   </DropdownMenuContent>
-</DropdownMenu>
+</DropdownMenu>;
 ```
 
 ### 🏥 HavRid Logo - Logo d'entreprise
+
 **6 tailles disponibles avec accessibilité intégrée**
 
 ```tsx
@@ -347,45 +394,51 @@ import { HavRidLogo } from "@repo/ui"
 ```
 
 **API & Props:**
+
 ```typescript
 interface HavRidLogoProps {
-  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl'  // Taille du logo
-  className?: string                                 // Classes CSS supplémentaires
+  size?: "sm" | "md" | "lg" | "xl" | "2xl" | "3xl"; // Taille du logo
+  className?: string; // Classes CSS supplémentaires
 }
 ```
 
 **Accessibilité intégrée:**
+
 - ✅ `role="img"` automatique pour les lecteurs d'écran
 - ✅ `aria-label="Logo HavRid - Services d'ambulance"` descriptif
 - ✅ Support responsive avec classes Tailwind
 - ✅ SVG vectoriel pour netteté sur tous écrans
 
 **Contextes d'utilisation (NOUVELLE ÉCHELLE):**
+
 - **Headers d'application** : `size="md"` (standard) ou `size="lg"` (importantes)
-- **Pages d'authentification** : `size="lg"` ou `size="xl"` 
+- **Pages d'authentification** : `size="lg"` ou `size="xl"`
 - **Footers** : `size="md"` avec informations d'entreprise
 - **États de chargement** : `size="lg"` ou `size="xl"` avec animation
 - **Interfaces compactes** : `size="sm"` pour navigation secondaire
 - **Écrans 4K/ultra-wide** : `size="2xl"` pour dashboards grands écrans
 - **Signalétique d'urgence** : `size="3xl"` pour affichage mural haute visibilité
 
-> ⚠️ **BREAKING CHANGE v1.1 - Nouvelle échelle HavRidLogo** 
-> 
+> ⚠️ **BREAKING CHANGE v1.1 - Nouvelle échelle HavRidLogo**
+>
 > **TOUS LES LOGOS SONT MAINTENANT PLUS GRANDS** après cette mise à jour :
-> - `sm` : 32px → **64px** (+100%) 
+>
+> - `sm` : 32px → **64px** (+100%)
 > - `md` : 48px → **80px** (+67%)
 > - `lg` : 64px → **112px** (+75%)
 > - `xl` : 80px → **160px** (+100%)
 > - `2xl` : 112px → **256px** (+129%)
 > - `3xl` : 160px → **320px** (+100%)
 >
-> **Nouvelles possibilités :** 
+> **Nouvelles possibilités :**
+>
 > - Tailles géantes `2xl` (256px) et `3xl` (320px) pour écrans 4K et signalétique
 > - Échelle optimisée pour interfaces médicales avec meilleure visibilité
-> 
+>
 > **Migration :** Aucun changement de code requis, mais vérifiez l'affichage sur vos interfaces après mise à jour.
 
 **Autres composants shadcn/ui disponibles:**
+
 - **Accordion** : FAQ, sections dépliables
 - **Avatar** : Photos profil patients/personnel
 - **Badge** : Statuts, priorités, catégories
@@ -404,70 +457,75 @@ interface HavRidLogoProps {
 Système d'authentification spécialisé pour le contexte médical HavRid, avec validation renforcée et UX accessible.
 
 ### 🃏 AuthCard - Wrapper authentification
+
 **Container principal pour tous les flux auth**
 
 ```tsx
-import { AuthCard } from "@repo/ui"
+import { AuthCard } from "@repo/ui";
 
-<AuthCard 
+<AuthCard
   title="Connexion Ambulancier"
   description="Accédez à votre interface de gestion des interventions"
   showLogo={true}
 >
   {/* Contenu du formulaire d'authentification */}
-</AuthCard>
+</AuthCard>;
 ```
 
 **API:**
+
 ```typescript
 interface AuthCardProps {
-  title: string                    // Titre principal (ex: "Connexion Patient")
-  description?: string             // Description contextuelle
-  children: React.ReactNode        // Contenu du formulaire
-  showLogo?: boolean              // Affichage logo HavRid (défaut: true)
-  className?: string              // Classes personnalisées
+  title: string; // Titre principal (ex: "Connexion Patient")
+  description?: string; // Description contextuelle
+  children: React.ReactNode; // Contenu du formulaire
+  showLogo?: boolean; // Affichage logo HavRid (défaut: true)
+  className?: string; // Classes personnalisées
 }
 ```
 
 ### 🔑 SignInForm - Connexion sécurisée
+
 **Formulaire complet avec validation temps réel**
 
 ```tsx
-import { SignInForm } from "@repo/ui"
+import { SignInForm } from "@repo/ui";
 
 // Flux de connexion patient
 <SignInForm
   onSubmit={async (data) => {
-    await signIn(data.email, data.password)
+    await signIn(data.email, data.password);
   }}
   onError={(error) => {
-    toast.error(error.message)
+    toast.error(error.message);
   }}
-  providers={['google', 'microsoft']}  // OAuth médical
-  userType="patient"                   // patient | ambulancier | admin
-/>
+  providers={["google", "microsoft"]} // OAuth médical
+  userType="patient" // patient | ambulancier | admin
+/>;
 ```
 
 ### 🔐 PasswordInput - Saisie mot de passe
+
 **Indicateur de sécurité + visibilité toggle**
 
 ```tsx
-import { PasswordInput } from "@repo/ui"
+import { PasswordInput } from "@repo/ui";
 
 <PasswordInput
   placeholder="Mot de passe sécurisé"
-  showStrengthIndicator={true}     // Barre de force
-  minLength={8}                   // Contraintes médicales
+  showStrengthIndicator={true} // Barre de force
+  minLength={8} // Contraintes médicales
   requireSpecialChar={true}
   aria-label="Mot de passe professionnel"
-/>
+/>;
 ```
 
 ### ⚠️ AuthErrorAlert - Gestion d'erreurs
+
 **Alertes contextuelles avec actions**
 
 ```tsx
-import { AuthErrorAlert } from "@repo/ui"
+import { AuthErrorAlert } from "@repo/ui";
 
 <AuthErrorAlert
   type="invalid_credentials"
@@ -477,10 +535,11 @@ import { AuthErrorAlert } from "@repo/ui"
       Mot de passe oublié ?
     </Button>
   }
-/>
+/>;
 ```
 
 **Types d'erreurs gérés:**
+
 - `invalid_credentials` : Identifiants incorrects
 - `account_locked` : Compte temporairement bloqué
 - `network_error` : Problème de connexion
@@ -488,6 +547,7 @@ import { AuthErrorAlert } from "@repo/ui"
 - `two_factor_required` : 2FA requis
 
 ### ⏳ AuthLoadingSpinner - États de chargement
+
 **Feedback visuel pendant l'authentification**
 
 ```tsx
@@ -504,6 +564,7 @@ import { AuthLoadingSpinner, InlineLoadingSpinner } from "@repo/ui"
 ```
 
 ### ⚙️ AuthFormField - Champs spécialisés
+
 **Validation médicale + assistance**
 
 ```tsx
@@ -528,6 +589,7 @@ import { AuthFormField } from "@repo/ui"
 ```
 
 ### 🟦 AuthButton - Boutons contextuels
+
 **Variants spécialisés pour l'authentification**
 
 ```tsx
@@ -553,12 +615,13 @@ import { AuthButton, SocialAuthButton } from "@repo/ui"
 ```
 
 **Flux d'authentification complet:**
+
 ```tsx
 // Exemple d'implémentation complète
 function PatientSignIn() {
   return (
-    <AuthCard 
-      title="Espace Patient" 
+    <AuthCard
+      title="Espace Patient"
       description="Gérez vos trajets ambulance en toute sécurité"
     >
       <SignInForm
@@ -568,52 +631,88 @@ function PatientSignIn() {
       >
         <AuthFormField type="email" required />
         <PasswordInput showStrengthIndicator />
-        
-        {error && (
-          <AuthErrorAlert 
-            type={error.type} 
-            message={error.message} 
-          />
-        )}
-        
+
+        {error && <AuthErrorAlert type={error.type} message={error.message} />}
+
         <AuthButton loading={isLoading}>
           {isLoading ? (
-            <><InlineLoadingSpinner /> Connexion...</>
+            <>
+              <InlineLoadingSpinner /> Connexion...
+            </>
           ) : (
             "Se connecter"
           )}
         </AuthButton>
-        
+
         <SocialAuthButton provider="google" />
       </SignInForm>
     </AuthCard>
-  )
+  );
 }
 ```
 
 ---
 
 ### Système d'exports optimisé
+
 ```typescript
-// Export principal du package (25 composants)
-export * from "./components/ui"      // 17 composants shadcn/ui + logo
-export * from "./components/auth"    // 8 composants authentification
-export { cn } from "./lib/utils"     // Utilitaires classe
+// Export principal du package (26 composants)
+export * from "./components/ui"; // 18 composants shadcn/ui + logo
+export * from "./components/auth"; // 8 composants authentification
+export { cn } from "./lib/utils"; // Utilitaires classe
 
 // Exports individuels pour tree-shaking optimal
 // shadcn/ui Components + Logo
-export { Button, buttonVariants, type ButtonProps } from "./components/ui/button"
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from "./components/ui/card"
-export { Input } from "./components/ui/input"
-export { Label } from "./components/ui/label"
-export { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "./components/ui/dialog"
-export { HavRidLogo } from "./components/ui/havrid-logo"
+export {
+  Button,
+  buttonVariants,
+  type ButtonProps,
+} from "./components/ui/button";
+export {
+  Card,
+  CardHeader,
+  CardFooter,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "./components/ui/card";
+export { Input } from "./components/ui/input";
+export { Label } from "./components/ui/label";
+export {
+  Combobox,
+  type ComboboxItem,
+  type ComboboxProps,
+} from "./components/ui/combobox";
+export {
+  AddressCombobox,
+  type AddressComboboxProps,
+} from "./components/ui/address-combobox";
+export {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./components/ui/dialog";
+export { HavRidLogo } from "./components/ui/havrid-logo";
 // ... +11 autres composants shadcn/ui
 
 // Auth Components
-export { AuthCard, AuthFormField, PasswordInput, AuthButton, SocialAuthButton } from "./components/auth"
-export { AuthErrorAlert, AuthLoadingSpinner, InlineLoadingSpinner } from "./components/auth"
-export { SignInForm, SignUpForm } from "./components/auth"
+export {
+  AuthCard,
+  AuthFormField,
+  PasswordInput,
+  AuthButton,
+  SocialAuthButton,
+} from "./components/auth";
+export {
+  AuthErrorAlert,
+  AuthLoadingSpinner,
+  InlineLoadingSpinner,
+} from "./components/auth";
+export { SignInForm, SignUpForm } from "./components/auth";
 
 // Note: Composants accessibles seniors déplacés vers @repo/ui-accessible
 // import { EmergencyButton, SeniorCard } from "@repo/ui-accessible"
@@ -626,6 +725,7 @@ export { SignInForm, SignUpForm } from "./components/auth"
 ### ✅ Accessibilité WCAG 2.1 AA
 
 **Standards obligatoires :**
+
 - **Contraste minimum** : 4.5:1 pour le texte normal, 3:1 pour le texte large
 - **Taille tactile** : 44×44px minimum pour tous les éléments interactifs
 - **Focus visible** : Ring de 2px + offset 2px sur tous les composants
@@ -633,6 +733,7 @@ export { SignInForm, SignUpForm } from "./components/auth"
 - **Lecteurs d'écran** : Attributes ARIA appropriés sur tous les composants
 
 **Tests automatisés intégrés :**
+
 ```bash
 # Storybook avec addon-a11y
 pnpm storybook  # Port 6006 - Tests a11y automatiques
@@ -646,34 +747,39 @@ pnpm storybook  # Port 6006 - Tests a11y automatiques
 ### 🎨 Patterns de composition
 
 **Pattern Modal médical :**
+
 ```tsx
 // ✅ Bon - Structure accessible complète
 function PatientInfoModal({ patient }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">
-          📋 Dossier {patient.name}
-        </Button>
+        <Button variant="outline">📋 Dossier {patient.name}</Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Dossier médical - {patient.name}</DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Informations personnelles</CardTitle>
+              <CardTitle className="text-lg">
+                Informations personnelles
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-sm font-medium">Date de naissance</Label>
+                  <Label className="text-sm font-medium">
+                    Date de naissance
+                  </Label>
                   <p className="text-sm">{patient.birthDate}</p>
                 </div>
                 <div>
-                  <Label className="text-sm font-medium">Numéro sécurité sociale</Label>
+                  <Label className="text-sm font-medium">
+                    Numéro sécurité sociale
+                  </Label>
                   <p className="text-sm font-mono">{patient.socialSecurity}</p>
                 </div>
               </div>
@@ -682,11 +788,12 @@ function PatientInfoModal({ patient }) {
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 ```
 
 **Pattern Formulaire médical :**
+
 ```tsx
 // ✅ Bon - Validation + feedback accessibles
 function MedicalForm() {
@@ -695,8 +802,10 @@ function MedicalForm() {
       <form className="space-y-6">
         {/* Groupement logique avec fieldset */}
         <fieldset className="space-y-4 border border-border rounded-lg p-4">
-          <legend className="text-sm font-medium px-2">Informations médicales</legend>
-          
+          <legend className="text-sm font-medium px-2">
+            Informations médicales
+          </legend>
+
           <FormField
             name="medications"
             render={({ field }) => (
@@ -709,19 +818,22 @@ function MedicalForm() {
                     className="border-primary/30 focus:border-primary"
                   />
                 </FormControl>
-                <FormMessage />  {/* Erreur accessible automatique */}
+                <FormMessage /> {/* Erreur accessible automatique */}
               </FormItem>
             )}
           />
         </fieldset>
-        
+
         <div className="flex gap-3 justify-end">
           <Button variant="outline" type="button">
             Annuler
           </Button>
           <Button type="submit" disabled={!form.formState.isValid}>
             {isLoading ? (
-              <><InlineLoadingSpinner className="mr-2" />Enregistrement...</>
+              <>
+                <InlineLoadingSpinner className="mr-2" />
+                Enregistrement...
+              </>
             ) : (
               "Enregistrer"
             )}
@@ -729,13 +841,14 @@ function MedicalForm() {
         </div>
       </form>
     </Form>
-  )
+  );
 }
 ```
 
 ### 📱 Responsive Design
 
 **Breakpoints Tailwind CSS :**
+
 ```css
 /* Mobile-first approach */
 sm: 640px   /* Tablettes portrait */
@@ -746,10 +859,11 @@ xl: 1280px  /* Large desktop */
 ```
 
 **Patterns responsive pour le médical :**
+
 ```tsx
 // ✅ Layout adaptatif pour interface ambulancier
 <div className="
-  grid 
+  grid
   grid-cols-1         /* Mobile : 1 colonne */
   md:grid-cols-2      /* Tablette : 2 colonnes */
   xl:grid-cols-3      /* Desktop : 3 colonnes */
@@ -773,42 +887,43 @@ xl: 1280px  /* Large desktop */
 ### ⚡ Performance & Optimisation
 
 **Tree-shaking optimal :**
+
 ```tsx
 // ✅ Bon - Import spécifique
-import { Button } from "@repo/ui/button"
-import { Card, CardContent } from "@repo/ui/card"
+import { Button } from "@repo/ui/button";
+import { Card, CardContent } from "@repo/ui/card";
 
 // ❌ Éviter - Import global (bundle plus lourd)
-import { Button, Card, CardContent } from "@repo/ui"
+import { Button, Card, CardContent } from "@repo/ui";
 ```
 
 **Lazy loading pour modals lourdes :**
+
 ```tsx
 // ✅ Bon - Modal chargée uniquement si nécessaire
-const HeavyPatientModal = React.lazy(() => import('./HeavyPatientModal'))
+const HeavyPatientModal = React.lazy(() => import("./HeavyPatientModal"));
 
 function PatientCard() {
-  const [showModal, setShowModal] = React.useState(false)
-  
+  const [showModal, setShowModal] = React.useState(false);
+
   return (
     <>
-      <Button onClick={() => setShowModal(true)}>
-        Voir détails
-      </Button>
-      
+      <Button onClick={() => setShowModal(true)}>Voir détails</Button>
+
       {showModal && (
         <Suspense fallback={<AuthLoadingSpinner />}>
           <HeavyPatientModal onClose={() => setShowModal(false)} />
         </Suspense>
       )}
     </>
-  )
+  );
 }
 ```
 
 ### 🌙 Dark Mode (Futur)
 
 **Variables CSS prêtes :**
+
 ```css
 /* Structure préparée pour dark mode */
 :root {
@@ -825,6 +940,7 @@ function PatientCard() {
 ### ⚙️ Guidelines de développement
 
 **Do's ✅**
+
 - Utiliser les couleurs OKLCH recommandées (primary-700, error-700, etc.)
 - Tester la navigation clavier sur tous les nouveaux composants
 - Inclure des labels explicites et des descriptions d'aide
@@ -832,6 +948,7 @@ function PatientCard() {
 - Utiliser les utilitaires `.sr-only` pour les informations lecteur d'écran
 
 **Don'ts ❌**
+
 - Ne jamais utiliser uniquement la couleur pour transmettre l'information
 - Éviter les animations non-essentielles (respect `prefers-reduced-motion`)
 - Ne pas oublier les états focus/hover/disabled
@@ -865,15 +982,14 @@ pnpm test                  # Jest + Testing Library + a11y
 ```typescript
 // tailwind.config.ts - CSS-first approach
 export default {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+  content: ["./src/**/*.{js,jsx,ts,tsx}"],
   // Configuration automatique via theme.css
   // + preset JavaScript pour utilitaires a11y
-} satisfies Config
+} satisfies Config;
 ```
 
 **Preset partagé :**
+
 ```javascript
 // tailwind.config.preset.js
 module.exports = {
@@ -882,18 +998,20 @@ module.exports = {
       colors: {
         // Couleurs OKLCH via variables CSS
         primary: {
-          500: 'var(--color-primary-500)',
-          700: 'var(--color-primary-700)', // Recommandé
+          500: "var(--color-primary-500)",
+          700: "var(--color-primary-700)", // Recommandé
         },
       },
     },
   },
   plugins: [
     // Utilitaires accessibilité
-    function({ addUtilities }) {
+    function ({ addUtilities }) {
       addUtilities({
-        '.sr-only': { /* Screen reader only */ },
-        '.touch-target': { minHeight: '44px', minWidth: '44px' },
+        ".sr-only": {
+          /* Screen reader only */
+        },
+        ".touch-target": { minHeight: "44px", minWidth: "44px" },
       });
     },
   ],
@@ -905,17 +1023,18 @@ module.exports = {
 ```javascript
 // jest.config.js
 module.exports = {
-  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ["<rootDir>/src/test-setup.ts"],
+  testEnvironment: "jsdom",
 };
 
 // src/test-setup.ts
-import '@testing-library/jest-dom'
-import { toHaveNoViolations } from 'jest-axe'
-expect.extend(toHaveNoViolations)
+import "@testing-library/jest-dom";
+import { toHaveNoViolations } from "jest-axe";
+expect.extend(toHaveNoViolations);
 ```
 
 **Exemple de test :**
+
 ```typescript
 import { render } from '@testing-library/react'
 import { axe } from 'jest-axe'
@@ -932,22 +1051,22 @@ test('Button is accessible', async () => {
 
 ```typescript
 // .storybook/main.ts
-import type { StorybookConfig } from '@storybook/react-vite';
+import type { StorybookConfig } from "@storybook/react-vite";
 
 const config: StorybookConfig = {
   addons: [
-    '@storybook/addon-essentials',
-    '@storybook/addon-a11y',        // Tests accessibilité automatiques
-    '@storybook/addon-viewport',     // Tests responsive
+    "@storybook/addon-essentials",
+    "@storybook/addon-a11y", // Tests accessibilité automatiques
+    "@storybook/addon-viewport", // Tests responsive
   ],
-  
+
   async viteFinal(config) {
     return {
       ...config,
       plugins: [
         ...(config.plugins || []),
         // Tailwind CSS v4 support
-        (await import('@tailwindcss/vite')).default(),
+        (await import("@tailwindcss/vite")).default(),
       ],
     };
   },
@@ -964,7 +1083,7 @@ const config: StorybookConfig = {
 // Dans package.json de toutes les apps du monorepo
 {
   "dependencies": {
-    "@repo/ui": "workspace:*",           // Package principal UI
+    "@repo/ui": "workspace:*", // Package principal UI
     "@repo/ui-accessible": "workspace:*" // Uniquement pour app client
   },
   "devDependencies": {
@@ -981,18 +1100,18 @@ const config: StorybookConfig = {
 module.exports = {
   // Utilisation du preset partagé
   presets: [require("@repo/ui/tailwind.config.preset.js")],
-  
+
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
     // Inclure les composants UI dans le scan
     "../../packages/ui/src/**/*.{js,jsx,ts,tsx}",
   ],
-  
+
   theme: {
     extend: {
       // Personnalisations spécifiques à l'app si nécessaires
       colors: {
-        'app-specific': 'oklch(60% 0.2 180)',
+        "app-specific": "oklch(60% 0.2 180)",
       },
     },
   },
@@ -1004,24 +1123,48 @@ module.exports = {
 ```tsx
 // Dans les applications HavRid
 import {
-  // 17 composants shadcn/ui + logo
-  Accordion, Avatar, Badge, Breadcrumb, Button, Card, Dialog,
-  Drawer, DropdownMenu, Form, Input, Label, NavigationMenu, 
-  Table, Tooltip, HavRidLogo,
-  
+  // 18 composants shadcn/ui + logo + adresse
+  Accordion,
+  Avatar,
+  Badge,
+  Breadcrumb,
+  Button,
+  Card,
+  Combobox,
+  AddressCombobox,
+  Dialog,
+  Drawer,
+  DropdownMenu,
+  Form,
+  Input,
+  Label,
+  NavigationMenu,
+  Table,
+  Tooltip,
+  HavRidLogo,
+
   // 8 composants authentification
-  AuthCard, AuthFormField, PasswordInput, AuthButton,
-  AuthErrorAlert, AuthLoadingSpinner, SignInForm, SignUpForm,
-  
+  AuthCard,
+  AuthFormField,
+  PasswordInput,
+  AuthButton,
+  AuthErrorAlert,
+  AuthLoadingSpinner,
+  SignInForm,
+  SignUpForm,
+
   // Utilitaires
-  cn
-} from "@repo/ui"
+  cn,
+} from "@repo/ui";
 
 // Import séparé pour composants seniors (app client uniquement)
 import {
-  EmergencyButton, SeniorCard, AccessibleForm,
-  MedicalInput, AnnouncementRegion
-} from "@repo/ui-accessible"
+  EmergencyButton,
+  SeniorCard,
+  AccessibleForm,
+  MedicalInput,
+  AnnouncementRegion,
+} from "@repo/ui-accessible";
 ```
 
 ### Import des styles (CSS-first)
@@ -1046,10 +1189,11 @@ import {
 ### Exemples d'implémentation par app
 
 #### 👥 App Client (Patients/Gardiens)
+
 ```tsx
 // Utilisation mixte UI + UI-Accessible
-import { Card, CardContent, Button } from "@repo/ui"
-import { EmergencyButton, SeniorCard } from "@repo/ui-accessible"
+import { Card, CardContent, Button } from "@repo/ui";
+import { EmergencyButton, SeniorCard } from "@repo/ui-accessible";
 
 function PatientDashboard() {
   return (
@@ -1058,18 +1202,14 @@ function PatientDashboard() {
       <EmergencyButton className="mb-8">
         🚑 URGENCE - Appeler ambulance
       </EmergencyButton>
-      
+
       {/* Cards standard pour informations */}
       <div className="grid md:grid-cols-2 gap-4">
-        <SeniorCard 
-          title="Prochaine course"
-          icon="🕰️"
-          accessible={true}
-        >
+        <SeniorCard title="Prochaine course" icon="🕰️" accessible={true}>
           <p>Rendez-vous médical - Hôpital Saint-Louis</p>
           <p>Demain 14h30</p>
         </SeniorCard>
-        
+
         <Card>
           <CardContent className="p-6">
             <h3>Historique des courses</h3>
@@ -1078,14 +1218,15 @@ function PatientDashboard() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
 ```
 
 #### 🚑 App Fleet (Gestionnaires)
+
 ```tsx
 // Utilisation UI standard pour interfaces professionnelles
-import { Button, Card, Badge, Table, HavRidLogo } from "@repo/ui"
+import { Button, Card, Badge, Table, HavRidLogo } from "@repo/ui";
 
 function FleetDashboard() {
   return (
@@ -1096,11 +1237,9 @@ function FleetDashboard() {
           <HavRidLogo size="md" />
           <h1 className="text-2xl font-bold">Gestion de flotte</h1>
         </div>
-        <Button>
-          + Nouvelle intervention
-        </Button>
+        <Button>+ Nouvelle intervention</Button>
       </div>
-      
+
       <Card>
         <CardContent>
           <Table>
@@ -1115,14 +1254,15 @@ function FleetDashboard() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 ```
 
 #### ⚙️ App Admin (Administrateurs)
+
 ```tsx
 // Interface admin avec composants auth et logo
-import { AuthCard, SignInForm, Button, Dialog, HavRidLogo } from "@repo/ui"
+import { AuthCard, SignInForm, Button, Dialog, HavRidLogo } from "@repo/ui";
 
 function AdminLogin() {
   return (
@@ -1137,19 +1277,20 @@ function AdminLogin() {
         >
           <SignInForm
             userType="admin"
-            providers={['microsoft']} // OAuth entreprise
+            providers={["microsoft"]} // OAuth entreprise
             onSubmit={handleAdminLogin}
           />
         </AuthCard>
       </div>
     </div>
-  )
+  );
 }
 ```
 
 ### Bonnes pratiques d'usage
 
 **✅ Recommandations :**
+
 1. **App Client** : Privilégier `@repo/ui-accessible` pour UX seniors optimisée
 2. **Apps Pro** : Utiliser `@repo/ui` standard pour interfaces efficaces
 3. **Authentification** : Toujours utiliser les composants auth du package
@@ -1157,6 +1298,7 @@ function AdminLogin() {
 5. **Accessibilité** : Valider avec lecteurs d'écran et navigation clavier
 
 **❌ À éviter :**
+
 1. Mélanger les styles Tailwind avec des CSS externes non-accessibles
 2. Oublier d'importer `theme.css` (couleurs OKLCH manquantes)
 3. Utiliser des couleurs non-OKLCH pour le contenu médical
@@ -1167,6 +1309,7 @@ function AdminLogin() {
 ## 📚 Ressources & Documentation
 
 ### Liens utiles
+
 - **Storybook UI** : http://localhost:6006 (composants + tests a11y)
 - **Storybook Accessible** : http://localhost:6007 (composants seniors)
 - **shadcn/ui Docs** : https://ui.shadcn.com/docs
@@ -1177,6 +1320,7 @@ function AdminLogin() {
 ### Support et contribution
 
 **Ajouter un nouveau composant :**
+
 1. Créer le composant dans `src/components/ui/` ou `src/components/auth/`
 2. Exporter dans `src/index.ts`
 3. Créer les stories Storybook
@@ -1185,8 +1329,9 @@ function AdminLogin() {
 6. Mettre à jour les apps consommatrices
 
 **Guidelines de contribution :**
+
 - Respecter les couleurs OKLCH scientifiques
-- Suivre les standards WCAG 2.1 AA obligatoires  
+- Suivre les standards WCAG 2.1 AA obligatoires
 - Tester sur lecteurs d'écran (VoiceOver, NVDA)
 - Maintenir la compatibilité TypeScript strict
 - Documenter les breaking changes
@@ -1194,5 +1339,3 @@ function AdminLogin() {
 ---
 
 _Documentation du HavRid Medical UI Design System v1.0 - Optimisé pour l'accessibilité médicale_ 🎨⚕️
-
-

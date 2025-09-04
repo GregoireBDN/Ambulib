@@ -13,6 +13,9 @@
 /* === COMPATIBILITÉ SHADCN/UI === */
 @import "tailwindcss";
 
+/* === STYLES GLOBAUX ET COMPOSANTS === */
+@import "./globals.css";
+
 /* === STYLES DE BASE ESSENTIELS === */
 @layer base {
   * {
