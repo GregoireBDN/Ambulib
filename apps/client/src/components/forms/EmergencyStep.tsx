@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle, Input, Label, Button } from "@repo/ui"
+import { Card, CardContent, CardHeader, CardTitle, Input, PhoneInput, Label, Button } from "@repo/ui"
 import { Phone, UserCheck, Shield, FileText } from 'lucide-react'
 import { FormData } from '@/types/inscription'
 
@@ -111,16 +111,16 @@ export default function EmergencyStep({
               <Label htmlFor="emergencyPhone" className="text-base font-medium">
                 Téléphone *
               </Label>
-              <Input
+              <PhoneInput
                 id="emergencyPhone"
-                type="tel"
                 value={formData.emergencyContact.phone}
-                onChange={(e) => onEmergencyContactChange('phone', e.target.value)}
-                placeholder="01 23 45 67 89"
+                onChange={(value, isValid) => onEmergencyContactChange('phone', value)}
+                placeholder="06 12 34 56 78"
                 required
                 aria-invalid={!!errors['emergencyContact.phone']}
                 aria-describedby={errors['emergencyContact.phone'] ? "emergencyPhone-error" : "emergencyPhone-help"}
                 className={`h-14 text-lg ${errors['emergencyContact.phone'] ? 'border-red-500 focus:border-red-500' : ''}`}
+                error={errors['emergencyContact.phone']}
               />
               {errors['emergencyContact.phone'] && (
                 <p id="emergencyPhone-error" className="text-red-600 text-sm" role="alert">
@@ -128,7 +128,7 @@ export default function EmergencyStep({
                 </p>
               )}
               <p id="emergencyPhone-help" className="text-xs text-muted-foreground">
-                Numéro joignable 24h/24 de préférence
+                Validation automatique française. Numéro joignable 24h/24 de préférence.
               </p>
             </div>
 

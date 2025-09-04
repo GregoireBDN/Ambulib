@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react'
 import { FormData } from '@/types/inscription'
 import { validateStep } from '@/lib/validation/inscription'
+import { useSecureFormStorage } from './useSecureFormStorage'
 
-const STORAGE_KEY = 'havrid-inscription-draft'
+// DEPRECATED: Ancien système non-sécurisé
+// const STORAGE_KEY = 'havrid-inscription-draft'
 
 const initialFormData: FormData = {
   // Étape 1
@@ -46,33 +48,45 @@ export const useFormStepper = () => {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = useState(false)
   const [submitError, setSubmitError] = useState<string>('')
+  
+  // Hook de stockage sécurisé
+  const secureStorage = useSecureFormStorage()
 
-  // Charger les données du localStorage au montage
+  // Charger les données sécurisées au montage
   useEffect(() => {
-    const savedData = localStorage.getItem(STORAGE_KEY)
-    if (savedData) {
+    const loadStoredData = async () => {
       try {
-        const parsed = JSON.parse(savedData)
-        setFormData({ ...initialFormData, ...parsed.formData })
-        setCurrentStep(parsed.currentStep || 1)
-      } catch (error: any) {
-        console.warn('Impossible de charger le brouillon:', error)
+        // Nettoyer d'abord l'ancien système non-sécurisé
+        const oldData = localStorage.getItem('havrid-inscription-draft')
+        if (oldData) {
+          console.warn('Migration: suppression ancien stockage non-sécurisé')
+          localStorage.removeItem('havrid-inscription-draft')
+        }
+
+        // Charger avec le nouveau système sécurisé
+        const { formData: loadedData, currentStep: loadedStep } = await secureStorage.loadAllData()
+        
+        if (loadedData && Object.keys(loadedData).length > 0) {
+          setFormData(prev => ({ ...prev, ...loadedData }))
+          setCurrentStep(loadedStep)
+        }
+      } catch (error) {
+        console.error('Erreur chargement données sécurisées:', error)
       }
     }
-  }, [])
 
-  // Sauvegarder automatiquement les données
-  const saveToStorage = useCallback((data: FormData, step: number) => {
+    loadStoredData()
+  }, [secureStorage])
+
+  // Sauvegarder automatiquement les données (système sécurisé)
+  const saveToStorage = useCallback(async (data: FormData, step: number) => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        formData: data,
-        currentStep: step,
-        timestamp: Date.now()
-      }))
+      // Utiliser le nouveau système de stockage hybride sécurisé
+      await secureStorage.saveAllData(data, step)
     } catch (error: any) {
-      console.warn('Impossible de sauvegarder le brouillon:', error)
+      console.error('Erreur sauvegarde sécurisée:', error)
     }
-  }, [])
+  }, [secureStorage])
 
   // Mettre à jour un champ du formulaire
   const updateField = useCallback((field: keyof FormData, value: any) => {
@@ -261,10 +275,15 @@ export const useFormStepper = () => {
     return true
   }, [formData])
 
-  // Nettoyer le localStorage
-  const clearStorage = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEY)
-  }, [])
+  // Nettoyer le stockage sécurisé
+  const clearStorage = useCallback(async () => {
+    try {
+      await secureStorage.clearAllData()
+      console.log('Toutes les données sécurisées ont été supprimées')
+    } catch (error) {
+      console.error('Erreur nettoyage stockage sécurisé:', error)
+    }
+  }, [secureStorage])
 
   // Obtenir les labels des étapes
   const stepLabels = [
@@ -290,7 +309,7 @@ export const useFormStepper = () => {
     setCurrentStep,
     formData,
     errors,
-    isLoading,
+    isLoading: isLoading || secureStorage.isLoading,
     stepLabels,
     submitError,
     setIsLoading,
@@ -304,6 +323,10 @@ export const useFormStepper = () => {
     goToStep,
     validateCurrentStep,
     validateForm,
-    clearStorage
+    clearStorage,
+    
+    // Nouvelles propriétés du stockage sécurisé
+    lastSaved: secureStorage.lastSaved,
+    checkExpiration: secureStorage.checkExpiration
   }
 }

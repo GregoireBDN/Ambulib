@@ -4,7 +4,7 @@ import { Badge, badgeVariants } from './badge'
 import { Card, CardContent, CardHeader, CardTitle } from './card'
 
 const meta: Meta<typeof Badge> = {
-  title: 'Components/UI/Badge',
+  title: "UI/Badge",
   component: Badge,
   parameters: {
     layout: 'centered',

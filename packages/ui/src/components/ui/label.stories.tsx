@@ -5,7 +5,7 @@ import { Input } from './input'
 import { Badge } from './badge'
 
 const meta: Meta<typeof Label> = {
-  title: 'Components/UI/Label',
+  title: "UI/Label",
   component: Label,
   parameters: {
     layout: 'centered',

@@ -29,11 +29,15 @@ export default function SecurityStep({
 
     strength = Object.values(checks).filter(Boolean).length
     
+    // Toutes les conditions doivent être remplies pour être considéré comme "valide"
+    const isValid = Object.values(checks).every(Boolean)
+    
     return {
       strength,
       checks,
-      level: strength < 3 ? 'Faible' : strength < 4 ? 'Moyen' : 'Fort',
-      color: strength < 3 ? 'bg-red-500' : strength < 4 ? 'bg-yellow-500' : 'bg-green-500'
+      isValid,
+      level: strength < 2 ? 'Très faible' : strength < 3 ? 'Faible' : strength < 4 ? 'Moyen' : !isValid ? 'Incomplet' : strength === 5 ? 'Excellent' : 'Fort',
+      color: strength < 2 ? 'bg-red-600' : strength < 3 ? 'bg-red-500' : strength < 4 ? 'bg-yellow-500' : !isValid ? 'bg-orange-500' : 'bg-green-600'
     }
   }
 
@@ -98,11 +102,17 @@ export default function SecurityStep({
               <li className={passwordStrength.checks.length ? 'text-green-700' : ''}>
                 {passwordStrength.checks.length ? '✅' : '•'} Au moins 8 caractères
               </li>
-              <li className={passwordStrength.checks.special ? 'text-green-700' : ''}>
-                {passwordStrength.checks.special ? '✅' : '•'} Au moins 1 caractère spécial (!@#$%...)
+              <li className={passwordStrength.checks.uppercase ? 'text-green-700' : ''}>
+                {passwordStrength.checks.uppercase ? '✅' : '•'} Au moins 1 lettre majuscule (A-Z)
+              </li>
+              <li className={passwordStrength.checks.lowercase ? 'text-green-700' : ''}>
+                {passwordStrength.checks.lowercase ? '✅' : '•'} Au moins 1 lettre minuscule (a-z)
               </li>
               <li className={passwordStrength.checks.numbers ? 'text-green-700' : ''}>
-                {passwordStrength.checks.numbers ? '✅' : '•'} Au moins 1 chiffre
+                {passwordStrength.checks.numbers ? '✅' : '•'} Au moins 1 chiffre (0-9)
+              </li>
+              <li className={passwordStrength.checks.special ? 'text-green-700' : ''}>
+                {passwordStrength.checks.special ? '✅' : '•'} Au moins 1 caractère spécial (!@#$%...)
               </li>
             </ul>
           </div>
@@ -216,17 +226,24 @@ export default function SecurityStep({
           </ul>
         </div>
 
-        {/* Message d'encouragement */}
-        {formData.email && passwordStrength.strength >= 3 && formData.password === formData.confirmPassword && (
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-            <p className="text-green-800 text-base font-medium">
-              🔐 Parfait ! Votre compte est bien sécurisé
+        {/* Message de prévention pour la rétention du mot de passe */}
+        <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+          <h4 className="text-orange-800 text-sm font-semibold mb-2">
+            🔐 Important : Retenez bien votre mot de passe
+          </h4>
+          <div className="text-orange-700 text-sm space-y-2">
+            <p>
+              <strong>Notez votre mot de passe dans un endroit sûr</strong> ou assurez-vous de bien le retenir.
             </p>
-            <p className="text-green-700 text-sm mt-1">
-              Vous pourrez vous connecter avec ces identifiants
+            <p>
+              Vous en aurez besoin pour accéder à votre compte et gérer vos réservations d'ambulance.
+            </p>
+            <p className="text-xs italic">
+              En cas d'oubli, vous pourrez réinitialiser votre mot de passe via votre adresse email.
             </p>
           </div>
-        )}
+        </div>
+
       </CardContent>
     </Card>
   )

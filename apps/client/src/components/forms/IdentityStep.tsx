@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle, Input, Label } from "@repo/ui"
+import { Card, CardContent, CardHeader, CardTitle, Input, PhoneInput, Label, AddressCombobox } from "@repo/ui"
 import { FormData } from '@/types/inscription'
 
 interface IdentityStepProps {
@@ -111,16 +111,16 @@ export default function IdentityStep({
               <Label htmlFor="phone" className="text-base font-medium">
                 Numéro de téléphone *
               </Label>
-              <Input
+              <PhoneInput
                 id="phone"
-                type="tel"
                 value={formData.phone}
-                onChange={(e) => onFieldChange('phone', e.target.value)}
-                placeholder="01 23 45 67 89"
+                onChange={(value, isValid) => onFieldChange('phone', value)}
+                placeholder="06 12 34 56 78"
                 required
                 aria-invalid={!!errors.phone}
                 aria-describedby={errors.phone ? "phone-error" : "phone-help"}
                 className={`h-14 text-lg ${errors.phone ? 'border-red-500 focus:border-red-500' : ''}`}
+                error={errors.phone}
               />
               {errors.phone && (
                 <p id="phone-error" className="text-red-600 text-sm" role="alert">
@@ -128,7 +128,7 @@ export default function IdentityStep({
                 </p>
               )}
               <p id="phone-help" className="text-xs text-muted-foreground">
-                Indispensable pour vous contacter en cas d'urgence
+                Validation automatique française - mobile et fixe acceptés
               </p>
             </div>
           </div>
@@ -146,86 +146,99 @@ export default function IdentityStep({
           </div>
 
           <div className="space-y-6">
+            {/* Autocomplete adresse unique */}
             <div className="space-y-3">
-              <Label htmlFor="street" className="text-base font-medium">
-                Adresse complète *
+              <Label htmlFor="address-full" className="text-base font-medium">
+                Votre adresse *
               </Label>
-              <Input
-                id="street"
+              <AddressCombobox
                 value={formData.address.street}
-                onChange={(e) => onAddressChange('street', e.target.value)}
-                placeholder="123 rue de la République"
+                initialAddressData={
+                  formData.address.street ? {
+                    id: formData.address.street,
+                    label: `${formData.address.street}${formData.address.postalCode && formData.address.city ? `, ${formData.address.postalCode} ${formData.address.city}` : ''}`,
+                    street: formData.address.street,
+                    postalCode: formData.address.postalCode || '',
+                    city: formData.address.city || '',
+                    coordinates: [0, 0],
+                    type: "housenumber" as const,
+                    score: 1,
+                    context: formData.address.street
+                  } : null
+                }
+                placeholder="Tapez votre adresse : 123 rue de la République, Paris..."
+                onAddressSelect={(address) => {
+                  if (address) {
+                    // Extraire les informations de l'adresse
+                    let street = address.street || address.label || '';
+                    let postalCode = address.postalCode || '';
+                    let city = address.city || '';
+                    
+                    // Si postalCode ou city sont manquants, essayer de parser depuis label
+                    if ((!postalCode || !city) && address.label) {
+                      // Parser le label pour extraire code postal et ville
+                      // Format attendu: "Adresse, Code postal Ville"
+                      const labelParts = address.label.split(',');
+                      if (labelParts.length >= 2) {
+                        const lastPart = labelParts[labelParts.length - 1].trim();
+                        const postalCityMatch = lastPart.match(/(\d{5})\s+(.+)/);
+                        
+                        if (postalCityMatch) {
+                          if (!postalCode) postalCode = postalCityMatch[1];
+                          if (!city) city = postalCityMatch[2];
+                        }
+                      }
+                    }
+                    
+                    // Sauvegarder les données
+                    onAddressChange('street', street)
+                    onAddressChange('postalCode', postalCode)
+                    onAddressChange('city', city)
+                  } else {
+                    // Réinitialiser l'adresse si désélectionnée
+                    onAddressChange('street', '')
+                    onAddressChange('postalCode', '')
+                    onAddressChange('city', '')
+                  }
+                }}
+                error={errors['address.street']}
                 required
-                aria-invalid={!!errors['address.street']}
-                aria-describedby={errors['address.street'] ? "street-error" : "street-help"}
-                className={`h-14 text-lg ${errors['address.street'] ? 'border-red-500 focus:border-red-500' : ''}`}
+                className={errors['address.street'] ? 'border-red-500' : ''}
+                searchLimit={5}
+                debounceDelay={300}
+                id="address-full"
               />
               {errors['address.street'] && (
-                <p id="street-error" className="text-red-600 text-sm" role="alert">
+                <p id="address-error" className="text-red-600 text-sm" role="alert">
                   {errors['address.street']}
                 </p>
               )}
-              <p id="street-help" className="text-xs text-muted-foreground">
-                Numéro et nom de rue complets
+              <p className="text-sm text-muted-foreground">
+                💡 Tapez quelques lettres et sélectionnez votre adresse dans la liste
               </p>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="space-y-3">
-                <Label htmlFor="postalCode" className="text-base font-medium">
-                  Code postal *
-                </Label>
-                <Input
-                  id="postalCode"
-                  value={formData.address.postalCode}
-                  onChange={(e) => onAddressChange('postalCode', e.target.value)}
-                  placeholder="75001"
-                  maxLength={5}
-                  required
-                  aria-invalid={!!errors['address.postalCode']}
-                  aria-describedby={errors['address.postalCode'] ? "postalCode-error" : undefined}
-                  className={`h-14 text-lg ${errors['address.postalCode'] ? 'border-red-500 focus:border-red-500' : ''}`}
-                />
-                {errors['address.postalCode'] && (
-                  <p id="postalCode-error" className="text-red-600 text-sm" role="alert">
-                    {errors['address.postalCode']}
-                  </p>
-                )}
-              </div>
 
-              <div className="space-y-3">
-                <Label htmlFor="city" className="text-base font-medium">
-                  Ville *
-                </Label>
-                <Input
-                  id="city"
-                  value={formData.address.city}
-                  onChange={(e) => onAddressChange('city', e.target.value)}
-                  placeholder="Paris"
-                  required
-                  aria-invalid={!!errors['address.city']}
-                  aria-describedby={errors['address.city'] ? "city-error" : undefined}
-                  className={`h-14 text-lg ${errors['address.city'] ? 'border-red-500 focus:border-red-500' : ''}`}
-                />
-                {errors['address.city'] && (
-                  <p id="city-error" className="text-red-600 text-sm" role="alert">
-                    {errors['address.city']}
-                  </p>
-                )}
-              </div>
+            {/* Complément d'adresse optionnel */}
+            <div className="space-y-3">
+              <Label htmlFor="complement" className="text-base font-medium">
+                Complément d'adresse (optionnel)
+              </Label>
+              <Input
+                id="complement"
+                value={formData.address.complement || ''}
+                onChange={(e) => onAddressChange('complement', e.target.value)}
+                placeholder="Appartement, étage, bâtiment, digicode..."
+                className="h-14 text-lg"
+                aria-describedby="complement-help"
+              />
+              <p id="complement-help" className="text-xs text-muted-foreground">
+                Informations supplémentaires pour faciliter l'accès des ambulanciers
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Message d'encouragement */}
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-          <p className="text-green-800 text-base font-medium">
-            ✅ Excellent ! Vous avez complété la première étape
-          </p>
-          <p className="text-green-700 text-sm mt-1">
-            Vos informations sont automatiquement sauvegardées
-          </p>
-        </div>
       </CardContent>
     </Card>
   )

@@ -4,7 +4,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './
 import { Card, CardContent } from './card'
 
 const meta = {
-  title: 'Components/UI/Accordion',
+  title: "UI/Accordion",
   component: Accordion,
   parameters: {
     layout: 'centered',

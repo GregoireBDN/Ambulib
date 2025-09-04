@@ -1,7 +1,8 @@
 export interface Address {
-  street: string
-  postalCode: string
-  city: string
+  street: string        // Adresse complète via autocomplete
+  postalCode: string   // Auto-rempli par autocomplete
+  city: string         // Auto-rempli par autocomplete
+  complement?: string  // Informations supplémentaires (étage, digicode, etc.)
 }
 
 export interface EmergencyContact {
@@ -11,20 +12,27 @@ export interface EmergencyContact {
   relation: string
 }
 
-export interface FormData {
-  // Étape 1 : Identité & Contact
+// Données non-sensibles (stockage local chiffré autorisé)
+export interface BasicFormData {
+  // Étape 1 : Identité basique
   firstName: string
   lastName: string
   birthDate: string
   phone: string
   address: Address
 
-  // Étape 2 : Compte & Sécurité
+  // Étape 2 : Compte (non-médical)
   email: string
   password: string
   confirmPassword: string
 
-  // Étape 3 : Informations Médicales
+  // Étape 4 : Finalisation
+  acceptTerms: boolean
+}
+
+// Données sensibles médicales (stockage serveur uniquement)
+export interface SensitiveFormData {
+  // Étape 3 : Informations Médicales SENSIBLES
   socialSecurity?: string
   allergies?: string
   medications?: string
@@ -33,10 +41,12 @@ export interface FormData {
   doctorName?: string
   doctorPhone?: string
 
-  // Étape 4 : Contact d'Urgence & Finalisation
+  // Contact d'urgence (contient données médicales)
   emergencyContact: EmergencyContact
-  acceptTerms: boolean
 }
+
+// Interface complète (union des deux)
+export interface FormData extends BasicFormData, SensitiveFormData {}
 
 export interface FormStep {
   id: string

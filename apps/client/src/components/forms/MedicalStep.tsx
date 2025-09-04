@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle, Input, Label, Button } from "@repo/ui"
+import { Card, CardContent, CardHeader, CardTitle, Input, PhoneInput, SocialSecurityInput, Label, Button } from "@repo/ui"
 import { Heart, AlertTriangle, Stethoscope } from 'lucide-react'
 import { FormData } from '@/types/inscription'
 
@@ -60,15 +60,15 @@ export default function MedicalStep({
             <Label htmlFor="socialSecurity" className="text-base font-medium">
               Numéro de sécurité sociale
             </Label>
-            <Input
+            <SocialSecurityInput
               id="socialSecurity"
               value={formData.socialSecurity || ''}
-              onChange={(e) => onFieldChange('socialSecurity', e.target.value)}
+              onChange={(value, isValid) => onFieldChange('socialSecurity', value)}
               placeholder="1 23 45 67 890 123 45"
-              maxLength={15}
               aria-invalid={!!errors.socialSecurity}
               aria-describedby={errors.socialSecurity ? "socialSecurity-error" : "socialSecurity-help"}
               className={`h-14 text-lg ${errors.socialSecurity ? 'border-red-500 focus:border-red-500' : ''}`}
+              error={errors.socialSecurity}
             />
             {errors.socialSecurity && (
               <p id="socialSecurity-error" className="text-red-600 text-sm" role="alert">
@@ -76,7 +76,7 @@ export default function MedicalStep({
               </p>
             )}
             <p id="socialSecurity-help" className="text-xs text-muted-foreground">
-              Facilite les remboursements de vos trajets médicaux
+              Validation automatique française (15 chiffres). Facilite les remboursements de vos trajets médicaux.
             </p>
           </div>
         </div>
@@ -229,14 +229,14 @@ export default function MedicalStep({
               <Label htmlFor="doctorPhone" className="text-base font-medium">
                 Téléphone du médecin
               </Label>
-              <Input
+              <PhoneInput
                 id="doctorPhone"
-                type="tel"
                 value={formData.doctorPhone || ''}
-                onChange={(e) => onFieldChange('doctorPhone', e.target.value)}
+                onChange={(value, isValid) => onFieldChange('doctorPhone', value)}
                 placeholder="01 23 45 67 89"
                 aria-invalid={!!errors.doctorPhone}
                 className={`h-14 text-lg ${errors.doctorPhone ? 'border-red-500 focus:border-red-500' : ''}`}
+                error={errors.doctorPhone}
               />
               {errors.doctorPhone && (
                 <p className="text-red-600 text-sm" role="alert">
@@ -250,23 +250,6 @@ export default function MedicalStep({
           </p>
         </div>
 
-        {/* Message de confidentialité */}
-        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-          <div className="flex items-start gap-3">
-            <div className="w-5 h-5 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-              <span className="text-white text-xs">✓</span>
-            </div>
-            <div>
-              <p className="text-green-800 text-sm font-medium">
-                Vos informations médicales sont protégées
-              </p>
-              <p className="text-green-700 text-sm mt-1">
-                Conformément au secret médical, ces données ne sont accessibles qu'aux professionnels 
-                de santé autorisés et uniquement dans le cadre de votre prise en charge.
-              </p>
-            </div>
-          </div>
-        </div>
       </CardContent>
     </Card>
   )

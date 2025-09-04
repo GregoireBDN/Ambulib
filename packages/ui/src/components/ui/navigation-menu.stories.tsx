@@ -15,7 +15,7 @@ import { Badge } from './badge'
 import { cn } from '../../lib/utils'
 
 const meta: Meta<typeof NavigationMenu> = {
-  title: 'Components/UI/NavigationMenu',
+  title: "UI/NavigationMenu",
   component: NavigationMenu,
   parameters: {
     layout: 'centered',

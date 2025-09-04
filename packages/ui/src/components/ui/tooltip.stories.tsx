@@ -7,7 +7,7 @@ import { Input } from './input'
 import { Label } from './label'
 
 const meta: Meta<typeof Tooltip> = {
-  title: 'Components/UI/Tooltip',
+  title: "UI/Tooltip",
   component: Tooltip,
   parameters: {
     layout: 'centered',

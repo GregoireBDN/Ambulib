@@ -13,7 +13,7 @@ import { Badge } from './badge'
 import { Button } from './button'
 
 const meta: Meta<typeof Table> = {
-  title: 'Components/UI/Table',
+  title: "UI/Table",
   component: Table,
   parameters: {
     layout: 'centered',

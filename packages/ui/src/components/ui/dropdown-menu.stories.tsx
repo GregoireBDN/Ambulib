@@ -19,7 +19,7 @@ import { Button } from './button'
 import { Badge } from './badge'
 
 const meta: Meta<typeof DropdownMenu> = {
-  title: 'Components/UI/DropdownMenu',
+  title: "UI/DropdownMenu",
   component: DropdownMenu,
   parameters: {
     layout: 'centered',
