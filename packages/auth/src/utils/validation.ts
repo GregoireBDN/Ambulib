@@ -23,6 +23,7 @@ export const signupSchema = z.object({
     .string()
     .min(8, { message: 'Le mot de passe doit contenir au moins 8 caractères' })
     .regex(/[a-zA-Z]/, { message: 'Le mot de passe doit contenir au moins une lettre' })
+    .regex(/[A-Z]/, { message: 'Le mot de passe doit contenir au moins une majuscule' })
     .regex(/[0-9]/, { message: 'Le mot de passe doit contenir au moins un chiffre' })
     .regex(/[^a-zA-Z0-9]/, { message: 'Le mot de passe doit contenir au moins un caractère spécial' })
     .trim(),
