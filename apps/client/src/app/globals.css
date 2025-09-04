@@ -32,6 +32,11 @@
   transition: outline 0.2s ease;
 }
 
+/* Exception pour les inputs dans les Command/Popover pour éviter double focus */
+[data-slot="command-input"]:focus-visible {
+  outline: none;
+}
+
 /* Amélioration de la lisibilité pour les seniors */
 .senior-text {
   line-height: 1.6;

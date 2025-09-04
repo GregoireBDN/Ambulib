@@ -2,7 +2,7 @@ import { z } from "zod"
 
 // Schémas de base
 const AddressSchema = z.object({
-  street: z.string().min(5, "L'adresse doit contenir au moins 5 caractères"),
+  street: z.string().min(3, "L'adresse doit contenir au moins 3 caractères"),
   postalCode: z.string().regex(/^\d{5}$/, "Le code postal doit contenir 5 chiffres"),
   city: z.string().min(2, "Le nom de la ville doit contenir au moins 2 caractères")
 })
@@ -42,6 +42,9 @@ export const Step2Schema = z.object({
     .min(1, "L'email est requis"),
   password: z.string()
     .min(8, "Le mot de passe doit contenir au moins 8 caractères")
+    .regex(/[a-zA-Z]/, "Le mot de passe doit contenir au moins une lettre")
+    .regex(/[A-Z]/, "Le mot de passe doit contenir au moins une majuscule")
+    .regex(/[0-9]/, "Le mot de passe doit contenir au moins un chiffre")
     .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, "Le mot de passe doit contenir au moins un caractère spécial"),
   confirmPassword: z.string()
     .min(1, "La confirmation du mot de passe est requise")
@@ -95,6 +98,9 @@ const Step2BaseSchema = z.object({
     .min(1, "L'email est requis"),
   password: z.string()
     .min(8, "Le mot de passe doit contenir au moins 8 caractères")
+    .regex(/[a-zA-Z]/, "Le mot de passe doit contenir au moins une lettre")
+    .regex(/[A-Z]/, "Le mot de passe doit contenir au moins une majuscule")
+    .regex(/[0-9]/, "Le mot de passe doit contenir au moins un chiffre")
     .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, "Le mot de passe doit contenir au moins un caractère spécial"),
   confirmPassword: z.string()
     .min(1, "La confirmation du mot de passe est requise")
