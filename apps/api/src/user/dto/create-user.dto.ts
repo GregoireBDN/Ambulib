@@ -27,6 +27,9 @@ export class CreateUserDto {
   @Matches(/[a-zA-Z]/, {
     message: 'Le mot de passe doit contenir au moins une lettre',
   })
+  @Matches(/[A-Z]/, {
+    message: 'Le mot de passe doit contenir au moins une majuscule',
+  })
   @Matches(/\d/, {
     message: 'Le mot de passe doit contenir au moins un chiffre',
   })

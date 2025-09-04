@@ -83,7 +83,7 @@ describe('AdminService', () => {
   describe('createFleetManager', () => {
     const createFleetManagerDto = {
       email: 'manager@example.com',
-      password: 'password123',
+      password: 'TestPassword123!',
       firstName: 'Jane',
       lastName: 'Smith',
     };
@@ -125,7 +125,7 @@ describe('AdminService', () => {
   describe('createAmbulanceDriver', () => {
     const createDriverDto = {
       email: 'driver@example.com',
-      password: 'password123',
+      password: 'TestPassword123!',
       firstName: 'Bob',
       lastName: 'Wilson',
     };

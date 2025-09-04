@@ -5,6 +5,8 @@ import {
   IsOptional,
   IsBoolean,
   IsNumber,
+  MinLength,
+  Matches,
 } from 'class-validator';
 import { AuthProvider, Role } from '@prisma/client';
 
@@ -35,6 +37,22 @@ export class SignupDto {
     example: 'TestPassword123!',
   })
   @IsString()
+  @MinLength(8, {
+    message: 'Le mot de passe doit contenir au moins 8 caractères',
+  })
+  @Matches(/[a-zA-Z]/, {
+    message: 'Le mot de passe doit contenir au moins une lettre',
+  })
+  @Matches(/[A-Z]/, {
+    message: 'Le mot de passe doit contenir au moins une majuscule',
+  })
+  @Matches(/\d/, {
+    message: 'Le mot de passe doit contenir au moins un chiffre',
+  })
+  @Matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, {
+    message:
+      'Le mot de passe doit contenir au moins un caractère spécial (!@#$%^&*...)',
+  })
   password: string;
 
   @ApiProperty({
@@ -299,6 +317,22 @@ export class CreateCompanyUserDto {
     example: 'TestPassword123!',
   })
   @IsString()
+  @MinLength(8, {
+    message: 'Le mot de passe doit contenir au moins 8 caractères',
+  })
+  @Matches(/[a-zA-Z]/, {
+    message: 'Le mot de passe doit contenir au moins une lettre',
+  })
+  @Matches(/[A-Z]/, {
+    message: 'Le mot de passe doit contenir au moins une majuscule',
+  })
+  @Matches(/\d/, {
+    message: 'Le mot de passe doit contenir au moins un chiffre',
+  })
+  @Matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, {
+    message:
+      'Le mot de passe doit contenir au moins un caractère spécial (!@#$%^&*...)',
+  })
   password: string;
 
   @ApiProperty({

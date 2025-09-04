@@ -2,9 +2,24 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as session from 'express-session';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Configuration des sessions Express pour form-draft
+  app.use(
+    session({
+      secret: process.env.SESSION_SECRET_KEY || 'havrid-dev-session-key-2024',
+      resave: false,
+      saveUninitialized: true,
+      cookie: {
+        secure: false, // false pour HTTP en développement
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60, // 1 heure
+      },
+    }),
+  );
 
   // Configuration CORS pour permettre l'accès depuis l'app mobile
   app.enableCors({
