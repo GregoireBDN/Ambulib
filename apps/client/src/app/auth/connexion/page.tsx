@@ -50,7 +50,12 @@ export default function ConnexionPage() {
         <div className="space-y-8">
           {/* Logo centré */}
           <div className="text-center">
-            <HavRidLogo size="lg" className="mx-auto mb-6" />
+            <div 
+              onClick={() => router.push("/")} 
+              className="cursor-pointer inline-block mx-auto mb-6 transition-opacity hover:opacity-80"
+            >
+              <HavRidLogo size="lg" />
+            </div>
           </div>
 
           {/* Carte de connexion */}

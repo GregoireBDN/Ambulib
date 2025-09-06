@@ -87,7 +87,8 @@ export default function InscriptionPage() {
           setTimeout(() => {
             const newStep = 2
             setCurrentStep(newStep)
-            // Focus sur le champ email
+            // Faire défiler la page vers le haut et focus sur le champ email
+            window.scrollTo({ top: 0, behavior: 'smooth' })
             setTimeout(() => {
               const emailInput = document.getElementById('email')
               emailInput?.focus()
@@ -159,7 +160,12 @@ export default function InscriptionPage() {
         <div className="space-y-8">
           {/* Logo centré */}
           <div className="text-center">
-            <HavRidLogo size="lg" className="mx-auto mb-6" />
+            <div 
+              onClick={() => router.push("/")} 
+              className="cursor-pointer inline-block mx-auto mb-6 transition-opacity hover:opacity-80"
+            >
+              <HavRidLogo size="lg" />
+            </div>
             <h1 className="text-3xl font-bold text-foreground mb-2">
               Créer votre compte HavRid
             </h1>
@@ -176,6 +182,47 @@ export default function InscriptionPage() {
               stepLabels={stepLabels}
               className="mb-8"
             />
+          </div>
+
+          {/* Navigation du haut */}
+          <div className="max-w-3xl mx-auto">
+            <div className="flex flex-col sm:flex-row justify-between gap-4 mb-8">
+              <div className="flex gap-3">
+                {currentStep > 1 && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevStep}
+                    className="h-14 px-8 text-lg"
+                    disabled={isLoading}
+                  >
+                    ← Précédent
+                  </Button>
+                )}
+              </div>
+              
+              <div className="flex gap-3 sm:ml-auto">
+                {currentStep < 4 ? (
+                  <Button
+                    type="button"
+                    onClick={nextStep}
+                    className="h-14 px-8 text-lg min-w-[140px]"
+                    disabled={isLoading}
+                  >
+                    Suivant →
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    onClick={handleSubmit}
+                    className="h-14 px-8 text-lg min-w-[180px] bg-green-600 hover:bg-green-700"
+                    disabled={isLoading || !formData.acceptTerms}
+                  >
+                    {isLoading ? "Création..." : "🎉 Créer mon compte"}
+                  </Button>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Formulaire par étapes */}

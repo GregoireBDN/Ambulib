@@ -125,6 +125,8 @@ export const useFormStepper = () => {
   // Passer à l'étape suivante avec vérification email
   const nextStep = useCallback(async () => {
     if (!validateCurrentStep()) {
+      // Faire défiler la page vers le haut en cas d'erreur de validation
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
 
@@ -141,6 +143,8 @@ export const useFormStepper = () => {
             email: 'Cette adresse email est déjà utilisée. Veuillez en choisir une autre.'
           }))
           setSubmitError('Cette adresse email est déjà utilisée. Veuillez en choisir une autre ou vous connecter si vous avez déjà un compte.')
+          // Faire défiler la page vers le haut quand il y a une erreur d'email
+          window.scrollTo({ top: 0, behavior: 'smooth' })
           setIsLoading(false)
           return
         }
@@ -228,6 +232,8 @@ export const useFormStepper = () => {
   // Fonction pour définir une erreur de soumission
   const setError = useCallback((error: string) => {
     setSubmitError(error)
+    // Faire défiler la page vers le haut quand il y a une erreur
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
   // Fonction pour nettoyer les erreurs
