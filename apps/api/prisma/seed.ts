@@ -198,8 +198,8 @@ async function main() {
   const ambulance1 = await prisma.ambulance.create({
     data: {
       licensePlate: 'AB-123-CD',
-      vehicleModel: 'Mercedes Sprinter Ambulance',
-      vehicleYear: 2021,
+      model: 'Mercedes Sprinter Ambulance',
+      year: 2021,
       capacity: 2,
       status: AmbulanceStatus.AVAILABLE,
       companyId: company1.id,
@@ -210,8 +210,8 @@ async function main() {
   const ambulance2 = await prisma.ambulance.create({
     data: {
       licensePlate: 'EF-456-GH',
-      vehicleModel: 'Renault Master Ambulance',
-      vehicleYear: 2020,
+      model: 'Renault Master Ambulance',
+      year: 2020,
       capacity: 3,
       status: AmbulanceStatus.AVAILABLE,
       companyId: company2.id,
@@ -222,8 +222,8 @@ async function main() {
   const ambulance3 = await prisma.ambulance.create({
     data: {
       licensePlate: 'IJ-789-KL',
-      vehicleModel: 'Ford Transit Ambulance',
-      vehicleYear: 2022,
+      model: 'Ford Transit Ambulance',
+      year: 2022,
       capacity: 2,
       status: AmbulanceStatus.MAINTENANCE,
       companyId: company1.id,
@@ -236,14 +236,11 @@ async function main() {
       clientId: client1.id,
       pickupAddress: '78 Rue du Faubourg Saint-Antoine, 75011 Paris',
       destinationAddress: 'Hôpital Pitié-Salpêtrière, 47-83 Bd de l\'Hôpital, 75013 Paris',
-      pickupCity: 'Paris',
-      destinationCity: 'Paris',
-      scheduledDateTime: new Date('2025-08-22T10:30:00'),
+      pickupDateTime: new Date('2025-08-22T10:30:00'),
       status: BookingStatus.CONFIRMED,
-      bookingType: BookingType.SCHEDULED,
+      bookingType: BookingType.MEDICAL_APPOINTMENT,
       specialRequirements: [SpecialRequirements.NEEDS_LYING_TRANSPORT],
       notes: 'Patient nécessite un brancard pour le transport. Rendez-vous cardiologie.',
-      estimatedDuration: 120,
     },
   });
 
@@ -252,14 +249,11 @@ async function main() {
       clientId: client2.id,
       pickupAddress: '33 Place Bellecour, 69002 Lyon',
       destinationAddress: 'Centre Hospitalier Lyon Sud, 165 Chem. du Grand Revoyet, 69310 Pierre-Bénite',
-      pickupCity: 'Lyon',
-      destinationCity: 'Pierre-Bénite',
-      scheduledDateTime: new Date('2025-08-23T14:00:00'),
+      pickupDateTime: new Date('2025-08-23T14:00:00'),
       status: BookingStatus.CONFIRMED,
-      bookingType: BookingType.SCHEDULED,
+      bookingType: BookingType.MEDICAL_APPOINTMENT,
       specialRequirements: [SpecialRequirements.MEDICATIONS],
       notes: 'Transport pour dialyse programmée. Patient diabétique.',
-      estimatedDuration: 90,
     },
   });
 
@@ -268,13 +262,10 @@ async function main() {
       clientId: client1.id,
       pickupAddress: '78 Rue du Faubourg Saint-Antoine, 75011 Paris',
       destinationAddress: 'Clinique Saint-Louis, 1 Av. Claude Vellefaux, 75010 Paris',
-      pickupCity: 'Paris',
-      destinationCity: 'Paris',
-      scheduledDateTime: new Date('2025-08-25T09:15:00'),
+      pickupDateTime: new Date('2025-08-25T09:15:00'),
       status: BookingStatus.PENDING,
-      bookingType: BookingType.SCHEDULED,
+      bookingType: BookingType.MEDICAL_APPOINTMENT,
       notes: 'Transfer pour examens complémentaires.',
-      estimatedDuration: 60,
     },
   });
 
@@ -284,7 +275,6 @@ async function main() {
       bookingId: booking1.id,
       ambulanceId: ambulance1.id,
       driverId: driver1.id,
-      createdById: admin1.id,
       startedAt: new Date('2025-08-22T10:25:00'),
     },
   });
@@ -294,7 +284,6 @@ async function main() {
       bookingId: booking2.id,
       ambulanceId: ambulance2.id,
       driverId: driver2.id,
-      createdById: fleetManager.id,
     },
   });
 
@@ -303,7 +292,6 @@ async function main() {
     data: {
       bookingId: booking1.id,
       ticketNumber: 'TKT-2025-001',
-      ticketType: 'MEDICAL_TRANSPORT',
       validUntil: new Date('2025-08-22T23:59:59'),
       isUsed: false,
     },
@@ -313,7 +301,6 @@ async function main() {
     data: {
       bookingId: booking2.id,
       ticketNumber: 'TKT-2025-002',
-      ticketType: 'SCHEDULED_TRANSPORT',
       validUntil: new Date('2025-08-23T23:59:59'),
       isUsed: false,
     },

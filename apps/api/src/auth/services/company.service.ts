@@ -25,7 +25,7 @@ export class CompanyService {
 
     try {
       // Vérifier que l'email de l'entreprise n'existe pas
-      const existingCompany = await this.prisma.company.findUnique({
+      const existingCompany = await this.prisma.company.findFirst({
         where: { email: registrationDto.email },
       });
 
