@@ -1,10 +1,6 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { FormData } from '@/types/inscription'
 import { validateStep } from '@/lib/validation/inscription'
-import { useSecureFormStorage } from './useSecureFormStorage'
-
-// DEPRECATED: Ancien système non-sécurisé
-// const STORAGE_KEY = 'havrid-inscription-draft'
 
 const initialFormData: FormData = {
   // Étape 1
@@ -48,96 +44,40 @@ export const useFormStepper = () => {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = useState(false)
   const [submitError, setSubmitError] = useState<string>('')
-  
-  // Hook de stockage sécurisé
-  const secureStorage = useSecureFormStorage()
-
-  // Charger les données sécurisées au montage
-  useEffect(() => {
-    const loadStoredData = async () => {
-      try {
-        // Nettoyer d'abord l'ancien système non-sécurisé
-        const oldData = localStorage.getItem('havrid-inscription-draft')
-        if (oldData) {
-          console.warn('Migration: suppression ancien stockage non-sécurisé')
-          localStorage.removeItem('havrid-inscription-draft')
-        }
-
-        // Charger avec le nouveau système sécurisé
-        const { formData: loadedData, currentStep: loadedStep } = await secureStorage.loadAllData()
-        
-        if (loadedData && Object.keys(loadedData).length > 0) {
-          setFormData(prev => ({ ...prev, ...loadedData }))
-          setCurrentStep(loadedStep)
-        }
-      } catch (error) {
-        console.error('Erreur chargement données sécurisées:', error)
-      }
-    }
-
-    loadStoredData()
-  }, [secureStorage])
-
-  // Sauvegarder automatiquement les données (système sécurisé)
-  const saveToStorage = useCallback(async (data: FormData, step: number) => {
-    try {
-      // Utiliser le nouveau système de stockage hybride sécurisé
-      await secureStorage.saveAllData(data, step)
-    } catch (error: any) {
-      console.error('Erreur sauvegarde sécurisée:', error)
-    }
-  }, [secureStorage])
 
   // Mettre à jour un champ du formulaire
   const updateField = useCallback((field: keyof FormData, value: any) => {
-    setFormData(prev => {
-      const newData = { ...prev, [field]: value }
-      
-      // Sauvegarder automatiquement après une courte pause
-      setTimeout(() => saveToStorage(newData, currentStep), 500)
-      
-      return newData
-    })
+    setFormData(prev => ({ ...prev, [field]: value }))
     
     // Effacer l'erreur du champ modifié
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: '' }))
     }
-  }, [currentStep, errors, saveToStorage])
+  }, [errors])
 
   // Mettre à jour un champ d'adresse
   const updateAddressField = useCallback((field: keyof FormData['address'], value: string) => {
-    setFormData(prev => {
-      const newData = {
-        ...prev,
-        address: { ...prev.address, [field]: value }
-      }
-      
-      setTimeout(() => saveToStorage(newData, currentStep), 500)
-      return newData
-    })
+    setFormData(prev => ({
+      ...prev,
+      address: { ...prev.address, [field]: value }
+    }))
     
     if (errors[`address.${field}`]) {
       setErrors(prev => ({ ...prev, [`address.${field}`]: '' }))
     }
-  }, [currentStep, errors, saveToStorage])
+  }, [errors])
 
   // Mettre à jour un champ de contact d'urgence
   const updateEmergencyContactField = useCallback((field: keyof FormData['emergencyContact'], value: string) => {
-    setFormData(prev => {
-      const newData = {
-        ...prev,
-        emergencyContact: { ...prev.emergencyContact, [field]: value }
-      }
-      
-      setTimeout(() => saveToStorage(newData, currentStep), 500)
-      return newData
-    })
+    setFormData(prev => ({
+      ...prev,
+      emergencyContact: { ...prev.emergencyContact, [field]: value }
+    }))
     
     if (errors[`emergencyContact.${field}`]) {
       setErrors(prev => ({ ...prev, [`emergencyContact.${field}`]: '' }))
     }
-  }, [currentStep, errors, saveToStorage])
+  }, [errors])
 
   // Valider l'étape courante
   const validateCurrentStep = useCallback((): boolean => {
@@ -219,7 +159,6 @@ export const useFormStepper = () => {
     if (currentStep < 4) {
       const newStep = currentStep + 1
       setCurrentStep(newStep)
-      saveToStorage(formData, newStep)
       
       // Nettoyer les erreurs de soumission
       setSubmitError('')
@@ -230,27 +169,25 @@ export const useFormStepper = () => {
         firstInput?.focus()
       }, 100)
     }
-  }, [currentStep, formData, validateCurrentStep, saveToStorage, checkEmailAvailability])
+  }, [currentStep, formData, validateCurrentStep, checkEmailAvailability])
 
   // Revenir à l'étape précédente
   const prevStep = useCallback(() => {
     if (currentStep > 1) {
       const newStep = currentStep - 1
       setCurrentStep(newStep)
-      saveToStorage(formData, newStep)
       
       // Nettoyer les erreurs de soumission
       setSubmitError('')
     }
-  }, [currentStep, formData, saveToStorage])
+  }, [currentStep])
 
   // Aller à une étape spécifique
   const goToStep = useCallback((step: number) => {
     if (step >= 1 && step <= 4) {
       setCurrentStep(step)
-      saveToStorage(formData, step)
     }
-  }, [formData, saveToStorage])
+  }, [])
 
   // Valider tout le formulaire
   const validateForm = useCallback((): boolean => {
@@ -275,15 +212,10 @@ export const useFormStepper = () => {
     return true
   }, [formData])
 
-  // Nettoyer le stockage sécurisé
-  const clearStorage = useCallback(async () => {
-    try {
-      await secureStorage.clearAllData()
-      console.log('Toutes les données sécurisées ont été supprimées')
-    } catch (error) {
-      console.error('Erreur nettoyage stockage sécurisé:', error)
-    }
-  }, [secureStorage])
+  // Fonction de nettoyage simple (ne fait plus rien maintenant)
+  const clearStorage = useCallback(() => {
+    console.log('Nettoyage du stockage - aucune action requise')
+  }, [])
 
   // Obtenir les labels des étapes
   const stepLabels = [
@@ -309,7 +241,7 @@ export const useFormStepper = () => {
     setCurrentStep,
     formData,
     errors,
-    isLoading: isLoading || secureStorage.isLoading,
+    isLoading,
     stepLabels,
     submitError,
     setIsLoading,
@@ -323,10 +255,6 @@ export const useFormStepper = () => {
     goToStep,
     validateCurrentStep,
     validateForm,
-    clearStorage,
-    
-    // Nouvelles propriétés du stockage sécurisé
-    lastSaved: secureStorage.lastSaved,
-    checkExpiration: secureStorage.checkExpiration
+    clearStorage
   }
 }

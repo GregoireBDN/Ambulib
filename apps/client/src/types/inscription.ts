@@ -12,27 +12,21 @@ export interface EmergencyContact {
   relation: string
 }
 
-// Données non-sensibles (stockage local chiffré autorisé)
-export interface BasicFormData {
-  // Étape 1 : Identité basique
+// Interface complète des données du formulaire d'inscription
+export interface FormData {
+  // Étape 1 : Identité
   firstName: string
   lastName: string
   birthDate: string
   phone: string
   address: Address
 
-  // Étape 2 : Compte (non-médical)
+  // Étape 2 : Compte
   email: string
   password: string
   confirmPassword: string
 
-  // Étape 4 : Finalisation
-  acceptTerms: boolean
-}
-
-// Données sensibles médicales (stockage serveur uniquement)
-export interface SensitiveFormData {
-  // Étape 3 : Informations Médicales SENSIBLES
+  // Étape 3 : Informations médicales
   socialSecurity?: string
   allergies?: string
   medications?: string
@@ -41,12 +35,10 @@ export interface SensitiveFormData {
   doctorName?: string
   doctorPhone?: string
 
-  // Contact d'urgence (contient données médicales)
+  // Étape 4 : Contact d'urgence et finalisation
   emergencyContact: EmergencyContact
+  acceptTerms: boolean
 }
-
-// Interface complète (union des deux)
-export interface FormData extends BasicFormData, SensitiveFormData {}
 
 export interface FormStep {
   id: string
