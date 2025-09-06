@@ -6,7 +6,6 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { AdminModule } from './admin/admin.module';
 import { BookingModule } from './booking/booking.module';
-import { FormDraftModule } from './form-draft/form-draft.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -15,7 +14,6 @@ import { ConfigModule } from '@nestjs/config';
     UserModule,
     AdminModule,
     BookingModule,
-    FormDraftModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
