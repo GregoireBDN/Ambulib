@@ -35,8 +35,29 @@ export default function ConnexionPage() {
       // Le middleware se chargera de la redirection automatiquement
       // On peut forcer un refresh de la page si nécessaire
       window.location.href = redirectPath
-    } catch {
-      setError("Identifiants incorrects. Vérifiez votre email et mot de passe.")
+    } catch (error: any) {
+      console.error("Erreur connexion:", error)
+      
+      // Gestion spécifique des erreurs
+      if (error?.message?.includes('User not found') || 
+          error?.message?.includes('not found')) {
+        setError("Aucun compte trouvé avec cette adresse email. Vérifiez votre email ou créez un compte.")
+      } else if (error?.message?.includes('invalid') || 
+                 error?.message?.includes('password') ||
+                 error?.message?.includes('credentials')) {
+        setError("Mot de passe incorrect. Vérifiez votre mot de passe ou utilisez 'Mot de passe oublié'.")
+      } else if (error?.message?.includes('network') || 
+                 error?.message?.includes('fetch')) {
+        setError("Problème de connexion. Vérifiez votre connexion internet et réessayez.")
+      } else if (error?.message?.includes('blocked') ||
+                 error?.message?.includes('suspended')) {
+        setError("Votre compte a été suspendu. Contactez le support pour plus d'informations.")
+      } else {
+        setError("Identifiants incorrects. Vérifiez votre email et mot de passe.")
+      }
+      
+      // Faire défiler la page vers le haut en cas d'erreur
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
@@ -46,7 +67,7 @@ export default function ConnexionPage() {
 
   return (
     <PublicLayout>
-      <main className="container mx-auto px-4 py-8 max-w-md">
+      <main className="container mx-auto px-4 py-8 max-w-2xl">
         <div className="space-y-8">
           {/* Logo centré */}
           <div className="text-center">
@@ -74,9 +95,19 @@ export default function ConnexionPage() {
                   <div 
                     id="login-error"
                     role="alert"
-                    className="bg-red-50 border border-red-200 rounded-md p-3"
+                    className="bg-red-50 border border-red-200 rounded-lg p-4 mb-2"
                   >
-                    <p className="text-red-700 text-sm">{error}</p>
+                    <div className="flex items-start gap-3">
+                      <div className="text-red-500 text-xl flex-shrink-0">⚠️</div>
+                      <div>
+                        <h3 className="text-red-800 font-semibold text-base mb-1">
+                          Erreur de connexion
+                        </h3>
+                        <p className="text-red-700 text-base">
+                          {error}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 )}
 
