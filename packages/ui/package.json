@@ -18,10 +18,11 @@
   },
   "scripts": {
     "dev": "concurrently \"tsc --watch\" \"pnpm dev:styles\" \"pnpm storybook\"",
+    "dev:full": "concurrently \"tsc --watch\" \"pnpm dev:styles\" \"pnpm storybook\"",
     "dev:styles": "npx tailwindcss --config ./tailwind.config.ts --input ./src/styles.css --output ./dist/styles.css --watch",
     "build": "concurrently \"tsc\" \"pnpm build:styles\"",
     "build:styles": "npx tailwindcss --config ./tailwind.config.ts --input ./src/styles.css --output ./dist/styles.css --minify",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "storybook dev -p 6006 --no-open",
     "storybook:build": "storybook build",
     "storybook:serve": "npx serve storybook-static -p 6006",
     "test": "jest --passWithNoTests",
