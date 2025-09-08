@@ -53,8 +53,15 @@ export const Step2Schema = z.object({
   path: ["confirmPassword"]
 })
 
-// Schéma Étape 3 : Informations Médicales (optionnelles)
+// Schéma Étape 3 : Vérification Email
 export const Step3Schema = z.object({
+  emailVerified: z.boolean()
+    .refine((val: boolean) => val === true, "L'email doit être vérifié"),
+  verificationCode: z.string().optional().or(z.literal(""))
+})
+
+// Schéma Étape 4 : Informations Médicales (optionnelles)
+export const Step4Schema = z.object({
   socialSecurity: z.string()
     .regex(/^\d{15}$/, "Le numéro de sécurité sociale doit contenir 15 chiffres")
     .optional()
@@ -84,8 +91,8 @@ export const Step3Schema = z.object({
     .or(z.literal(""))
 })
 
-// Schéma Étape 4 : Contact d'Urgence & Finalisation
-export const Step4Schema = z.object({
+// Schéma Étape 5 : Contact d'Urgence & Finalisation
+export const Step5Schema = z.object({
   emergencyContact: EmergencyContactSchema,
   acceptTerms: z.boolean()
     .refine((val: boolean) => val === true, "Vous devez accepter les conditions d'utilisation")
@@ -111,6 +118,7 @@ export const FullFormSchema = Step1Schema
   .merge(Step2BaseSchema)
   .merge(Step3Schema)
   .merge(Step4Schema)
+  .merge(Step5Schema)
   .refine((data: any) => data.password === data.confirmPassword, {
     message: "Les mots de passe ne correspondent pas",
     path: ["confirmPassword"]
@@ -121,6 +129,7 @@ export type Step1Data = z.infer<typeof Step1Schema>
 export type Step2Data = z.infer<typeof Step2Schema>
 export type Step3Data = z.infer<typeof Step3Schema>
 export type Step4Data = z.infer<typeof Step4Schema>
+export type Step5Data = z.infer<typeof Step5Schema>
 export type FullFormData = z.infer<typeof FullFormSchema>
 
 // Fonction utilitaire pour valider une étape spécifique
@@ -134,6 +143,8 @@ export const validateStep = (step: number, data: any) => {
       return Step3Schema.safeParse(data)
     case 4:
       return Step4Schema.safeParse(data)
+    case 5:
+      return Step5Schema.safeParse(data)
     default:
       throw new Error(`Étape invalide: ${step}`)
   }

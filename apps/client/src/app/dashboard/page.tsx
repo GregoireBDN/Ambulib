@@ -49,25 +49,25 @@ export default function DashboardPage() {
         {/* Grille principale du dashboard */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           
-          {/* Réservations à venir */}
-          <Card>
+          {/* Trajets à planifier */}
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push("/dashboard/trajets")}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                🚑 Réservations à venir
+                🚑 Trajets
               </CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                Aucune réservation prévue
+                Planifiez vos prochains transports médicaux
               </p>
               <Button className="w-full">
-                Nouvelle réservation
+                Gérer les trajets
               </Button>
             </CardContent>
           </Card>
 
           {/* Historique des trajets */}
-          <Card>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push("/dashboard/historique")}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 📋 Historique
@@ -75,7 +75,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                Vos derniers trajets médicaux
+                Consultez l'historique de tous vos trajets passés
               </p>
               <Button variant="outline" className="w-full">
                 Voir l'historique
@@ -84,7 +84,7 @@ export default function DashboardPage() {
           </Card>
 
           {/* Informations médicales */}
-          <Card>
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push("/dashboard/medical")}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 🏥 Dossier médical
@@ -92,7 +92,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <p className="text-muted-foreground mb-4">
-                Informations de santé sécurisées
+                Centralisez vos documents médicaux, ordonnances et informations de santé
               </p>
               <Button variant="outline" className="w-full">
                 Gérer le dossier
@@ -129,6 +129,41 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
 
+          {/* Documents administratifs */}
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push("/dashboard/documents")}>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                📄 Documents
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground mb-4">
+                Gérez vos papiers administratifs, carte de mutuelle et bons de transport
+              </p>
+              <Button variant="outline" className="w-full">
+                Voir documents
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Personnes à charge */}
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => router.push("/dashboard/dependants")}>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                👥 Personnes à charge
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground mb-4">
+                Gérez les informations et trajets de vos proches et personnes à charge
+              </p>
+              <Button variant="outline" className="w-full">
+                Gérer dépendants
+              </Button>
+            </CardContent>
+          </Card>
+
+
         </div>
 
         {/* Informations du compte */}
@@ -150,11 +185,11 @@ export default function DashboardPage() {
                 <div>
                   <h3 className="font-semibold mb-2">Actions</h3>
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => router.push("/dashboard/profil")}>
                       Modifier le profil
                     </Button>
-                    <Button variant="outline" size="sm">
-                      Changer le mot de passe
+                    <Button variant="outline" size="sm" onClick={() => router.push("/dashboard/support")}>
+                      Support et aide
                     </Button>
                   </div>
                 </div>
