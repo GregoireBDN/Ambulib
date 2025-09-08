@@ -152,7 +152,7 @@ export default function ConnexionPage() {
                 <button 
                   type="button"
                   className="text-primary hover:underline text-sm"
-                  onClick={() => {/* TODO: Implement password reset */}}
+                  onClick={() => router.push("/auth/mot-de-passe-oublie")}
                 >
                   Mot de passe oublié ?
                 </button>
