@@ -21,3 +21,4 @@ export { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, Comma
 export { Popover, PopoverContent, PopoverTrigger } from "./popover"
 export { Combobox, type ComboboxItem, type ComboboxProps } from "./combobox"
 export { AddressCombobox, type AddressComboboxProps } from "./address-combobox"
+export { Progress } from "./progress"
