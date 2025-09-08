@@ -18,6 +18,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
 import { RolesGuard } from './guards/roles/roles.guard';
 import { TenantGuard } from './guards/tenant/tenant.guard';
+import { EmailVerificationService } from './email-verification.service';
+import { PasswordResetService } from './password-reset.service';
 @Module({
   imports: [
     JwtModule.registerAsync(jwtConfig.asProvider()),
@@ -36,6 +38,8 @@ import { TenantGuard } from './guards/tenant/tenant.guard';
     RefreshStrategy,
     GoogleStrategy,
     TenantGuard,
+    EmailVerificationService,
+    PasswordResetService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
