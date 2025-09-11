@@ -20,7 +20,7 @@ jobs:
           node-version: '18'
           cache: 'pnpm'
       - run: pnpm install --no-frozen-lockfile --shamefully-hoist
-      - run: cd apps/api && PRISMA_QUERY_ENGINE_BINARY=native npx prisma generate
+      - run: cd apps/api && npx prisma generate
       - run: pnpm test
 
   lint:
