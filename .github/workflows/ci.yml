@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: '18'
           cache: 'pnpm'
-      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm install --no-frozen-lockfile --shamefully-hoist
       - run: cd apps/api && PRISMA_QUERY_ENGINE_BINARY=native npx prisma generate
       - run: pnpm test
 
@@ -35,7 +35,7 @@ jobs:
         with:
           node-version: '18'
           cache: 'pnpm'
-      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm install --no-frozen-lockfile --shamefully-hoist
       - run: pnpm lint
 
   typecheck:
@@ -50,5 +50,5 @@ jobs:
         with:
           node-version: '18'
           cache: 'pnpm'
-      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm install --no-frozen-lockfile --shamefully-hoist
       - run: pnpm check-types
