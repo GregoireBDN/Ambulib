@@ -469,7 +469,7 @@ importers:
         version: 9.26.0(jiti@2.5.1)
       jest:
         specifier: ^29.7.0
-        version: 29.7.0(@types/node@22.15.17)
+        version: 29.7.0(@types/node@22.15.17)(ts-node@10.9.2(@swc/core@1.11.24)(@types/node@22.15.17)(typescript@5.8.3))
       jest-environment-jsdom:
         specifier: ^29.7.0
         version: 29.7.0
@@ -481,7 +481,7 @@ importers:
         version: 19.0.0
       ts-jest:
         specifier: ^29.1.0
-        version: 29.3.2(@babel/core@7.27.1)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.27.1))(esbuild@0.25.4)(jest@29.7.0(@types/node@22.15.17))(typescript@5.8.3)
+        version: 29.3.2(@babel/core@7.27.1)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.27.1))(esbuild@0.25.4)(jest@29.7.0(@types/node@22.15.17)(ts-node@10.9.2(@swc/core@1.11.24)(@types/node@22.15.17)(typescript@5.8.3)))(typescript@5.8.3)
       tsup:
         specifier: ^8.3.5
         version: 8.5.0(@swc/core@1.11.24)(jiti@2.5.1)(postcss@8.5.6)(typescript@5.8.3)(yaml@2.7.1)
@@ -538,6 +538,9 @@ importers:
       '@radix-ui/react-popover':
         specifier: ^1.1.15
         version: 1.1.15(@types/react-dom@19.1.7(@types/react@19.0.14))(@types/react@19.0.14)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@radix-ui/react-progress':
+        specifier: ^1.1.7
+        version: 1.1.7(@types/react-dom@19.1.7(@types/react@19.0.14))(@types/react@19.0.14)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@radix-ui/react-slot':
         specifier: ^1.2.3
         version: 1.2.3(@types/react@19.0.14)(react@19.0.0)
@@ -670,7 +673,7 @@ importers:
         version: 5.2.0(eslint@9.26.0(jiti@2.5.1))
       jest:
         specifier: ^29.7.0
-        version: 29.7.0(@types/node@24.2.0)
+        version: 29.7.0(@types/node@24.2.0)(ts-node@10.9.2(@swc/core@1.11.24)(@types/node@24.2.0)(typescript@5.8.3))
       jest-axe:
         specifier: ^10.0.0
         version: 10.0.0
@@ -682,7 +685,7 @@ importers:
         version: 8.6.14(prettier@3.5.3)
       ts-jest:
         specifier: ^29.4.1
-        version: 29.4.1(@babel/core@7.27.1)(@jest/transform@29.7.0)(@jest/types@30.0.5)(babel-jest@29.7.0(@babel/core@7.27.1))(esbuild@0.25.4)(jest-util@30.0.5)(jest@29.7.0(@types/node@24.2.0))(typescript@5.8.3)
+        version: 29.4.1(@babel/core@7.27.1)(@jest/transform@29.7.0)(@jest/types@30.0.5)(babel-jest@29.7.0(@babel/core@7.27.1))(esbuild@0.25.4)(jest-util@30.0.5)(jest@29.7.0(@types/node@24.2.0)(ts-node@10.9.2(@swc/core@1.11.24)(@types/node@24.2.0)(typescript@5.8.3)))(typescript@5.8.3)
       typescript:
         specifier: ~5.8.3
         version: 5.8.3
@@ -3285,6 +3288,19 @@ packages:
 
   '@radix-ui/react-primitive@2.1.3':
     resolution: {integrity: sha512-m9gTwRkhy2lvCPe6QJp4d3G1TYEUHn/FzJUtq9MjH46an1wJU+GdoGC5VLof8RX8Ft/DlpshApkhswDLZzHIcQ==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+
+  '@radix-ui/react-progress@1.1.7':
+    resolution: {integrity: sha512-vPdg/tF6YC/ynuBIJlk1mm7Le0VgW6ub6J2UWnTQ7/D23KXcPI1qy+0vBkgKgd38RCMJavBXpB83HPNFMTb0Fg==}
     peerDependencies:
       '@types/react': '*'
       '@types/react-dom': '*'
@@ -14027,6 +14043,16 @@ snapshots:
       '@types/react': 19.0.14
       '@types/react-dom': 19.1.7(@types/react@19.0.14)
 
+  '@radix-ui/react-progress@1.1.7(@types/react-dom@19.1.7(@types/react@19.0.14))(@types/react@19.0.14)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+    dependencies:
+      '@radix-ui/react-context': 1.1.2(@types/react@19.0.14)(react@19.0.0)
+      '@radix-ui/react-primitive': 2.1.3(@types/react-dom@19.1.7(@types/react@19.0.14))(@types/react@19.0.14)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+    optionalDependencies:
+      '@types/react': 19.0.14
+      '@types/react-dom': 19.1.7(@types/react@19.0.14)
+
   '@radix-ui/react-roving-focus@1.1.10(@types/react-dom@19.1.7(@types/react@19.0.14))(@types/react@19.0.14)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@radix-ui/primitive': 1.1.2
@@ -19065,25 +19091,6 @@ snapshots:
       - babel-plugin-macros
       - supports-color
 
-  jest-cli@29.7.0(@types/node@22.15.17):
-    dependencies:
-      '@jest/core': 29.7.0(ts-node@10.9.2(@swc/core@1.11.24)(@types/node@22.15.17)(typescript@5.8.3))
-      '@jest/test-result': 29.7.0
-      '@jest/types': 29.6.3
-      chalk: 4.1.2
-      create-jest: 29.7.0(@types/node@22.15.17)(ts-node@10.9.2(@swc/core@1.11.24)(@types/node@22.15.17)(typescript@5.8.3))
-      exit: 0.1.2
-      import-local: 3.2.0
-      jest-config: 29.7.0(@types/node@22.15.17)(ts-node@10.9.2(@swc/core@1.11.24)(@types/node@22.15.17)(typescript@5.8.3))
-      jest-util: 29.7.0
-      jest-validate: 29.7.0
-      yargs: 17.7.2
-    transitivePeerDependencies:
-      - '@types/node'
-      - babel-plugin-macros
-      - supports-color
-      - ts-node
-
   jest-cli@29.7.0(@types/node@22.15.17)(ts-node@10.9.2(@swc/core@1.11.24)(@types/node@22.15.17)(typescript@5.8.3)):
     dependencies:
       '@jest/core': 29.7.0(ts-node@10.9.2(@swc/core@1.11.24)(@types/node@22.15.17)(typescript@5.8.3))
@@ -19567,18 +19574,6 @@ snapshots:
       jest-util: 29.7.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
-
-  jest@29.7.0(@types/node@22.15.17):
-    dependencies:
-      '@jest/core': 29.7.0(ts-node@10.9.2(@swc/core@1.11.24)(@types/node@22.15.17)(typescript@5.8.3))
-      '@jest/types': 29.6.3
-      import-local: 3.2.0
-      jest-cli: 29.7.0(@types/node@22.15.17)
-    transitivePeerDependencies:
-      - '@types/node'
-      - babel-plugin-macros
-      - supports-color
-      - ts-node
 
   jest@29.7.0(@types/node@22.15.17)(ts-node@10.9.2(@swc/core@1.11.24)(@types/node@22.15.17)(typescript@5.8.3)):
     dependencies:
@@ -22773,26 +22768,26 @@ snapshots:
       babel-jest: 29.7.0(@babel/core@7.27.1)
       esbuild: 0.25.4
 
-  ts-jest@29.3.2(@babel/core@7.27.1)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.27.1))(esbuild@0.25.4)(jest@29.7.0(@types/node@22.15.17))(typescript@5.8.3):
+  ts-jest@29.4.1(@babel/core@7.27.1)(@jest/transform@29.7.0)(@jest/types@30.0.5)(babel-jest@29.7.0(@babel/core@7.27.1))(esbuild@0.25.4)(jest-util@30.0.5)(jest@29.7.0(@types/node@24.2.0)(ts-node@10.9.2(@swc/core@1.11.24)(@types/node@24.2.0)(typescript@5.8.3)))(typescript@5.8.3):
     dependencies:
       bs-logger: 0.2.6
-      ejs: 3.1.10
       fast-json-stable-stringify: 2.1.0
-      jest: 29.7.0(@types/node@22.15.17)
-      jest-util: 29.7.0
+      handlebars: 4.7.8
+      jest: 29.7.0(@types/node@24.2.0)(ts-node@10.9.2(@swc/core@1.11.24)(@types/node@24.2.0)(typescript@5.8.3))
       json5: 2.2.3
       lodash.memoize: 4.1.2
       make-error: 1.3.6
-      semver: 7.7.1
+      semver: 7.7.2
       type-fest: 4.41.0
       typescript: 5.8.3
       yargs-parser: 21.1.1
     optionalDependencies:
       '@babel/core': 7.27.1
       '@jest/transform': 29.7.0
-      '@jest/types': 29.6.3
+      '@jest/types': 30.0.5
       babel-jest: 29.7.0(@babel/core@7.27.1)
       esbuild: 0.25.4
+      jest-util: 30.0.5
 
   ts-jest@29.4.1(@babel/core@7.27.1)(@jest/transform@29.7.0)(@jest/types@30.0.5)(babel-jest@29.7.0(@babel/core@7.27.1))(esbuild@0.25.4)(jest-util@30.0.5)(jest@29.7.0(@types/node@24.2.0))(typescript@5.8.3):
     dependencies:

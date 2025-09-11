@@ -1,15 +1,15 @@
-import * as React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import { StatsCard, StatsGrid } from './StatsCard'
+import type { StatData } from './StatsCard'
 
 const meta: Meta<typeof StatsCard> = {
-  title: "Business/StatsCard",
+  title: 'Business/StatsCard',
   component: StatsCard,
   parameters: {
-    layout: 'centered',
+    layout: 'padded',
     docs: {
       description: {
-        component: 'Composant de carte statistique pour afficher des métriques importantes dans les dashboards HavRid. Supporte différents variants, tendances et états de chargement.',
+        component: 'Composant de statistiques médicales optimisé pour les tableaux de bord HavRid. Supporte les couleurs OKLCH, les icônes contextuelles et les formatters spécialisés.',
       },
     },
   },
@@ -17,308 +17,317 @@ const meta: Meta<typeof StatsCard> = {
   argTypes: {
     stat: {
       description: 'Données de la statistique à afficher',
-      control: 'object',
     },
     loading: {
+      description: 'Affiche un skeleton de chargement',
       control: 'boolean',
-      description: 'État de chargement',
     },
     onClick: {
+      description: 'Callback appelé au clic sur la card',
       action: 'clicked',
-      description: 'Callback appelé lors du clic sur la carte',
     },
   },
 }
 
 export default meta
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<typeof StatsCard>
 
-// Stories pour StatsCard
+// Données d'exemple pour les stories médicales
+const interventionsData: StatData = {
+  title: "Interventions aujourd'hui",
+  value: 12,
+  valueType: 'number',
+  status: 'success',
+  icon: 'ambulance',
+  trend: {
+    direction: 'up',
+    value: '+3',
+    period: 'vs hier'
+  },
+  contextualInfo: 'Objectif: 15 interventions/jour'
+}
 
-export const Default: Story = {
+const responseTimeData: StatData = {
+  title: 'Temps de réponse moyen',
+  value: 8.5,
+  valueType: 'duration',
+  status: 'warning',
+  icon: 'clock',
+  trend: {
+    direction: 'down',
+    value: '-2 min',
+    period: 'cette semaine'
+  },
+  contextualInfo: 'Objectif: < 8 minutes',
+  threshold: {
+    warning: 8,
+    critical: 12
+  }
+}
+
+const revenueData: StatData = {
+  title: 'Revenus du jour',
+  value: 2450,
+  valueType: 'currency',
+  status: 'info',
+  icon: 'euro',
+  trend: {
+    direction: 'up',
+    value: '12%',
+    period: 'vs semaine dernière'
+  }
+}
+
+const availableAmbulancesData: StatData = {
+  title: 'Ambulances disponibles',
+  value: 3,
+  valueType: 'number',
+  status: 'critical',
+  icon: 'ambulance',
+  contextualInfo: 'Sur 8 véhicules total',
+  description: 'Alerte: Capacité faible',
+  action: {
+    label: 'Voir planning',
+    onClick: () => alert('Redirection vers le planning')
+  },
+  threshold: {
+    warning: 4,
+    critical: 2
+  }
+}
+
+// Stories individuelles
+export const InterventionsSuccess: Story = {
   args: {
-    stat: {
-      title: "Trajets effectués",
-      value: 45,
-      subtitle: "+12 ce mois",
-      trend: "up",
-      variant: "default",
-      icon: "🚑"
-    },
+    stat: interventionsData,
   },
 }
 
+export const ResponseTimeWarning: Story = {
+  args: {
+    stat: responseTimeData,
+  },
+}
+
+export const RevenueCurrency: Story = {
+  args: {
+    stat: revenueData,
+  },
+}
+
+export const AmbulancesCritical: Story = {
+  args: {
+    stat: availableAmbulancesData,
+  },
+}
+
+// État de chargement
 export const Loading: Story = {
   args: {
-    stat: {
-      title: "Trajets effectués",
-      value: 45
-    },
+    stat: interventionsData,
     loading: true,
   },
-  parameters: {
-    docs: {
-      description: {
-        story: 'État de chargement avec animation skeleton',
-      },
-    },
-  },
 }
 
-export const Success: Story = {
-  args: {
-    stat: {
-      title: "Profil médical",
-      value: "100%",
-      subtitle: "Complet",
-      trend: "up",
-      variant: "success",
-      icon: "✅",
-      change: "+20%"
-    },
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Variant succès pour les métriques positives',
-      },
-    },
-  },
-}
-
-export const Warning: Story = {
-  args: {
-    stat: {
-      title: "Documents manquants",
-      value: 3,
-      subtitle: "À compléter",
-      trend: "neutral",
-      variant: "warning",
-      icon: "⚠️",
-      description: "Carte d'identité, prescription médicale"
-    },
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Variant avertissement pour attirer l\'attention',
-      },
-    },
-  },
-}
-
-export const Destructive: Story = {
-  args: {
-    stat: {
-      title: "Trajets annulés",
-      value: 2,
-      subtitle: "Cette semaine",
-      trend: "down",
-      variant: "destructive",
-      icon: "❌",
-      change: "+1"
-    },
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Variant destructif pour les métriques critiques',
-      },
-    },
-  },
-}
-
-// Stories contextuelles médicales
-
-export const MedicalAppointments: Story = {
-  args: {
-    stat: {
-      title: "Rendez-vous à venir",
-      value: 8,
-      subtitle: "Prochain demain",
-      trend: "up",
-      variant: "default",
-      icon: "📅",
-      change: "+2",
-      description: "2 contrôles, 4 spécialistes, 2 urgences"
-    },
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Exemple pour le suivi des rendez-vous médicaux',
-      },
-    },
-  },
-}
-
-export const EmergencyResponse: Story = {
-  args: {
-    stat: {
-      title: "Temps de réponse moyen",
-      value: "8 min",
-      subtitle: "Sous la limite",
-      trend: "up",
-      variant: "success",
-      icon: "🚨",
-      change: "-2 min"
-    },
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Suivi des performances d\'intervention d\'urgence',
-      },
-    },
-  },
-}
-
-export const PatientSatisfaction: Story = {
-  args: {
-    stat: {
-      title: "Satisfaction patient",
-      value: "4.8/5",
-      subtitle: "Excellent",
-      trend: "up",
-      variant: "success",
-      icon: "⭐",
-      change: "+0.2",
-      description: "Basé sur 156 avis ce mois"
-    },
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Mesure de satisfaction des patients transportés',
-      },
-    },
-  },
-}
-
-export const FleetUtilization: Story = {
-  args: {
-    stat: {
-      title: "Utilisation flotte",
-      value: "78%",
-      subtitle: "Bon niveau",
-      trend: "neutral",
-      variant: "default",
-      icon: "🚑",
-      change: "+5%",
-      description: "12/15 ambulances actives"
-    },
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Taux d\'utilisation de la flotte d\'ambulances',
-      },
-    },
-  },
-}
-
-// Stories pour StatsGrid
-
-const medicalStats = [
-  {
-    title: "Trajets effectués",
-    value: 156,
-    subtitle: "+23 ce mois",
-    trend: "up" as const,
-    variant: "default" as const,
-    icon: "🚑",
-    change: "+18%"
-  },
-  {
-    title: "Profil médical",
-    value: "85%",
-    subtitle: "À compléter",
-    trend: "neutral" as const,
-    variant: "warning" as const,
-    icon: "🏥",
-    change: "+10%"
-  },
-  {
-    title: "Satisfaction",
-    value: "4.9/5",
-    subtitle: "Excellent",
-    trend: "up" as const,
-    variant: "success" as const,
-    icon: "⭐",
-    change: "+0.1"
-  },
-  {
-    title: "Temps réponse",
-    value: "6 min",
-    subtitle: "Optimal",
-    trend: "up" as const,
-    variant: "success" as const,
-    icon: "⚡",
-    change: "-1 min"
-  }
-]
-
-export const StatsGridExample: Story = {
+// Tous les statuts
+export const AllStatuses: StoryObj<typeof StatsGrid> = {
   render: () => (
-    <div className="w-full max-w-4xl">
-      <StatsGrid stats={medicalStats} columns={4} />
+    <StatsGrid
+      stats={[
+        {
+          title: 'Status Normal',
+          value: 42,
+          status: 'normal',
+          icon: 'activity',
+        },
+        {
+          title: 'Status Success',
+          value: 98,
+          valueType: 'percentage',
+          status: 'success',
+          icon: 'activity',
+        },
+        {
+          title: 'Status Warning',
+          value: 15,
+          valueType: 'duration',
+          status: 'warning',
+          icon: 'clock',
+        },
+        {
+          title: 'Status Critical',
+          value: 2,
+          valueType: 'number',
+          status: 'critical',
+          icon: 'alert',
+        },
+        {
+          title: 'Status Info',
+          value: 1250,
+          valueType: 'currency',
+          status: 'info',
+          icon: 'euro',
+        },
+      ]}
+      columns={3}
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Démonstration des 5 statuts disponibles avec les couleurs OKLCH.',
+      },
+    },
+  },
+}
+
+// Types de valeurs
+export const ValueTypes: StoryObj<typeof StatsGrid> = {
+  render: () => (
+    <StatsGrid
+      stats={[
+        {
+          title: 'Nombre',
+          value: 1234,
+          valueType: 'number',
+          icon: 'users',
+        },
+        {
+          title: 'Devise',
+          value: 2450.50,
+          valueType: 'currency',
+          icon: 'euro',
+        },
+        {
+          title: 'Pourcentage',
+          value: 87.5,
+          valueType: 'percentage',
+          icon: 'activity',
+        },
+        {
+          title: 'Durée',
+          value: 12.5,
+          valueType: 'duration',
+          icon: 'clock',
+        },
+        {
+          title: 'Distance',
+          value: 156.8,
+          valueType: 'distance',
+          icon: 'map',
+        },
+        {
+          title: 'Texte custom',
+          value: 'Excellent',
+          icon: 'activity',
+        },
+      ]}
+      columns={3}
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Démonstration des différents types de formatage de valeurs.',
+      },
+    },
+  },
+}
+
+// Dashboard complet HavRid
+export const HavRidDashboard: StoryObj<typeof StatsGrid> = {
+  render: () => (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-lg font-semibold mb-4">Tableau de bord ambulancier</h2>
+        <StatsGrid
+          stats={[
+            interventionsData,
+            responseTimeData,
+            revenueData,
+            availableAmbulancesData,
+            {
+              title: 'Patients transportés',
+              value: 28,
+              valueType: 'number',
+              status: 'success',
+              icon: 'users',
+              trend: {
+                direction: 'stable',
+                value: '0',
+                period: 'vs hier'
+              }
+            },
+            {
+              title: 'Distance parcourue',
+              value: 186,
+              valueType: 'distance',
+              status: 'normal',
+              icon: 'map',
+              trend: {
+                direction: 'up',
+                value: '+15 km',
+                period: 'aujourd\'hui'
+              }
+            },
+            {
+              title: 'Taux de satisfaction',
+              value: 94.2,
+              valueType: 'percentage',
+              status: 'success',
+              icon: 'activity',
+              trend: {
+                direction: 'up',
+                value: '+2.1%',
+                period: 'ce mois'
+              }
+            },
+            {
+              title: 'Alertes actives',
+              value: 1,
+              status: 'warning',
+              icon: 'alert',
+              contextualInfo: 'Véhicule en maintenance',
+              action: {
+                label: 'Voir alertes',
+                onClick: () => alert('Vue des alertes')
+              }
+            }
+          ]}
+          columns={4}
+        />
+      </div>
     </div>
   ),
   parameters: {
     docs: {
       description: {
-        story: 'Grille de statistiques pour dashboard médical complet',
+        story: 'Exemple complet d\'un dashboard HavRid avec métriques médicales réalistes.',
       },
     },
   },
 }
 
-export const StatsGridLoading: Story = {
+// Test responsive
+export const ResponsiveGrid: StoryObj<typeof StatsGrid> = {
   render: () => (
-    <div className="w-full max-w-4xl">
-      <StatsGrid stats={[]} loading={true} columns={4} />
+    <div className="space-y-4">
+      <p className="text-sm text-muted-foreground">
+        Redimensionnez la fenêtre pour voir l'adaptation responsive
+      </p>
+      <StatsGrid
+        stats={[interventionsData, responseTimeData, revenueData, availableAmbulancesData]}
+        columns={4}
+      />
     </div>
   ),
   parameters: {
+    viewport: {
+      defaultViewport: 'mobile1',
+    },
     docs: {
       description: {
-        story: 'État de chargement de la grille de statistiques',
-      },
-    },
-  },
-}
-
-export const StatsGrid2Columns: Story = {
-  render: () => (
-    <div className="w-full max-w-2xl">
-      <StatsGrid stats={medicalStats.slice(0, 2)} columns={2} />
-    </div>
-  ),
-  parameters: {
-    docs: {
-      description: {
-        story: 'Grille 2 colonnes pour interfaces plus compactes',
-      },
-    },
-  },
-}
-
-export const Clickable: Story = {
-  args: {
-    stat: {
-      title: "Voir les trajets",
-      value: 45,
-      subtitle: "Cliquez pour détails",
-      trend: "up",
-      variant: "default",
-      icon: "👆"
-    },
-    onClick: () => alert('Statistique cliquée!')
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: 'Carte statistique cliquable avec effet hover',
+        story: 'Test de l\'adaptation responsive sur différentes tailles d\'écran.',
       },
     },
   },

@@ -121,7 +121,7 @@ export function AddressCombobox({
         }
       }
     }
-  }, [value, initialAddressData]); // Supprimé selectedValue et selectedAddressData des dépendances
+  }, [value, initialAddressData, selectedValue]); // Ajouté selectedValue dans les dépendances
   
   // Sélection d'adresse
   const handleSelect = (addressId: string) => {

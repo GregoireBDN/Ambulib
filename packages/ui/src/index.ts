@@ -27,20 +27,19 @@ export { Progress } from "./components/ui/progress"
 export { 
   StatsCard, 
   StatsGrid, 
-  ProgressProfile, 
-  ActionPanel,
+  ProgressProfile,
   type StatData,
+  type StatStatus,
+  type StatValueType,
+  type StatTrendDirection,
+  type MedicalIconType,
   type StatTrend,
-  type StatVariant,
+  type StatThreshold,
+  type StatAction,
   type StatsCardProps,
   type StatsGridProps,
   type ProfileField,
-  type ProgressProfileProps,
-  type ActionItem,
-  type ActionGroup,
-  type ActionVariant,
-  type ActionSize,
-  type ActionPanelProps
+  type ProgressProfileProps
 } from "./components/business"
 
 // Accessible Components have been moved to @repo/ui-accessible package

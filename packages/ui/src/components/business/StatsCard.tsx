@@ -3,20 +3,54 @@
 import * as React from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { Badge } from "../ui/badge"
+import { Button } from "../ui/button"
 import { cn } from "../../lib/utils"
+import { 
+  TrendingUp, 
+  TrendingDown, 
+  Minus,
+  Ambulance,
+  Hospital,
+  Clock,
+  Users,
+  Euro,
+  Activity,
+  MapPin,
+  AlertTriangle
+} from "lucide-react"
 
-export type StatTrend = "up" | "down" | "neutral"
-export type StatVariant = "default" | "success" | "warning" | "destructive"
+export type StatStatus = "normal" | "success" | "warning" | "critical" | "info"
+export type StatValueType = "number" | "currency" | "percentage" | "duration" | "distance"
+export type StatTrendDirection = "up" | "down" | "stable"
+export type MedicalIconType = "ambulance" | "hospital" | "clock" | "users" | "euro" | "activity" | "map" | "alert"
+
+export interface StatTrend {
+  direction: StatTrendDirection
+  value?: string
+  period?: string
+}
+
+export interface StatThreshold {
+  warning: number
+  critical: number
+}
+
+export interface StatAction {
+  label: string
+  onClick: () => void
+}
 
 export interface StatData {
   title: string
   value: string | number
-  subtitle?: string
+  valueType?: StatValueType
+  status?: StatStatus
   trend?: StatTrend
-  variant?: StatVariant
-  icon?: string
-  change?: string
+  icon?: MedicalIconType | React.ReactNode
+  contextualInfo?: string
   description?: string
+  action?: StatAction
+  threshold?: StatThreshold
 }
 
 export interface StatsCardProps {
@@ -26,46 +60,80 @@ export interface StatsCardProps {
   onClick?: () => void
 }
 
-const getTrendIcon = (trend: StatTrend) => {
-  switch (trend) {
-    case "up":
-      return "↗️"
-    case "down":
-      return "↘️"
-    case "neutral":
-    default:
-      return "→"
-  }
-}
+const medicalIcons = {
+  ambulance: Ambulance,
+  hospital: Hospital,
+  clock: Clock,
+  users: Users,
+  euro: Euro,
+  activity: Activity,
+  map: MapPin,
+  alert: AlertTriangle
+} as const
 
-const getVariantStyles = (variant: StatVariant) => {
-  switch (variant) {
-    case "success":
-      return "border-green-200 bg-green-50 hover:bg-green-100"
-    case "warning":
-      return "border-amber-200 bg-amber-50 hover:bg-amber-100"
-    case "destructive":
-      return "border-red-200 bg-red-50 hover:bg-red-100"
-    case "default":
-    default:
-      return "border-border bg-card hover:bg-accent/50"
-  }
-}
+const trendIcons = {
+  up: TrendingUp,
+  down: TrendingDown,
+  stable: Minus
+} as const
 
-const getTrendColor = (trend: StatTrend, variant: StatVariant) => {
-  if (variant === "destructive") return "text-red-600"
-  if (variant === "warning") return "text-amber-600"
-  if (variant === "success") return "text-green-600"
+const formatValue = (value: string | number, valueType?: StatValueType): string => {
+  if (typeof value === 'string') return value
   
-  switch (trend) {
+  switch (valueType) {
+    case 'currency':
+      return new Intl.NumberFormat('fr-FR', { 
+        style: 'currency', 
+        currency: 'EUR',
+        maximumFractionDigits: 0
+      }).format(value)
+    case 'percentage':
+      return `${value}%`
+    case 'duration':
+      return `${value} min`
+    case 'distance':
+      return `${value} km`
+    case 'number':
+      return new Intl.NumberFormat('fr-FR').format(value)
+    default:
+      return value.toString()
+  }
+}
+
+const getStatusStyles = (status: StatStatus) => {
+  switch (status) {
+    case "success":
+      return "bg-success-50 border-success-500/20 text-success-700 hover:bg-success-100"
+    case "warning":
+      return "bg-warning-50 border-warning-600/20 text-warning-700 hover:bg-warning-100"
+    case "critical":
+      return "bg-error-50 border-error-500/20 text-error-700 hover:bg-error-100"
+    case "info":
+      return "bg-primary-50 border-primary-500/20 text-primary-700 hover:bg-primary-100"
+    case "normal":
+    default:
+      return "bg-card border-border text-card-foreground hover:bg-accent/50"
+  }
+}
+
+const getTrendColor = (direction: StatTrendDirection) => {
+  switch (direction) {
     case "up":
-      return "text-green-600"
+      return "text-success-600"
     case "down":
-      return "text-red-600"
-    case "neutral":
+      return "text-error-600"
+    case "stable":
     default:
       return "text-muted-foreground"
   }
+}
+
+const getStatusFromThreshold = (value: number, threshold?: StatThreshold): StatStatus => {
+  if (!threshold) return "normal"
+  
+  if (value >= threshold.critical) return "critical"
+  if (value >= threshold.warning) return "warning"
+  return "success"
 }
 
 export function StatsCard({ 
@@ -77,27 +145,87 @@ export function StatsCard({
   const {
     title,
     value,
-    subtitle,
-    trend = "neutral",
-    variant = "default",
+    valueType,
+    status,
+    trend,
     icon,
-    change,
-    description
+    contextualInfo,
+    description,
+    action,
+    threshold
   } = stat
+
+  // Determine status from threshold if provided
+  const finalStatus = React.useMemo(() => {
+    if (status) return status
+    if (threshold && typeof value === 'number') {
+      return getStatusFromThreshold(value, threshold)
+    }
+    return "normal"
+  }, [status, value, threshold])
+
+  // Format the display value
+  const displayValue = formatValue(value, valueType)
+
+  // Render icon
+  const renderIcon = () => {
+    if (!icon) return null
+    
+    if (React.isValidElement(icon)) {
+      return icon
+    }
+    
+    if (typeof icon === 'string' && icon in medicalIcons) {
+      const IconComponent = medicalIcons[icon as MedicalIconType]
+      return <IconComponent className="h-4 w-4" />
+    }
+    
+    return null
+  }
+
+  // Render trend indicator
+  const renderTrend = () => {
+    if (!trend) return null
+    
+    const TrendIcon = trendIcons[trend.direction]
+    
+    return (
+      <Badge 
+        variant="outline" 
+        className={cn(
+          "text-xs font-medium gap-1",
+          getTrendColor(trend.direction)
+        )}
+      >
+        <TrendIcon className="h-3 w-3" aria-hidden="true" />
+        {trend.value && <span>{trend.value}</span>}
+        {trend.period && (
+          <span className="text-muted-foreground">{trend.period}</span>
+        )}
+        <span className="sr-only">
+          Tendance {trend.direction === 'up' ? 'à la hausse' : 
+                   trend.direction === 'down' ? 'à la baisse' : 'stable'}
+        </span>
+      </Badge>
+    )
+  }
 
   if (loading) {
     return (
       <Card className={cn("transition-all duration-200", className)}>
-        <CardHeader className="pb-2">
+        <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="h-4 bg-muted rounded w-24 animate-pulse" />
-            {icon && <div className="h-6 w-6 bg-muted rounded animate-pulse" />}
+            <div className="h-4 w-4 bg-muted rounded animate-pulse" />
           </div>
         </CardHeader>
-        <CardContent className="space-y-2">
-          <div className="h-8 bg-muted rounded w-16 animate-pulse" />
-          <div className="h-4 bg-muted rounded w-32 animate-pulse" />
-          {change && <div className="h-3 bg-muted rounded w-20 animate-pulse" />}
+        <CardContent className="space-y-3">
+          <div className="h-8 bg-muted rounded w-20 animate-pulse" />
+          <div className="flex items-center gap-2">
+            <div className="h-5 bg-muted rounded w-16 animate-pulse" />
+            <div className="h-4 bg-muted rounded w-12 animate-pulse" />
+          </div>
+          <div className="h-3 bg-muted rounded w-28 animate-pulse" />
         </CardContent>
       </Card>
     )
@@ -107,58 +235,59 @@ export function StatsCard({
     <Card 
       className={cn(
         "transition-all duration-200 hover:shadow-md",
-        getVariantStyles(variant),
-        onClick && "cursor-pointer hover:scale-105 active:scale-95",
+        getStatusStyles(finalStatus),
+        onClick && "cursor-pointer hover:scale-[1.02] active:scale-[0.98]",
         className
       )}
       onClick={onClick}
     >
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-medium text-muted-foreground">
+          <CardTitle className="text-sm font-medium text-muted-foreground truncate">
             {title}
           </CardTitle>
-          {icon && (
-            <span className="text-lg" aria-hidden="true">
-              {icon}
-            </span>
-          )}
+          {renderIcon()}
         </div>
       </CardHeader>
-      <CardContent className="space-y-1">
-        <div className="flex items-baseline gap-2">
+      
+      <CardContent className="space-y-3">
+        {/* Main value display */}
+        <div className="flex items-baseline justify-between gap-2">
           <span className="text-2xl font-bold tracking-tight">
-            {value}
+            {displayValue}
           </span>
-          {change && (
-            <Badge 
-              variant="outline" 
-              className={cn(
-                "text-xs font-medium",
-                getTrendColor(trend, variant)
-              )}
-            >
-              <span className="mr-1" aria-hidden="true">
-                {getTrendIcon(trend)}
-              </span>
-              {change}
-            </Badge>
-          )}
+          {renderTrend()}
         </div>
         
-        {subtitle && (
-          <p className={cn(
-            "text-sm",
-            getTrendColor(trend, variant)
-          )}>
-            {subtitle}
+        {/* Contextual information */}
+        {contextualInfo && (
+          <p className="text-sm text-muted-foreground">
+            {contextualInfo}
           </p>
         )}
         
+        {/* Description */}
         {description && (
           <p className="text-xs text-muted-foreground">
             {description}
           </p>
+        )}
+
+        {/* Action button */}
+        {action && (
+          <div className="pt-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation()
+                action.onClick()
+              }}
+              className="h-7 px-2 text-xs"
+            >
+              {action.label}
+            </Button>
+          </div>
         )}
       </CardContent>
     </Card>
@@ -190,20 +319,20 @@ export function StatsGrid({
         return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
       case 4:
       default:
-        return "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+        return "grid-cols-1 sm:grid-cols-2 xl:grid-cols-4"
     }
   }
 
   return (
     <div className={cn(
-      "grid gap-4",
+      "grid gap-4 md:gap-6",
       getGridClass(),
       className
     )}>
       {loading ? (
         Array.from({ length: columns }).map((_, index) => (
           <StatsCard 
-            key={index}
+            key={`loading-${index}`}
             stat={{ title: "", value: "" }}
             loading={true}
           />
@@ -213,7 +342,7 @@ export function StatsGrid({
           <StatsCard
             key={`${stat.title}-${index}`}
             stat={stat}
-            onClick={() => onStatClick?.(stat, index)}
+            onClick={onStatClick ? () => onStatClick(stat, index) : undefined}
           />
         ))
       )}
