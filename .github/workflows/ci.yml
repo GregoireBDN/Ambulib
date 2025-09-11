@@ -12,43 +12,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'pnpm'
-      - run: pnpm install --no-frozen-lockfile --shamefully-hoist
+          cache: 'npm'
+      - run: npm install
       - run: cd apps/api && npx prisma generate
-      - run: pnpm test
+      - run: npm test
 
   lint:
     name: Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'pnpm'
-      - run: pnpm install --no-frozen-lockfile --shamefully-hoist
-      - run: pnpm lint
+          cache: 'npm'
+      - run: npm install
+      - run: npm run lint
 
   typecheck:
     name: Type Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
       - uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'pnpm'
-      - run: pnpm install --no-frozen-lockfile --shamefully-hoist
-      - run: pnpm check-types
+          cache: 'npm'
+      - run: npm install
+      - run: npm run check-types
