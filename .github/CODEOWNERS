@@ -1,0 +1,26 @@
+# Global fallback
+* @GregoireBDN
+
+# API Backend
+/apps/api/ @GregoireBDN
+
+# Mobile App (Leo only)
+/apps/mobile/ @LeoBrnBdr
+
+# Frontend Apps (Leo + Gregoire)
+/apps/client/ @GregoireBDN @LeoBrnBdr
+/apps/fleet/ @GregoireBDN @LeoBrnBdr
+/apps/admin/ @GregoireBDN @LeoBrnBdr
+
+# Shared Packages
+/packages/ui/ @GregoireBDN @LeoBrnBdr
+/packages/auth/ @GregoireBDN
+
+# Configuration files
+/turbo.json @GregoireBDN
+/package.json @GregoireBDN
+/pnpm-lock.yaml @GregoireBDN
+/.github/ @GregoireBDN
+
+# Database & Migrations
+/apps/api/prisma/ @GregoireBDN
