@@ -208,18 +208,27 @@ export function ProgressProfile({
             {Object.entries(fieldsByCategory).map(([category, fields]) => (
               <div key={category} className="space-y-2">
                 <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground uppercase tracking-wide">
-                  <span aria-hidden="true">{getCategoryIcon(category as any)}</span>
-                  {getCategoryLabel(category as any)}
+                  <span aria-hidden="true">{getCategoryIcon(category as ProfileField["category"])}</span>
+                  {getCategoryLabel(category as ProfileField["category"])}
                 </div>
                 <div className="pl-4 space-y-1">
                   {fields.map((field) => (
+                    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
                     <div 
                       key={field.id}
+                      role={onEditField ? "button" : undefined}
+                      tabIndex={onEditField ? 0 : undefined}
                       className={cn(
                         "flex items-center justify-between text-sm py-1",
                         onEditField && "cursor-pointer hover:bg-white/50 hover:rounded px-2 -mx-2"
                       )}
                       onClick={() => onEditField?.(field.id)}
+                      onKeyDown={(e) => {
+                        if (onEditField && (e.key === 'Enter' || e.key === ' ')) {
+                          e.preventDefault()
+                          onEditField(field.id)
+                        }
+                      }}
                     >
                       <div className="flex items-center gap-2">
                         <span 

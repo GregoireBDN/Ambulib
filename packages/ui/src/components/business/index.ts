@@ -3,8 +3,13 @@ export {
   StatsCard, 
   StatsGrid,
   type StatData,
+  type StatStatus,
+  type StatValueType,
+  type StatTrendDirection,
+  type MedicalIconType,
   type StatTrend,
-  type StatVariant,
+  type StatThreshold,
+  type StatAction,
   type StatsCardProps,
   type StatsGridProps
 } from "./StatsCard"
@@ -14,12 +19,3 @@ export {
   type ProfileField,
   type ProgressProfileProps
 } from "./ProgressProfile"
-
-export { 
-  ActionPanel,
-  type ActionItem,
-  type ActionGroup,
-  type ActionVariant,
-  type ActionSize,
-  type ActionPanelProps
-} from "./ActionPanel"
