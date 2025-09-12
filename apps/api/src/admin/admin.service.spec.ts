@@ -242,7 +242,7 @@ describe('AdminService', () => {
         where: { role: Role.FLEET_MANAGER },
         skip: 0,
         take: 10,
-        select: expect.any(Object),
+        select: expect.objectContaining({}),
         orderBy: { createdAt: 'desc' },
       });
     });

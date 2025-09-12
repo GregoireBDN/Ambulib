@@ -3,7 +3,7 @@ import { CompanyStatus, Role } from '@prisma/client';
 
 describe('CompanyController - Isolated Logic Tests', () => {
   let controller: CompanyController;
-  let mockService: any;
+  let mockService: jest.Mocked<CompanyService>;
 
   beforeEach(() => {
     mockService = {
@@ -40,7 +40,9 @@ describe('CompanyController - Isolated Logic Tests', () => {
 
       mockService.registerCompany.mockResolvedValue(expectedResult);
 
-      const result = await controller.registerCompany(registrationDto as any);
+      const result = await controller.registerCompany(
+        registrationDto as CompanyRegistrationDto,
+      );
 
       expect(mockService.registerCompany).toHaveBeenCalledWith(registrationDto);
       expect(result).toEqual(expectedResult);
