@@ -88,7 +88,7 @@ const availableAmbulancesData: StatData = {
   description: 'Alerte: Capacité faible',
   action: {
     label: 'Voir planning',
-    onClick: () => alert('Redirection vers le planning')
+    onClick: () => console.log('Redirection vers le planning')
   },
   threshold: {
     warning: 4,
@@ -290,7 +290,7 @@ export const HavRidDashboard: StoryObj<typeof StatsGrid> = {
               contextualInfo: 'Véhicule en maintenance',
               action: {
                 label: 'Voir alertes',
-                onClick: () => alert('Vue des alertes')
+                onClick: () => console.log('Vue des alertes')
               }
             }
           ]}
