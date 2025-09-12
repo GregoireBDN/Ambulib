@@ -42,7 +42,7 @@ import { Role } from '@prisma/client';
 @ApiBearerAuth('JWT-auth')
 @Controller('admin')
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(Role.ADMIN, Role.SUPER_ADMIN)
+@Roles(Role.ADMIN as Role, Role.SUPER_ADMIN as Role)
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 

@@ -93,7 +93,7 @@ export class ServerAuthApiClient {
     return this.request('/auth/signup', {
       method: 'POST',
       body: JSON.stringify(userData)
-    })
+    }) as Promise<AuthResponse>
   }
 
   /**
@@ -103,7 +103,7 @@ export class ServerAuthApiClient {
     return this.request('/auth/signin', {
       method: 'POST',
       body: JSON.stringify(credentials)
-    })
+    }) as Promise<AuthResponse>
   }
 
   /**
@@ -115,14 +115,14 @@ export class ServerAuthApiClient {
       headers: {
         'Authorization': `Bearer ${refreshToken}`
       }
-    })
+    }) as Promise<AuthResponse>
   }
 
   /**
    * Déconnexion utilisateur
    */
   async signOut(accessToken: string): Promise<void> {
-    return this.request('/auth/signout', {
+    await this.request('/auth/signout', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`
@@ -140,7 +140,7 @@ export class ServerAuthApiClient {
         'Authorization': `Bearer ${accessToken}`
       },
       body: JSON.stringify(profileData)
-    })
+    }) as Promise<AuthResponse>
   }
 
   /**
