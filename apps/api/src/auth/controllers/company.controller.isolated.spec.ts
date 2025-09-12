@@ -1,5 +1,9 @@
 import { CompanyController } from './company.controller';
 import { CompanyStatus, Role } from '@prisma/client';
+import { CompanyService } from '../services/company.service';
+import { CompanyRegistrationDto } from '../dto/company-registration.dto';
+import { CreateUserDto } from '../../user/dto/create-user.dto';
+import { RequestWithUser } from '../../common/interfaces/request-with-user.interface';
 
 describe('CompanyController - Isolated Logic Tests', () => {
   let controller: CompanyController;

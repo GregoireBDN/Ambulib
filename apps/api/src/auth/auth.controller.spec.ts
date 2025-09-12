@@ -3,10 +3,11 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
-import { Role } from '@prisma/client';
+import { Role, AuthProvider } from '@prisma/client';
 import { Response } from 'express';
 import { EmailVerificationService } from './email-verification.service';
 import { PasswordResetService } from './password-reset.service';
+import { RequestWithUser } from '../common/interfaces/request-with-user.interface';
 
 describe('AuthController', () => {
   let controller: AuthController;

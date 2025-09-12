@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
-import { Role } from '@prisma/client';
+import { Role, AuthProvider, AmbulanceStatus } from '@prisma/client';
 
 describe('AdminController', () => {
   let controller: AdminController;
