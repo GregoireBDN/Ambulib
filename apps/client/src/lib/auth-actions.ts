@@ -157,7 +157,7 @@ export async function signUpAction(
   } catch (error: unknown) {
     console.error('Erreur d\'inscription:', error)
     
-    let errorMessage = 'Erreur lors de l\'inscription'
+    const errorMessage = 'Erreur lors de l\'inscription'
     if (error && typeof error === 'object' && 'validation' in error) {
       return {
         success: false,

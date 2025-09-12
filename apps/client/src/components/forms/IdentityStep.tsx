@@ -4,7 +4,7 @@ import { FormData } from '@/types/inscription'
 interface IdentityStepProps {
   formData: FormData
   errors: Record<string, string>
-  onFieldChange: (field: keyof FormData, value: any) => void
+  onFieldChange: (field: keyof FormData, value: unknown) => void
   onAddressChange: (field: keyof FormData['address'], value: string) => void
 }
 
@@ -114,7 +114,7 @@ export default function IdentityStep({
               <PhoneInput
                 id="phone"
                 value={formData.phone}
-                onChange={(value, isValid) => onFieldChange('phone', value)}
+                onChange={(value) => onFieldChange('phone', value)}
                 placeholder="06 12 34 56 78"
                 required
                 aria-invalid={!!errors.phone}
@@ -170,7 +170,7 @@ export default function IdentityStep({
                 onAddressSelect={(address) => {
                   if (address) {
                     // Extraire les informations de l'adresse
-                    let street = address.street || address.label || '';
+                    const street = address.street || address.label || '';
                     let postalCode = address.postalCode || '';
                     let city = address.city || '';
                     

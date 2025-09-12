@@ -5,6 +5,8 @@ import { UserService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { Role } from '@prisma/client';
 import { Response } from 'express';
+import { EmailVerificationService } from './email-verification.service';
+import { PasswordResetService } from './password-reset.service';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -64,6 +66,23 @@ describe('AuthController', () => {
             findOne: jest.fn(),
             update: jest.fn(),
             create: jest.fn(),
+            findByEmail: jest.fn(),
+          },
+        },
+        {
+          provide: EmailVerificationService,
+          useValue: {
+            sendVerificationCode: jest.fn(),
+            verifyCode: jest.fn(),
+            isEmailVerified: jest.fn(),
+          },
+        },
+        {
+          provide: PasswordResetService,
+          useValue: {
+            sendPasswordResetEmail: jest.fn(),
+            resetPassword: jest.fn(),
+            verifyResetToken: jest.fn(),
           },
         },
       ],

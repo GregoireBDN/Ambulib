@@ -43,15 +43,16 @@ const mockStorage = {
 
 // Configuration globale des mocks
 beforeAll(() => {
-  global.crypto = mockCrypto as any
-  global.localStorage = mockStorage as any
-  global.sessionStorage = { ...mockStorage, data: new Map() } as any
+  global.crypto = mockCrypto as unknown as Crypto
+  global.localStorage = mockStorage as unknown as Storage
+  global.sessionStorage = { ...mockStorage, data: new Map() } as unknown as Storage
 })
 
 beforeEach(() => {
   // Reset tous les mocks
   jest.clearAllMocks()
   mockStorage.data.clear()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ;(global.sessionStorage as any).data.clear()
 })
 

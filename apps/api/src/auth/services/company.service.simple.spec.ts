@@ -17,6 +17,7 @@ describe('CompanyService - Simple Tests', () => {
   beforeEach(async () => {
     const mockPrismaService = {
       company: {
+        findFirst: jest.fn(), // Ajouter findFirst qui est utilisé par le service
         findUnique: jest.fn(),
         create: jest.fn(),
         update: jest.fn(),
@@ -63,20 +64,20 @@ describe('CompanyService - Simple Tests', () => {
 
     it('should throw ConflictException if company email exists', async () => {
       // Mock company email already exists
-      prismaService.company.findUnique.mockResolvedValue({ id: 1 });
+      prismaService.company.findFirst.mockResolvedValue({ id: 1 });
 
       await expect(
         service.registerCompany(mockRegistrationDto as any),
       ).rejects.toThrow(ConflictException);
 
-      expect(prismaService.company.findUnique).toHaveBeenCalledWith({
+      expect(prismaService.company.findFirst).toHaveBeenCalledWith({
         where: { email: mockRegistrationDto.email },
       });
     });
 
     it('should throw ConflictException if admin email exists', async () => {
       // Mock company email doesn't exist, but admin email exists
-      prismaService.company.findUnique.mockResolvedValue(null);
+      prismaService.company.findFirst.mockResolvedValue(null);
       userService.findByEmail.mockResolvedValue({ id: 1 });
 
       await expect(

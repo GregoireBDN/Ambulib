@@ -16,27 +16,31 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto) {
     try {
-      const { 
-        password, 
-        age, 
+      const {
+        password,
+        age,
         birthDate,
         socialSecurity,
-        allergies, 
-        medications, 
+        allergies,
+        medications,
         mobility,
         mobilityDetails,
-        doctorName, 
+        doctorName,
         doctorPhone,
         emergencyContactName,
         emergencyContactPhone,
         emergencyContactRelation,
-        ...userData 
+        ...userData
       } = createUserDto;
-      
+
       const hashedPassword = await hash(password);
 
       // Calculer l'âge à partir de la date de naissance si fournie
-      let calculatedAge = age ? (typeof age === 'string' ? parseInt(age) : age) : null;
+      let calculatedAge = age
+        ? typeof age === 'string'
+          ? parseInt(age)
+          : age
+        : null;
       if (birthDate && !calculatedAge) {
         const birth = new Date(birthDate);
         const today = new Date();
@@ -56,15 +60,22 @@ export class UserService {
         });
 
         // 2. Créer les informations médicales si fournies
-        if (allergies || medications || socialSecurity || doctorName || doctorPhone) {
+        if (
+          allergies ||
+          medications ||
+          socialSecurity ||
+          doctorName ||
+          doctorPhone
+        ) {
           await prisma.medicalInfo.create({
             data: {
               userId: user.id,
               allergies: allergies || null,
               medications: medications || null,
-              medicalConditions: mobility && mobility !== 'none' 
-                ? `Mobilité réduite: ${mobility}${mobilityDetails ? ` - ${mobilityDetails}` : ''}` 
-                : null,
+              medicalConditions:
+                mobility && mobility !== 'none'
+                  ? `Mobilité réduite: ${mobility}${mobilityDetails ? ` - ${mobilityDetails}` : ''}`
+                  : null,
               doctorName: doctorName || null,
               doctorPhone: doctorPhone || null,
               insuranceNumber: socialSecurity || null, // Utiliser le champ existant
@@ -73,7 +84,11 @@ export class UserService {
         }
 
         // 3. Créer le contact d'urgence si fourni
-        if (emergencyContactName && emergencyContactPhone && emergencyContactRelation) {
+        if (
+          emergencyContactName &&
+          emergencyContactPhone &&
+          emergencyContactRelation
+        ) {
           // Séparer le nom complet en prénom et nom
           const [firstName, ...lastNameParts] = emergencyContactName.split(' ');
           const lastName = lastNameParts.join(' ') || firstName;
@@ -112,7 +127,7 @@ export class UserService {
           role: true,
           password: true,
           isProfileComplete: true,
-        }
+        },
       });
       return result;
     } catch (error) {

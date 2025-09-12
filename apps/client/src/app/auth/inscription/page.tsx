@@ -77,7 +77,7 @@ export default function InscriptionPage() {
       
       // Redirection automatique
       window.location.href = "/dashboard"
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erreur inscription:", error)
       
       // Gestion spécifique des erreurs

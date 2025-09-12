@@ -1,66 +1,71 @@
-import { IsObject, IsOptional, IsString, ValidateNested } from 'class-validator'
-import { Type } from 'class-transformer'
+import {
+  IsObject,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 // DTO pour les données sensibles médicales uniquement
 export class EmergencyContactDto {
   @IsString()
-  firstName: string
+  firstName: string;
 
   @IsString()
-  lastName: string
+  lastName: string;
 
   @IsString()
-  phone: string
+  phone: string;
 
   @IsString()
-  relation: string
+  relation: string;
 }
 
 export class SensitiveFormDataDto {
   @IsOptional()
   @IsString()
-  socialSecurity?: string
+  socialSecurity?: string;
 
   @IsOptional()
   @IsString()
-  allergies?: string
+  allergies?: string;
 
   @IsOptional()
   @IsString()
-  medications?: string
+  medications?: string;
 
   @IsOptional()
   @IsString()
-  mobility?: 'none' | 'wheelchair' | 'walker' | 'cane' | 'other'
+  mobility?: 'none' | 'wheelchair' | 'walker' | 'cane' | 'other';
 
   @IsOptional()
   @IsString()
-  mobilityDetails?: string
+  mobilityDetails?: string;
 
   @IsOptional()
   @IsString()
-  doctorName?: string
+  doctorName?: string;
 
   @IsOptional()
   @IsString()
-  doctorPhone?: string
+  doctorPhone?: string;
 
   @ValidateNested()
   @Type(() => EmergencyContactDto)
   @IsObject()
-  emergencyContact: EmergencyContactDto
+  emergencyContact: EmergencyContactDto;
 }
 
 export class SaveFormDraftDto {
   @ValidateNested()
   @Type(() => SensitiveFormDataDto)
   @IsObject()
-  sensitiveData: SensitiveFormDataDto
+  sensitiveData: SensitiveFormDataDto;
 }
 
 export class FormDraftResponseDto {
-  success: boolean
-  draftId?: string
-  expiresAt?: Date
-  message?: string
+  success: boolean;
+  draftId?: string;
+  expiresAt?: Date;
+  message?: string;
 }

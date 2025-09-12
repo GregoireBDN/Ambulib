@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { AuthProviderType, Role } from '../types/auth.types'
 
 // Schémas de validation synchronisés avec l'API NestJS
 

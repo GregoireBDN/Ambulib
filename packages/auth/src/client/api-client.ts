@@ -10,8 +10,6 @@ import {
 import {
   AuthError,
   NetworkError,
-  UnauthorizedError,
-  ValidationError,
   createErrorFromApiResponse,
 } from '../utils/errors'
 import { API_ROUTES } from '../utils/constants'
@@ -179,7 +177,7 @@ export class AuthApiClient {
   /**
    * Extraire le payload d'un JWT (sans vérification de signature)
    */
-  decodeToken(token: string): any {
+  decodeToken(token: string): Record<string, unknown> | null {
     try {
       return JSON.parse(atob(token.split('.')[1]))
     } catch {

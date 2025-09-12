@@ -48,7 +48,7 @@ export const Step2Schema = z.object({
     .regex(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, "Le mot de passe doit contenir au moins un caractère spécial"),
   confirmPassword: z.string()
     .min(1, "La confirmation du mot de passe est requise")
-}).refine((data: any) => data.password === data.confirmPassword, {
+}).refine((data: unknown) => (data as Record<string, unknown>).password === (data as Record<string, unknown>).confirmPassword, {
   message: "Les mots de passe ne correspondent pas",
   path: ["confirmPassword"]
 })
@@ -119,7 +119,7 @@ export const FullFormSchema = Step1Schema
   .merge(Step3Schema)
   .merge(Step4Schema)
   .merge(Step5Schema)
-  .refine((data: any) => data.password === data.confirmPassword, {
+  .refine((data: unknown) => (data as Record<string, unknown>).password === (data as Record<string, unknown>).confirmPassword, {
     message: "Les mots de passe ne correspondent pas",
     path: ["confirmPassword"]
   })
@@ -133,7 +133,7 @@ export type Step5Data = z.infer<typeof Step5Schema>
 export type FullFormData = z.infer<typeof FullFormSchema>
 
 // Fonction utilitaire pour valider une étape spécifique
-export const validateStep = (step: number, data: any) => {
+export const validateStep = (step: number, data: unknown) => {
   switch (step) {
     case 1:
       return Step1Schema.safeParse(data)

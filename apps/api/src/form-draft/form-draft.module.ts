@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common'
-import { FormDraftController } from './form-draft.controller'
-import { FormDraftService } from './form-draft.service'
+import { Module } from '@nestjs/common';
+import { FormDraftController } from './form-draft.controller';
+import { FormDraftService } from './form-draft.service';
 
 @Module({
   controllers: [FormDraftController],

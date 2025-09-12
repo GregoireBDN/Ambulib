@@ -191,7 +191,7 @@ export class SignupDto {
   doctorPhone?: string;
 
   @ApiProperty({
-    description: 'Nom complet du contact d\'urgence',
+    description: "Nom complet du contact d'urgence",
     example: 'Marie Dubois',
     required: false,
   })
@@ -200,7 +200,7 @@ export class SignupDto {
   emergencyContactName?: string;
 
   @ApiProperty({
-    description: 'Téléphone du contact d\'urgence',
+    description: "Téléphone du contact d'urgence",
     example: '0123456789',
     required: false,
   })
@@ -209,7 +209,7 @@ export class SignupDto {
   emergencyContactPhone?: string;
 
   @ApiProperty({
-    description: 'Relation avec le contact d\'urgence',
+    description: "Relation avec le contact d'urgence",
     example: 'Conjoint(e)',
     required: false,
   })

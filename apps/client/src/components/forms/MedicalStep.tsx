@@ -1,11 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle, Input, PhoneInput, SocialSecurityInput, Label, Button } from "@repo/ui"
+import { Card, CardContent, CardHeader, CardTitle, Input, PhoneInput, SocialSecurityInput, Label } from "@repo/ui"
 import { Heart, AlertTriangle, Stethoscope } from 'lucide-react'
 import { FormData } from '@/types/inscription'
 
 interface MedicalStepProps {
   formData: FormData
   errors: Record<string, string>
-  onFieldChange: (field: keyof FormData, value: any) => void
+  onFieldChange: (field: keyof FormData, value: unknown) => void
 }
 
 export default function MedicalStep({
@@ -63,7 +63,7 @@ export default function MedicalStep({
             <SocialSecurityInput
               id="socialSecurity"
               value={formData.socialSecurity || ''}
-              onChange={(value, isValid) => onFieldChange('socialSecurity', value)}
+              onChange={(value) => onFieldChange('socialSecurity', value)}
               placeholder="1 23 45 67 890 123 45"
               aria-invalid={!!errors.socialSecurity}
               aria-describedby={errors.socialSecurity ? "socialSecurity-error" : "socialSecurity-help"}
@@ -232,7 +232,7 @@ export default function MedicalStep({
               <PhoneInput
                 id="doctorPhone"
                 value={formData.doctorPhone || ''}
-                onChange={(value, isValid) => onFieldChange('doctorPhone', value)}
+                onChange={(value) => onFieldChange('doctorPhone', value)}
                 placeholder="01 23 45 67 89"
                 aria-invalid={!!errors.doctorPhone}
                 className={`h-14 text-lg ${errors.doctorPhone ? 'border-red-500 focus:border-red-500' : ''}`}

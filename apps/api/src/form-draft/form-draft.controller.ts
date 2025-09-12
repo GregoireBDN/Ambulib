@@ -1,22 +1,26 @@
-import { 
-  Controller, 
-  Post, 
-  Get, 
-  Delete, 
-  Body, 
-  Param, 
+import {
+  Controller,
+  Post,
+  Get,
+  Delete,
+  Body,
+  Param,
   Session,
   HttpCode,
   HttpStatus,
-  Logger
-} from '@nestjs/common'
-import { FormDraftService } from './form-draft.service'
-import { SaveFormDraftDto, FormDraftResponseDto, SensitiveFormDataDto } from './dto/form-draft.dto'
-import { Public } from '../auth/decorators/public.decorator'
+  Logger,
+} from '@nestjs/common';
+import { FormDraftService } from './form-draft.service';
+import {
+  SaveFormDraftDto,
+  FormDraftResponseDto,
+  SensitiveFormDataDto,
+} from './dto/form-draft.dto';
+import { Public } from '../auth/decorators/public.decorator';
 
 @Controller('form-draft')
 export class FormDraftController {
-  private readonly logger = new Logger(FormDraftController.name)
+  private readonly logger = new Logger(FormDraftController.name);
 
   constructor(private readonly formDraftService: FormDraftService) {}
 
@@ -29,40 +33,39 @@ export class FormDraftController {
   @HttpCode(HttpStatus.CREATED)
   async saveDraft(
     @Body() saveDraftDto: SaveFormDraftDto,
-    @Session() session: Record<string, any>
+    @Session() session: Record<string, any>,
   ): Promise<FormDraftResponseDto> {
     try {
       // Utiliser l'ID de session Express comme identifiant sécurisé
-      const sessionId = session.id || session.sessionID
-      
+      const sessionId = session.id || session.sessionID;
+
       if (!sessionId) {
-        this.logger.error('Session ID manquant pour sauvegarde brouillon')
+        this.logger.error('Session ID manquant pour sauvegarde brouillon');
         return {
           success: false,
-          message: 'Session invalide'
-        }
+          message: 'Session invalide',
+        };
       }
 
       const { draftId, expiresAt } = await this.formDraftService.saveDraft(
         sessionId,
-        saveDraftDto.sensitiveData
-      )
+        saveDraftDto.sensitiveData,
+      );
 
-      this.logger.log(`Brouillon sauvegardé avec succès: ${draftId}`)
+      this.logger.log(`Brouillon sauvegardé avec succès: ${draftId}`);
 
       return {
         success: true,
         draftId,
         expiresAt,
-        message: 'Données médicales sauvegardées temporairement (30 min)'
-      }
-
+        message: 'Données médicales sauvegardées temporairement (30 min)',
+      };
     } catch (error) {
-      this.logger.error('Erreur sauvegarde brouillon:', error)
+      this.logger.error('Erreur sauvegarde brouillon:', error);
       return {
         success: false,
-        message: 'Erreur lors de la sauvegarde'
-      }
+        message: 'Erreur lors de la sauvegarde',
+      };
     }
   }
 
@@ -74,38 +77,41 @@ export class FormDraftController {
   @Get(':draftId')
   async getDraft(
     @Param('draftId') draftId: string,
-    @Session() session: Record<string, any>
-  ): Promise<{ success: boolean; data?: SensitiveFormDataDto; message?: string }> {
+    @Session() session: Record<string, any>,
+  ): Promise<{
+    success: boolean;
+    data?: SensitiveFormDataDto;
+    message?: string;
+  }> {
     try {
-      const sessionId = session.id || session.sessionID
-      
+      const sessionId = session.id || session.sessionID;
+
       if (!sessionId) {
         return {
           success: false,
-          message: 'Session invalide'
-        }
+          message: 'Session invalide',
+        };
       }
 
-      const data = await this.formDraftService.getDraft(draftId, sessionId)
-      
+      const data = await this.formDraftService.getDraft(draftId, sessionId);
+
       if (!data) {
         return {
           success: false,
-          message: 'Brouillon non trouvé ou expiré'
-        }
+          message: 'Brouillon non trouvé ou expiré',
+        };
       }
 
       return {
         success: true,
-        data
-      }
-
+        data,
+      };
     } catch (error) {
-      this.logger.error('Erreur récupération brouillon:', error)
+      this.logger.error('Erreur récupération brouillon:', error);
       return {
         success: false,
-        message: 'Erreur lors de la récupération'
-      }
+        message: 'Erreur lors de la récupération',
+      };
     }
   }
 
@@ -118,26 +124,30 @@ export class FormDraftController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async deleteDraft(
     @Param('draftId') draftId: string,
-    @Session() session: Record<string, any>
+    @Session() session: Record<string, any>,
   ): Promise<void> {
     try {
-      const sessionId = session.id || session.sessionID
-      
+      const sessionId = session.id || session.sessionID;
+
       if (!sessionId) {
-        this.logger.warn('Tentative suppression brouillon sans session valide')
-        return
+        this.logger.warn('Tentative suppression brouillon sans session valide');
+        return;
       }
 
-      const deleted = await this.formDraftService.deleteDraft(draftId, sessionId)
-      
+      const deleted = await this.formDraftService.deleteDraft(
+        draftId,
+        sessionId,
+      );
+
       if (deleted) {
-        this.logger.log(`Brouillon supprimé: ${draftId}`)
+        this.logger.log(`Brouillon supprimé: ${draftId}`);
       } else {
-        this.logger.warn(`Échec suppression brouillon: ${draftId} (non trouvé ou session incorrecte)`)
+        this.logger.warn(
+          `Échec suppression brouillon: ${draftId} (non trouvé ou session incorrecte)`,
+        );
       }
-
     } catch (error) {
-      this.logger.error('Erreur suppression brouillon:', error)
+      this.logger.error('Erreur suppression brouillon:', error);
     }
   }
 
@@ -147,6 +157,6 @@ export class FormDraftController {
    */
   @Get('admin/stats')
   async getStats(): Promise<{ total: number; expired: number }> {
-    return this.formDraftService.getStats()
+    return this.formDraftService.getStats();
   }
 }

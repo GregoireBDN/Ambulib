@@ -3,7 +3,8 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class ForgotPasswordDto {
   @ApiProperty({
-    description: 'Adresse email pour laquelle demander la réinitialisation du mot de passe',
+    description:
+      'Adresse email pour laquelle demander la réinitialisation du mot de passe',
     example: 'user@example.com',
   })
   @IsEmail({}, { message: 'Veuillez saisir une adresse email valide' })
@@ -25,6 +26,8 @@ export class ResetPasswordDto {
     minLength: 8,
   })
   @IsString({ message: 'Le mot de passe doit être une chaîne de caractères' })
-  @MinLength(8, { message: 'Le mot de passe doit contenir au moins 8 caractères' })
+  @MinLength(8, {
+    message: 'Le mot de passe doit contenir au moins 8 caractères',
+  })
   newPassword: string;
 }

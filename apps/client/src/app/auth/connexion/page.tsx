@@ -35,7 +35,7 @@ export default function ConnexionPage() {
       // Le middleware se chargera de la redirection automatiquement
       // On peut forcer un refresh de la page si nécessaire
       window.location.href = redirectPath
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erreur connexion:", error)
       
       // Gestion spécifique des erreurs

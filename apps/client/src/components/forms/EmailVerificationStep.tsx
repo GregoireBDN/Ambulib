@@ -7,7 +7,7 @@ import type { FormData } from '@/types/inscription'
 interface EmailVerificationStepProps {
   formData: FormData
   errors: Record<string, string>
-  onFieldChange: (field: keyof FormData, value: any) => void
+  onFieldChange: (field: keyof FormData, value: unknown) => void
   onVerificationComplete: () => void
   onGoToEmailStep: (step: number) => void
 }

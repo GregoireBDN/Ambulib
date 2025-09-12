@@ -44,10 +44,7 @@ import {
   SendVerificationCodeDto,
   VerifyCodeDto,
 } from './dto/email-verification.dto';
-import {
-  ForgotPasswordDto,
-  ResetPasswordDto,
-} from './dto/password-reset.dto';
+import { ForgotPasswordDto, ResetPasswordDto } from './dto/password-reset.dto';
 import { EmailVerificationService } from './email-verification.service';
 import { PasswordResetService } from './password-reset.service';
 
@@ -262,7 +259,7 @@ export class AuthController {
   @Post('check-email')
   @ApiOperation({
     summary: "Vérifier la disponibilité d'un email",
-    description: "Vérifie si un email est déjà utilisé dans le système",
+    description: 'Vérifie si un email est déjà utilisé dans le système',
   })
   @ApiBody({
     schema: {
@@ -304,7 +301,7 @@ export class AuthController {
 
     try {
       const existingUser = await this.userService.findByEmail(email);
-      
+
       if (existingUser) {
         return {
           available: false,
@@ -353,7 +350,7 @@ export class AuthController {
   @ApiOperation({
     summary: 'Envoyer un code de vérification par email',
     description:
-      'Génère et envoie un code de vérification à 6 chiffres à l\'adresse email spécifiée',
+      "Génère et envoie un code de vérification à 6 chiffres à l'adresse email spécifiée",
   })
   @ApiBody({ type: SendVerificationCodeDto })
   @ApiResponse({
@@ -370,7 +367,7 @@ export class AuthController {
     },
   })
   @ApiBadRequestResponse({
-    description: 'Email invalide ou erreur d\'envoi',
+    description: "Email invalide ou erreur d'envoi",
   })
   @ApiResponse({
     status: 429,
@@ -385,7 +382,7 @@ export class AuthController {
         message: 'Code de vérification envoyé avec succès',
       };
     } catch (error) {
-      console.error('Erreur lors de l\'envoi du code:', error);
+      console.error("Erreur lors de l'envoi du code:", error);
       throw error;
     }
   }
@@ -424,7 +421,7 @@ export class AuthController {
         verifyCodeDto.email,
         verifyCodeDto.code,
       );
-      
+
       return {
         verified: isVerified,
         message: 'Code vérifié avec succès',
@@ -438,7 +435,7 @@ export class AuthController {
   @Public()
   @Get('email-verification-status/:email')
   @ApiOperation({
-    summary: 'Vérifier le statut de vérification d\'un email',
+    summary: "Vérifier le statut de vérification d'un email",
     description: 'Vérifie si une adresse email a déjà été vérifiée',
   })
   @ApiResponse({
@@ -462,10 +459,9 @@ export class AuthController {
     description: 'Email invalide',
   })
   async getEmailVerificationStatus(@Param('email') email: string) {
-    const isVerified = await this.emailVerificationService.isEmailVerified(
-      email,
-    );
-    
+    const isVerified =
+      await this.emailVerificationService.isEmailVerified(email);
+
     return {
       verified: isVerified,
       email,
@@ -488,7 +484,8 @@ export class AuthController {
       properties: {
         message: {
           type: 'string',
-          example: 'Si cette adresse email est enregistrée, vous recevrez un lien de réinitialisation.',
+          example:
+            'Si cette adresse email est enregistrée, vous recevrez un lien de réinitialisation.',
         },
       },
     },
@@ -505,10 +502,11 @@ export class AuthController {
       await this.passwordResetService.sendPasswordResetEmail(
         forgotPasswordDto.email,
       );
-      
+
       // Retour neutre pour des raisons de sécurité
       return {
-        message: 'Si cette adresse email est enregistrée, vous recevrez un lien de réinitialisation.',
+        message:
+          'Si cette adresse email est enregistrée, vous recevrez un lien de réinitialisation.',
       };
     } catch (error) {
       console.error('Erreur lors de la demande de réinitialisation:', error);
@@ -546,7 +544,7 @@ export class AuthController {
         resetPasswordDto.token,
         resetPasswordDto.newPassword,
       );
-      
+
       return {
         message: 'Mot de passe réinitialisé avec succès',
       };
@@ -559,8 +557,9 @@ export class AuthController {
   @Public()
   @Get('verify-reset-token/:token')
   @ApiOperation({
-    summary: 'Vérifier la validité d\'un token de réinitialisation',
-    description: 'Vérifie si un token de réinitialisation est valide et non expiré',
+    summary: "Vérifier la validité d'un token de réinitialisation",
+    description:
+      'Vérifie si un token de réinitialisation est valide et non expiré',
   })
   @ApiResponse({
     status: 200,
@@ -584,7 +583,7 @@ export class AuthController {
   })
   async verifyResetToken(@Param('token') token: string) {
     const isValid = await this.passwordResetService.verifyResetToken(token);
-    
+
     return {
       valid: isValid,
       token,

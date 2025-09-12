@@ -5,7 +5,7 @@ import { FormData } from '@/types/inscription'
 interface EmergencyStepProps {
   formData: FormData
   errors: Record<string, string>
-  onFieldChange: (field: keyof FormData, value: any) => void
+  onFieldChange: (field: keyof FormData, value: unknown) => void
   onEmergencyContactChange: (field: keyof FormData['emergencyContact'], value: string) => void
 }
 
@@ -114,7 +114,7 @@ export default function EmergencyStep({
               <PhoneInput
                 id="emergencyPhone"
                 value={formData.emergencyContact.phone}
-                onChange={(value, isValid) => onEmergencyContactChange('phone', value)}
+                onChange={(value) => onEmergencyContactChange('phone', value)}
                 placeholder="06 12 34 56 78"
                 required
                 aria-invalid={!!errors['emergencyContact.phone']}

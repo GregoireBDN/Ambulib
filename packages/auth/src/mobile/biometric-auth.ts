@@ -87,7 +87,7 @@ export class BiometricAuthManager {
   }
 
   // Authentifier avec la biométrie pour accéder à l'application
-  async authenticateWithBiometrics(options?: BiometricAuthOptions): Promise<BiometricAuthResult & { userData?: any }> {
+  async authenticateWithBiometrics(options?: BiometricAuthOptions): Promise<BiometricAuthResult & { userData?: unknown }> {
     try {
       const isEnabled = await this.secureStorage.isBiometricEnabled()
       if (!isEnabled) {
@@ -127,12 +127,13 @@ export class BiometricAuthManager {
 
 // Implémentation pour Expo LocalAuthentication
 export class ExpoLocalAuth implements BiometricAuth {
-  private LocalAuthentication: any
+  private LocalAuthentication: typeof import('expo-local-authentication') | null = null
 
   constructor() {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       this.LocalAuthentication = require('expo-local-authentication')
-    } catch (error) {
+    } catch {
       throw new Error('Expo LocalAuthentication n\'est pas disponible. Assurez-vous d\'installer expo-local-authentication.')
     }
   }
@@ -201,15 +202,16 @@ export class ExpoLocalAuth implements BiometricAuth {
   }
 }
 
-// Implémentation pour React Native Biometrics (alternative)
+// Implémentation pour React Native Biometrics (alternative)  
 export class ReactNativeBiometrics implements BiometricAuth {
-  private Biometrics: any
+  private Biometrics: unknown
 
   constructor() {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { default: ReactNativeBiometrics } = require('react-native-biometrics')
       this.Biometrics = new ReactNativeBiometrics()
-    } catch (error) {
+    } catch {
       throw new Error('React Native Biometrics n\'est pas disponible. Assurez-vous d\'installer react-native-biometrics.')
     }
   }

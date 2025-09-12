@@ -151,13 +151,14 @@ export class AuthSecureStorage {
 
 // Implémentation pour Expo SecureStore
 export class ExpoSecureStorage implements SecureStorage {
-  private SecureStore: any
+  private SecureStore: typeof import('expo-secure-store') | null = null
 
   constructor() {
     try {
       // Import dynamique pour éviter les erreurs lors du build web
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       this.SecureStore = require('expo-secure-store')
-    } catch (error) {
+    } catch {
       throw new Error('Expo SecureStore n\'est pas disponible. Assurez-vous d\'installer expo-secure-store.')
     }
   }
@@ -191,12 +192,13 @@ export class ExpoSecureStorage implements SecureStorage {
 
 // Implémentation pour React Native Keychain (alternative)
 export class KeychainSecureStorage implements SecureStorage {
-  private Keychain: any
+  private Keychain: unknown
 
   constructor() {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       this.Keychain = require('react-native-keychain')
-    } catch (error) {
+    } catch {
       throw new Error('React Native Keychain n\'est pas disponible. Assurez-vous d\'installer react-native-keychain.')
     }
   }

@@ -236,12 +236,16 @@ export async function redirectAfterAuth(role: string, redirectPath?: string) {
   switch (role) {
     case 'CLIENT':
       redirect('/dashboard')
+      break
     case 'FLEET_MANAGER':
       redirect('/fleet/dashboard')
+      break
     case 'AMBULANCE_DRIVER':
       redirect('/driver/dashboard')
+      break
     case 'ADMIN':
       redirect('/admin/dashboard')
+      break
     default:
       redirect('/dashboard')
   }
@@ -286,7 +290,7 @@ export async function requireRole(requiredRole: string | string[]) {
 }
 
 // Types pour les réponses des server actions
-export interface ServerActionResponse<T = any> {
+export interface ServerActionResponse<T = unknown> {
   success: boolean
   data?: T
   user?: {

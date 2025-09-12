@@ -198,7 +198,7 @@ export class BookingService {
                 phoneNumber: true,
               },
             },
-              transportTickets: true,
+            transportTickets: true,
             assignments: {
               include: {
                 ambulance: true,

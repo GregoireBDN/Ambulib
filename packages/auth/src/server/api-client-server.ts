@@ -37,7 +37,7 @@ export class ServerAuthApiClient {
   /**
    * Méthode privée pour faire les appels HTTP avec gestion d'erreur
    */
-  private async request(endpoint: string, options: RequestInit = {}): Promise<any> {
+  private async request(endpoint: string, options: RequestInit = {}): Promise<unknown> {
     const url = `${this.baseUrl}${endpoint}`
     
     try {
@@ -133,7 +133,7 @@ export class ServerAuthApiClient {
   /**
    * Compléter le profil utilisateur
    */
-  async completeProfile(accessToken: string, profileData: any): Promise<AuthResponse> {
+  async completeProfile(accessToken: string, profileData: Record<string, unknown>): Promise<AuthResponse> {
     return this.request('/auth/complete-profile', {
       method: 'PATCH',
       headers: {
@@ -170,7 +170,7 @@ export class ServerAuthApiClient {
   /**
    * Extraire le payload d'un JWT (sans vérification de signature)
    */
-  decodeToken(token: string): any | null {
+  decodeToken(token: string): Record<string, unknown> | null {
     try {
       return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
     } catch {

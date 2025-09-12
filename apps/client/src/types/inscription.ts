@@ -58,6 +58,6 @@ export interface FormStepperProps {
   errors: Record<string, string>
   isLoading: boolean
   onStepChange: (step: number) => void
-  onFieldChange: (field: keyof FormData, value: any) => void
+  onFieldChange: (field: keyof FormData, value: unknown) => void
   onSubmit: () => Promise<void>
 }
