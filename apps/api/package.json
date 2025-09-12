@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "@havrid/api",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -24,6 +24,7 @@
     "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
@@ -37,6 +38,8 @@
     "@types/passport-jwt": "^4.0.1",
     "argon2": "^0.43.0",
     "express-session": "^1.18.2",
+    "handlebars": "^4.7.8",
+    "nodemailer": "^7.0.6",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
@@ -56,6 +59,7 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.14.0",
+    "@types/nodemailer": "^7.0.1",
     "@types/passport-google-oauth20": "^2.0.16",
     "@types/passport-local": "^1.0.38",
     "@types/supertest": "^6.0.2",

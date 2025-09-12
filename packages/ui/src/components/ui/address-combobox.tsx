@@ -100,7 +100,7 @@ export function AddressCombobox({
           setSelectedAddressData(initialAddressData);
           setInputValue("");
         } else {
-          // Reconstituer l'objet adresse depuis la valeur string avec plus de données
+          // Reconstituer l'objet adresse depuis la valeur string
           const reconstitutedAddress: AddressFeature = {
             id: value,
             label: value,
@@ -108,9 +108,13 @@ export function AddressCombobox({
             postalCode: extractPostalCode(value) || "",
             city: extractCity(value) || "",
             coordinates: [0, 0],
-            type: "housenumber",
-            score: 1,
-            context: value
+            properties: {
+              id: value,
+              label: value,
+              name: value,
+              postcode: extractPostalCode(value) || "",
+              city: extractCity(value) || ""
+            }
           };
           setSelectedAddressData(reconstitutedAddress);
           setInputValue("");

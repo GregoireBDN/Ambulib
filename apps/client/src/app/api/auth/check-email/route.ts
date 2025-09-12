@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Vérifier auprès de l'API backend
-    const backendUrl = process.env.BACKEND_URL || 'http://localhost:3000'
+    const backendUrl = process.env.BACKEND_URL || 'http://localhost:8000'
     
     const response = await fetch(`${backendUrl}/auth/check-email`, {
       method: 'POST',

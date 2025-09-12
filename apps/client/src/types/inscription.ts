@@ -25,6 +25,10 @@ export interface FormData {
   email: string
   password: string
   confirmPassword: string
+  
+  // Étape 2.5 : Vérification email (nouveau)
+  emailVerified?: boolean
+  verificationCode?: string
 
   // Étape 3 : Informations médicales
   socialSecurity?: string

@@ -156,6 +156,35 @@ model TransportTicket {
   booking      Booking   @relation(fields: [bookingId], references: [id])
 }
 
+model EmailVerification {
+  id         String   @id @default(cuid())
+  email      String
+  code       String
+  expiresAt  DateTime
+  attempts   Int      @default(0)
+  isVerified Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([email])
+  @@index([expiresAt])
+}
+
+model PasswordReset {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  attempts  Int      @default(0)
+  isUsed    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([token])
+  @@index([expiresAt])
+}
+
 enum AuthProvider {
   CREDENTIALS
   GOOGLE

@@ -10,6 +10,7 @@
     "dev": {
       "cache": false,
       "persistent": true,
+      "with": ["mailpit"],
       "env": ["NODE_ENV", "DATABASE_URL", "BACKEND_URL", "JWT_SECRET", "GOOGLE_CLIENT_ID", "GOOGLE_CLIENT_SECRET", "SESSION_SECRET_KEY"]
     },
     "start:dev": {
@@ -40,6 +41,11 @@
       "cache": false,
       "persistent": true,
       "outputs": ["storybook-static/**"]
+    },
+    "mailpit": {
+      "cache": false,
+      "persistent": true,
+      "outputs": []
     }
   }
 }

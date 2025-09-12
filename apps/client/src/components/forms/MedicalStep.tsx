@@ -22,7 +22,7 @@ export default function MedicalStep({
   ]
 
   return (
-    <Card data-step="3">
+    <Card data-step="4">
       <CardHeader>
         <CardTitle className="text-xl text-center flex items-center justify-center gap-2">
           <Heart className="w-6 h-6 text-red-500" />

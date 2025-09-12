@@ -21,6 +21,27 @@ export { Command, CommandDialog, CommandEmpty, CommandGroup, CommandInput, Comma
 export { Popover, PopoverContent, PopoverTrigger } from "./components/ui/popover"
 export { Combobox, type ComboboxItem, type ComboboxProps } from "./components/ui/combobox"
 export { AddressCombobox, type AddressComboboxProps } from "./components/ui/address-combobox"
+export { Progress } from "./components/ui/progress"
+
+// Business Components - HavRid specific components
+export { 
+  StatsCard, 
+  StatsGrid, 
+  ProgressProfile, 
+  ActionPanel,
+  type StatData,
+  type StatTrend,
+  type StatVariant,
+  type StatsCardProps,
+  type StatsGridProps,
+  type ProfileField,
+  type ProgressProfileProps,
+  type ActionItem,
+  type ActionGroup,
+  type ActionVariant,
+  type ActionSize,
+  type ActionPanelProps
+} from "./components/business"
 
 // Accessible Components have been moved to @repo/ui-accessible package
 // For backward compatibility, you can still import them from @repo/ui-accessible

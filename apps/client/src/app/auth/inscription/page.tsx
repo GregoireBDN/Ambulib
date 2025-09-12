@@ -11,6 +11,7 @@ import { useAuth } from "@/contexts/AuthContext"
 import { useFormStepper } from "@/hooks/useFormStepper"
 import IdentityStep from "@/components/forms/IdentityStep"
 import SecurityStep from "@/components/forms/SecurityStep"
+import EmailVerificationStep from "@/components/forms/EmailVerificationStep"
 import MedicalStep from "@/components/forms/MedicalStep"
 import EmergencyStep from "@/components/forms/EmergencyStep"
 
@@ -35,7 +36,10 @@ export default function InscriptionPage() {
     nextStep,
     prevStep,
     validateForm,
-    clearStorage
+    clearStorage,
+    handleEmailVerificationComplete,
+    resetEmailVerification,
+    goToStepWithEmailReset
   } = useFormStepper()
 
   const handleSubmit = async () => {
@@ -83,7 +87,7 @@ export default function InscriptionPage() {
           error?.response?.data?.message?.includes('exists')) {
         setError("Cette adresse email est déjà utilisée. Veuillez en choisir une autre ou vous connecter.")
         // Retourner à l'étape 2 (sécurité) pour permettre de changer l'email
-        if (currentStep === 4) {
+        if (currentStep === 5) {
           setTimeout(() => {
             const newStep = 2
             setCurrentStep(newStep)
@@ -130,9 +134,20 @@ export default function InscriptionPage() {
             formData={formData}
             errors={errors}
             onFieldChange={updateField}
+            onResetEmailVerification={resetEmailVerification}
           />
         )
       case 3:
+        return (
+          <EmailVerificationStep
+            formData={formData}
+            errors={errors}
+            onFieldChange={updateField}
+            onVerificationComplete={handleEmailVerificationComplete}
+            onGoToEmailStep={goToStepWithEmailReset}
+          />
+        )
+      case 4:
         return (
           <MedicalStep
             formData={formData}
@@ -140,7 +155,7 @@ export default function InscriptionPage() {
             onFieldChange={updateField}
           />
         )
-      case 4:
+      case 5:
         return (
           <EmergencyStep
             formData={formData}
@@ -178,7 +193,7 @@ export default function InscriptionPage() {
           <div className="max-w-2xl mx-auto">
             <FormStepProgress
               currentStep={currentStep}
-              totalSteps={4}
+              totalSteps={5}
               stepLabels={stepLabels}
               className="mb-8"
             />
@@ -202,14 +217,14 @@ export default function InscriptionPage() {
               </div>
               
               <div className="flex gap-3 sm:ml-auto">
-                {currentStep < 4 ? (
+                {currentStep < 5 ? (
                   <Button
                     type="button"
                     onClick={nextStep}
                     className="h-14 px-8 text-lg min-w-[140px]"
-                    disabled={isLoading}
+                    disabled={isLoading || (currentStep === 3 && !formData.emailVerified)}
                   >
-                    Suivant →
+                    {currentStep === 3 && !formData.emailVerified ? 'Vérifiez votre email' : 'Suivant →'}
                   </Button>
                 ) : (
                   <Button
@@ -270,14 +285,14 @@ export default function InscriptionPage() {
               </div>
               
               <div className="flex gap-3 sm:ml-auto">
-                {currentStep < 4 ? (
+                {currentStep < 5 ? (
                   <Button
                     type="button"
                     onClick={nextStep}
                     className="h-14 px-8 text-lg min-w-[140px]"
-                    disabled={isLoading}
+                    disabled={isLoading || (currentStep === 3 && !formData.emailVerified)}
                   >
-                    Suivant →
+                    {currentStep === 3 && !formData.emailVerified ? 'Vérifiez votre email' : 'Suivant →'}
                   </Button>
                 ) : (
                   <Button

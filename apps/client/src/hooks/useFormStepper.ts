@@ -19,6 +19,10 @@ const initialFormData: FormData = {
   password: '',
   confirmPassword: '',
   
+  // Étape 2.5 - Vérification email
+  emailVerified: false,
+  verificationCode: '',
+  
   // Étape 3
   socialSecurity: '',
   allergies: '',
@@ -130,7 +134,7 @@ export const useFormStepper = () => {
       return
     }
 
-    // Vérification spéciale pour l'étape 2 (sécurité) - vérifier l'email avant de passer à l'étape 3
+    // Vérification spéciale pour l'étape 2 (sécurité) - vérifier l'email avant de passer à l'étape 3 (vérification)
     if (currentStep === 2 && formData.email) {
       setIsLoading(true)
       
@@ -149,7 +153,7 @@ export const useFormStepper = () => {
           return
         }
         
-        // Email disponible, nettoyer les erreurs
+        // Email disponible, nettoyer les erreurs et passer à la vérification
         setErrors(prev => ({ ...prev, email: '' }))
         setSubmitError('')
       } catch (error) {
@@ -159,8 +163,14 @@ export const useFormStepper = () => {
         setIsLoading(false)
       }
     }
+    
+    // Bloquer la progression après l'étape 3 (vérification email) si l'email n'est pas vérifié
+    if (currentStep === 3 && !formData.emailVerified) {
+      setSubmitError('Veuillez vérifier votre adresse email avant de continuer.')
+      return
+    }
 
-    if (currentStep < 4) {
+    if (currentStep < 5) {
       const newStep = currentStep + 1
       setCurrentStep(newStep)
       
@@ -188,7 +198,7 @@ export const useFormStepper = () => {
 
   // Aller à une étape spécifique
   const goToStep = useCallback((step: number) => {
-    if (step >= 1 && step <= 4) {
+    if (step >= 1 && step <= 5) {
       setCurrentStep(step)
     }
   }, [])
@@ -198,7 +208,7 @@ export const useFormStepper = () => {
     const errors: Record<string, string> = {}
     let hasErrors = false
 
-    for (let step = 1; step <= 4; step++) {
+    for (let step = 1; step <= 5; step++) {
       const result = validateStep(step, formData)
       if (!result.success) {
         result.error.errors.forEach(error => {
@@ -224,7 +234,8 @@ export const useFormStepper = () => {
   // Obtenir les labels des étapes
   const stepLabels = [
     'Vos informations',
-    'Votre compte', 
+    'Votre compte',
+    'Vérification email',
     'Informations médicales',
     'Contact d\'urgence'
   ]
@@ -241,6 +252,60 @@ export const useFormStepper = () => {
     setErrors({})
     setSubmitError('')
   }, [])
+
+  // Fonction pour réinitialiser la vérification d'email
+  const resetEmailVerification = useCallback(() => {
+    setFormData(prev => ({
+      ...prev,
+      emailVerified: false,
+      verificationCode: ''
+    }))
+    
+    // Nettoyer les erreurs liées à la vérification
+    setErrors(prev => {
+      const newErrors = { ...prev }
+      delete newErrors.verificationCode
+      delete newErrors.email
+      return newErrors
+    })
+    setSubmitError('')
+  }, [])
+
+  // Fonction pour retourner à l'étape 2 avec réinitialisation de la vérification
+  const goToStepWithEmailReset = useCallback((step: number) => {
+    if (step === 2) {
+      resetEmailVerification()
+    }
+    setCurrentStep(step)
+    setSubmitError('')
+    
+    // Focus sur le champ email après un délai
+    setTimeout(() => {
+      if (step === 2) {
+        const emailInput = document.getElementById('email')
+        emailInput?.focus()
+      }
+    }, 100)
+  }, [resetEmailVerification])
+
+  // Fonction pour gérer la completion de la vérification email
+  const handleEmailVerificationComplete = useCallback(() => {
+    if (currentStep === 3) {
+      // Forcer le passage à l'étape suivante sans vérifier emailVerified
+      // car on sait que la vérification vient d'être complétée
+      const newStep = currentStep + 1
+      setCurrentStep(newStep)
+      
+      // Nettoyer les erreurs de soumission
+      setSubmitError('')
+      
+      // Focus sur le premier champ de la nouvelle étape après un délai
+      setTimeout(() => {
+        const firstInput = document.querySelector(`[data-step="${newStep}"] input, [data-step="${newStep}"] select, [data-step="${newStep}"] textarea`) as HTMLElement
+        firstInput?.focus()
+      }, 100)
+    }
+  }, [currentStep])
 
   return {
     currentStep,
@@ -261,6 +326,9 @@ export const useFormStepper = () => {
     goToStep,
     validateCurrentStep,
     validateForm,
-    clearStorage
+    clearStorage,
+    handleEmailVerificationComplete,
+    resetEmailVerification,
+    goToStepWithEmailReset
   }
 }

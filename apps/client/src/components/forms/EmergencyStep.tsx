@@ -26,7 +26,7 @@ export default function EmergencyStep({
   ]
 
   return (
-    <Card data-step="4">
+    <Card data-step="5">
       <CardHeader>
         <CardTitle className="text-xl text-center flex items-center justify-center gap-2">
           <UserCheck className="w-6 h-6 text-green-600" />

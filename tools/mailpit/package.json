@@ -1,0 +1,9 @@
+{
+  "name": "@havrid/mailpit",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "mailpit": "mailpit"
+  },
+  "description": "Mailpit email development server for HavRid"
+}

@@ -53,6 +53,6 @@ storybook.log
 .superdesign/
 
 
-
+.nx
 .nx/cache
 .nx/workspace-dataapps/client/cookies.txt

@@ -7,15 +7,33 @@ interface SecurityStepProps {
   formData: FormData
   errors: Record<string, string>
   onFieldChange: (field: keyof FormData, value: any) => void
+  onResetEmailVerification?: () => void
 }
 
 export default function SecurityStep({
   formData,
   errors,
-  onFieldChange
+  onFieldChange,
+  onResetEmailVerification
 }: SecurityStepProps) {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [showConfirmReset, setShowConfirmReset] = useState(false)
+
+  const handleEmailChange = (value: string) => {
+    if (formData.emailVerified) {
+      // Si l'email est vérifié, ne pas permettre la modification directe
+      return
+    }
+    onFieldChange('email', value)
+  }
+
+  const handleResetEmailVerification = () => {
+    if (onResetEmailVerification) {
+      onResetEmailVerification()
+      setShowConfirmReset(false)
+    }
+  }
 
   const getPasswordStrength = (password: string) => {
     let strength = 0
@@ -66,25 +84,101 @@ export default function SecurityStep({
             <Label htmlFor="email" className="text-base font-medium">
               Adresse email *
             </Label>
-            <Input
-              id="email"
-              type="email"
-              value={formData.email}
-              onChange={(e) => onFieldChange('email', e.target.value)}
-              placeholder="votre.email@exemple.fr"
-              required
-              aria-invalid={!!errors.email}
-              aria-describedby={errors.email ? "email-error" : "email-help"}
-              className={`h-14 text-lg ${errors.email ? 'border-red-500 focus:border-red-500' : ''}`}
-            />
-            {errors.email && (
-              <p id="email-error" className="text-red-600 text-sm" role="alert">
-                {errors.email}
-              </p>
+            
+            {formData.emailVerified ? (
+              /* Email vérifié - Mode lecture seule avec possibilité de déverrouiller */
+              <>
+                <div className="relative">
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    readOnly
+                    className="h-14 text-lg bg-green-50 border-green-300 text-green-800 cursor-not-allowed"
+                  />
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-green-600">
+                    ✅
+                  </div>
+                </div>
+                <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                  <p className="text-green-800 text-sm font-medium mb-2">
+                    ✅ Email vérifié et protégé
+                  </p>
+                  <p className="text-green-700 text-xs mb-3">
+                    Votre adresse email a été vérifiée avec succès. Elle est maintenant protégée contre les modifications accidentelles.
+                  </p>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowConfirmReset(true)}
+                    className="text-xs h-8 border-green-300 text-green-700 hover:bg-green-100"
+                  >
+                    Modifier l'email (nécessite une nouvelle vérification)
+                  </Button>
+                </div>
+                
+                {/* Dialogue de confirmation */}
+                {showConfirmReset && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                    <div className="flex items-start gap-3">
+                      <div className="text-amber-500 text-xl">⚠️</div>
+                      <div className="flex-1">
+                        <h4 className="text-amber-800 font-semibold text-sm mb-2">
+                          Confirmation requise
+                        </h4>
+                        <p className="text-amber-700 text-sm mb-3">
+                          En modifiant votre email, vous devrez effectuer une nouvelle vérification. 
+                          Êtes-vous sûr de vouloir continuer ?
+                        </p>
+                        <div className="flex gap-2">
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setShowConfirmReset(false)}
+                            className="text-xs h-8"
+                          >
+                            Annuler
+                          </Button>
+                          <Button
+                            type="button"
+                            size="sm"
+                            onClick={handleResetEmailVerification}
+                            className="text-xs h-8 bg-amber-600 hover:bg-amber-700"
+                          >
+                            Confirmer la modification
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              /* Email non vérifié - Mode normal */
+              <>
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => handleEmailChange(e.target.value)}
+                  placeholder="votre.email@exemple.fr"
+                  required
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? "email-error" : "email-help"}
+                  className={`h-14 text-lg ${errors.email ? 'border-red-500 focus:border-red-500' : ''}`}
+                />
+                {errors.email && (
+                  <p id="email-error" className="text-red-600 text-sm" role="alert">
+                    {errors.email}
+                  </p>
+                )}
+                <p id="email-help" className="text-xs text-muted-foreground">
+                  Utilisée pour la connexion et les communications importantes
+                </p>
+              </>
             )}
-            <p id="email-help" className="text-xs text-muted-foreground">
-              Utilisée pour la connexion et les communications importantes
-            </p>
           </div>
         </div>
 
