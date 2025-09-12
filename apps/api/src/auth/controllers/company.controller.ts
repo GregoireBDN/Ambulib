@@ -17,6 +17,7 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import { CompanyService } from '../services/company.service';
+import { RequestWithUser } from '../../common/interfaces/request-with-user.interface';
 import {
   CompanyRegistrationDto,
   CompanyApprovalDto,
@@ -116,7 +117,7 @@ export class CompanyController {
   async createCompanyUser(
     @Param('id', ParseIntPipe) companyId: number,
     @Body() userDto: CreateCompanyUserDto,
-    @Request() req: any,
+    @Request() req: RequestWithUser,
   ) {
     // SUPER_ADMIN peut accéder à toutes les entreprises
     if (req.user.role === Role.SUPER_ADMIN) {
@@ -154,7 +155,7 @@ export class CompanyController {
   async deleteCompanyUser(
     @Param('companyId', ParseIntPipe) companyId: number,
     @Param('userId', ParseIntPipe) userId: number,
-    @Request() req: any,
+    @Request() req: RequestWithUser,
   ) {
     // SUPER_ADMIN peut accéder à toutes les entreprises
     if (req.user.role === Role.SUPER_ADMIN) {

@@ -177,7 +177,7 @@ describe('CompanyController - Isolated Logic Tests', () => {
 
   describe('getCompany', () => {
     it('should call service.getCompanyById', async () => {
-      const expectedCompany = { id: 1, name: 'Test Company' };
+      const expectedCompany = { id: 1, name: 'Test Company', ambulances: [], users: [] } as any;
       mockService.getCompanyById.mockResolvedValue(expectedCompany);
 
       const result = await controller.getCompany(1);
@@ -189,7 +189,7 @@ describe('CompanyController - Isolated Logic Tests', () => {
 
   describe('getPendingCompanies', () => {
     it('should call service.getPendingCompanies', async () => {
-      const expectedCompanies = [{ id: 1, name: 'Test Company' }];
+      const expectedCompanies = [{ id: 1, name: 'Test Company', users: [] }] as any;
       mockService.getPendingCompanies.mockResolvedValue(expectedCompanies);
 
       const result = await controller.getPendingCompanies();

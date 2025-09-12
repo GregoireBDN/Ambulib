@@ -45,7 +45,7 @@ describe('AuthController', () => {
 
   const mockRequest = {
     user: mockUser,
-  } as RequestWithUser;
+  } as unknown as RequestWithUser;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

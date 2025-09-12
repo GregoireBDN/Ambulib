@@ -47,17 +47,9 @@ import {
 import { ForgotPasswordDto, ResetPasswordDto } from './dto/password-reset.dto';
 import { EmailVerificationService } from './email-verification.service';
 import { PasswordResetService } from './password-reset.service';
+import { RequestWithUser } from '../common/interfaces/request-with-user.interface';
 
-interface RequestWithUser extends Request {
-  user: {
-    id: number;
-    firstName: string;
-    lastName: string;
-    role: Role;
-    email: string;
-    isProfileComplete: boolean;
-  };
-}
+// Interface moved to ../common/interfaces/request-with-user.interface.ts
 
 @ApiTags('auth')
 @Controller('auth')
