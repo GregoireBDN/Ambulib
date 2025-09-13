@@ -1,5 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AdminService } from './admin.service';
+import { AdminUsersService } from './services/admin-users.service';
+import { AdminAmbulancesService } from './services/admin-ambulances.service';
+import { AdminStatsService } from './services/admin-stats.service';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   ConflictException,
@@ -65,6 +68,9 @@ describe('AdminService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AdminService,
+        AdminUsersService,
+        AdminAmbulancesService,
+        AdminStatsService,
         {
           provide: PrismaService,
           useValue: mockPrismaService,
