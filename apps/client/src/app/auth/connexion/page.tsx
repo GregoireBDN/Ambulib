@@ -38,19 +38,22 @@ export default function ConnexionPage() {
     } catch (error: unknown) {
       console.error("Erreur connexion:", error)
       
+      // Helper pour extraire le message d'erreur
+      const errorMessage = (error && typeof error === 'object' && 'message' in error && typeof error.message === 'string') ? error.message : String(error)
+      
       // Gestion spécifique des erreurs
-      if (error?.message?.includes('User not found') || 
-          error?.message?.includes('not found')) {
+      if (errorMessage.includes('User not found') || 
+          errorMessage.includes('not found')) {
         setError("Aucun compte trouvé avec cette adresse email. Vérifiez votre email ou créez un compte.")
-      } else if (error?.message?.includes('invalid') || 
-                 error?.message?.includes('password') ||
-                 error?.message?.includes('credentials')) {
+      } else if (errorMessage.includes('invalid') || 
+                 errorMessage.includes('password') ||
+                 errorMessage.includes('credentials')) {
         setError("Mot de passe incorrect. Vérifiez votre mot de passe ou utilisez 'Mot de passe oublié'.")
-      } else if (error?.message?.includes('network') || 
-                 error?.message?.includes('fetch')) {
+      } else if (errorMessage.includes('network') || 
+                 errorMessage.includes('fetch')) {
         setError("Problème de connexion. Vérifiez votre connexion internet et réessayez.")
-      } else if (error?.message?.includes('blocked') ||
-                 error?.message?.includes('suspended')) {
+      } else if (errorMessage.includes('blocked') ||
+                 errorMessage.includes('suspended')) {
         setError("Votre compte a été suspendu. Contactez le support pour plus d'informations.")
       } else {
         setError("Identifiants incorrects. Vérifiez votre email et mot de passe.")

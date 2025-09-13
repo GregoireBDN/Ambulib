@@ -160,10 +160,14 @@ export default function IdentityStep({
                     street: formData.address.street,
                     postalCode: formData.address.postalCode || '',
                     city: formData.address.city || '',
-                    coordinates: [0, 0],
-                    type: "housenumber" as const,
-                    score: 1,
-                    context: formData.address.street
+                    coordinates: [0, 0] as [number, number],
+                    properties: {
+                      id: '1',
+                      label: formData.address.street,
+                      name: formData.address.street,
+                      postcode: formData.address.postalCode || '',
+                      city: formData.address.city || ''
+                    }
                   } : null
                 }
                 placeholder="Tapez votre adresse : 123 rue de la République, Paris..."
