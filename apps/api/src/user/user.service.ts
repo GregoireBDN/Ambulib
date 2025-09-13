@@ -203,7 +203,7 @@ export class UserService {
     } = dto;
 
     // Mettre à jour les données utilisateur
-    const updatedUser = await this.prisma.user.update({
+    const updatedUser = (await this.prisma.user.update({
       where: { id: userId },
       data: {
         ...userData,
@@ -212,7 +212,7 @@ export class UserService {
       include: {
         emergencyContact: true,
       },
-    });
+    })) as Prisma.UserGetPayload<{ include: { emergencyContact: true } }>;
 
     // Gérer le contact d'urgence si des données sont fournies
     if (
@@ -286,7 +286,7 @@ export class UserService {
       throw new NotFoundException('Utilisateur introuvable');
     }
 
-    return await this.prisma.booking.findMany({
+    return (await this.prisma.booking.findMany({
       where: { clientId: userId },
       orderBy: { createdAt: 'desc' },
       include: {
@@ -304,7 +304,23 @@ export class UserService {
           },
         },
       },
-    });
+    })) as Prisma.BookingGetPayload<{
+      include: {
+        transportTickets: true;
+        assignments: {
+          include: {
+            ambulance: true;
+            driver: {
+              select: {
+                firstName: true;
+                lastName: true;
+                phoneNumber: true;
+              };
+            };
+          };
+        };
+      };
+    }>[];
   }
 
   async deleteAccount(userId: number) {
