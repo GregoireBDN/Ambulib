@@ -31,7 +31,7 @@ export class AdminService {
       data: {
         ...dto,
         password: hashedPassword,
-        role: Role.FLEET_MANAGER,
+        role: 'FLEET_MANAGER' as Role,
         isProfileComplete: true,
       },
     });
@@ -52,7 +52,7 @@ export class AdminService {
       data: {
         ...dto,
         password: hashedPassword,
-        role: Role.AMBULANCE_DRIVER,
+        role: 'AMBULANCE_DRIVER' as Role,
         isProfileComplete: true,
       },
     });
@@ -71,7 +71,7 @@ export class AdminService {
 
     if (dto.driverId) {
       const driver = await this.prisma.user.findUnique({
-        where: { id: dto.driverId, role: Role.AMBULANCE_DRIVER },
+        where: { id: dto.driverId, role: 'AMBULANCE_DRIVER' as Role },
       });
 
       if (!driver) {
@@ -200,7 +200,7 @@ export class AdminService {
       throw new NotFoundException('User not found');
     }
 
-    if (user.role === Role.SUPER_ADMIN) {
+    if (user.role === ('SUPER_ADMIN' as Role)) {
       throw new ForbiddenException('Cannot delete super admin user');
     }
 
@@ -335,15 +335,23 @@ export class AdminService {
       pendingBookings,
     ] = await Promise.all([
       this.prisma.user.count(),
-      this.prisma.user.count({ where: { role: Role.CLIENT } }),
       this.prisma.user.count({
-        where: { role: Role.AMBULANCE_DRIVER },
+        where: { role: 'CLIENT' as Role },
       }),
-      this.prisma.user.count({ where: { role: Role.FLEET_MANAGER } }),
+      this.prisma.user.count({
+        where: { role: 'AMBULANCE_DRIVER' as Role },
+      }),
+      this.prisma.user.count({
+        where: { role: 'FLEET_MANAGER' as Role },
+      }),
       this.prisma.ambulance.count(),
-      this.prisma.ambulance.count({ where: { status: 'AVAILABLE' } }),
+      this.prisma.ambulance.count({
+        where: { status: 'AVAILABLE' },
+      }),
       this.prisma.booking.count(),
-      this.prisma.booking.count({ where: { status: 'PENDING' } }),
+      this.prisma.booking.count({
+        where: { status: 'PENDING' },
+      }),
     ]);
 
     return {
