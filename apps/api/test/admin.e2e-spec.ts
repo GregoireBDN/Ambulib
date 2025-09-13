@@ -49,6 +49,8 @@ describe('AdminController (e2e)', () => {
         },
       });
 
+      expect(adminUser).toBeDefined();
+
       // Mock JWT token (in real scenario, you'd get this from login endpoint)
       const jwtToken = 'mock-jwt-token';
 
@@ -87,8 +89,8 @@ describe('AdminController (e2e)', () => {
     it('should create an ambulance when authenticated as admin', async () => {
       const createAmbulanceDto = {
         licensePlate: 'AMB123',
-        vehicleModel: 'Mercedes Sprinter',
-        vehicleYear: 2022,
+        model: 'Mercedes Sprinter',
+        year: 2022,
         capacity: 2,
       };
 
@@ -160,8 +162,8 @@ describe('AdminController (e2e)', () => {
         data: {
           companyId: 1,
           licensePlate: 'TEST123',
-          vehicleModel: 'Ford Transit',
-          vehicleYear: 2023,
+          model: 'Ford Transit',
+          year: 2023,
           capacity: 1,
           status: 'AVAILABLE',
         },
@@ -189,10 +191,9 @@ describe('AdminController (e2e)', () => {
           clientId: client.id,
           pickupAddress: '123 Test Street',
           destinationAddress: '456 Hospital Street',
-          pickupCity: 'Test City',
-          destinationCity: 'Hospital City',
-          bookingType: 'SCHEDULED',
+          bookingType: 'MEDICAL_APPOINTMENT',
           status: 'PENDING',
+          pickupDateTime: new Date(),
         },
       });
 

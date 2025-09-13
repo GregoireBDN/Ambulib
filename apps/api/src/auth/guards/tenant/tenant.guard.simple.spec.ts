@@ -41,67 +41,61 @@ describe('TenantGuard - Simple Tests', () => {
           query,
         }),
       }),
-    } as any;
+    } as unknown as ExecutionContext;
   };
 
   describe('SUPER_ADMIN access', () => {
-    it('should allow SUPER_ADMIN to access anything', async () => {
+    it('should allow SUPER_ADMIN to access anything', () => {
       const user = { id: 1, role: Role.SUPER_ADMIN, companyId: null };
       const context = createMockContext(user);
 
-      const result = await guard.canActivate(context);
+      const result = guard.canActivate(context);
 
       expect(result).toBe(true);
     });
   });
 
   describe('CLIENT access', () => {
-    it('should allow CLIENT to access without company restriction', async () => {
+    it('should allow CLIENT to access without company restriction', () => {
       const user = { id: 1, role: Role.CLIENT, companyId: null };
       const context = createMockContext(user);
 
-      const result = await guard.canActivate(context);
+      const result = guard.canActivate(context);
 
       expect(result).toBe(true);
     });
   });
 
   describe('Company user access', () => {
-    it('should allow access when user belongs to same company', async () => {
+    it('should allow access when user belongs to same company', () => {
       const user = { id: 1, role: Role.ADMIN, companyId: 1 };
       const context = createMockContext(user, { companyId: '1' });
 
-      const result = await guard.canActivate(context);
+      const result = guard.canActivate(context);
 
       expect(result).toBe(true);
     });
 
-    it('should throw ForbiddenException when accessing different company', async () => {
+    it('should throw ForbiddenException when accessing different company', () => {
       const user = { id: 1, role: Role.ADMIN, companyId: 1 };
       const context = createMockContext(user, { companyId: '2' });
 
-      await expect(guard.canActivate(context)).rejects.toThrow(
-        ForbiddenException,
-      );
+      expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
     });
 
-    it('should throw ForbiddenException when company user has no companyId', async () => {
+    it('should throw ForbiddenException when company user has no companyId', () => {
       const user = { id: 1, role: Role.ADMIN, companyId: null };
       const context = createMockContext(user);
 
-      await expect(guard.canActivate(context)).rejects.toThrow(
-        ForbiddenException,
-      );
+      expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
     });
   });
 
   describe('Authentication check', () => {
-    it('should throw ForbiddenException when no user', async () => {
+    it('should throw ForbiddenException when no user', () => {
       const context = createMockContext(null);
 
-      await expect(guard.canActivate(context)).rejects.toThrow(
-        ForbiddenException,
-      );
+      expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
     });
   });
 });

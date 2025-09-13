@@ -4,7 +4,6 @@ import {
   IsString,
   IsOptional,
   IsBoolean,
-  IsNumber,
   MinLength,
   Matches,
 } from 'class-validator';
@@ -49,7 +48,7 @@ export class SignupDto {
   @Matches(/\d/, {
     message: 'Le mot de passe doit contenir au moins un chiffre',
   })
-  @Matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, {
+  @Matches(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/, {
     message:
       'Le mot de passe doit contenir au moins un caractère spécial (!@#$%^&*...)',
   })
@@ -329,7 +328,7 @@ export class CreateCompanyUserDto {
   @Matches(/\d/, {
     message: 'Le mot de passe doit contenir au moins un chiffre',
   })
-  @Matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, {
+  @Matches(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/, {
     message:
       'Le mot de passe doit contenir au moins un caractère spécial (!@#$%^&*...)',
   })

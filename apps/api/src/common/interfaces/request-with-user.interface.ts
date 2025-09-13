@@ -10,5 +10,6 @@ export interface RequestWithUser extends Request {
     role: Role;
     companyId?: number;
     isEmailVerified: boolean;
+    isProfileComplete: boolean;
   };
 }

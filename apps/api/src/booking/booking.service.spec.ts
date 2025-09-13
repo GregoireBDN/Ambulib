@@ -266,6 +266,7 @@ describe('BookingService', () => {
         orderBy: { createdAt: 'desc' },
         include: expect.any(Object),
       });
+      expect(result).toBeDefined();
     });
 
     it('should apply status filter', async () => {

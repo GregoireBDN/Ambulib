@@ -7,6 +7,7 @@ import {
 import { Reflector } from '@nestjs/core';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { Role } from '@prisma/client';
+import { RequestWithUser } from '../../../common/interfaces/request-with-user.interface';
 
 @Injectable()
 export class TenantGuard implements CanActivate {
@@ -15,8 +16,8 @@ export class TenantGuard implements CanActivate {
     private prisma: PrismaService,
   ) {}
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
+  canActivate(context: ExecutionContext): boolean {
+    const request = context.switchToHttp().getRequest<RequestWithUser>();
     const user = request.user;
 
     if (!user) {
@@ -44,11 +45,11 @@ export class TenantGuard implements CanActivate {
     return true;
   }
 
-  private extractCompanyIdFromRequest(request: any): number | null {
-    const companyId =
-      request.params?.companyId ||
-      request.body?.companyId ||
-      request.query?.companyId;
+  private extractCompanyIdFromRequest(request: RequestWithUser): number | null {
+    const companyId: string | undefined =
+      (request.params as Record<string, string>)?.companyId ||
+      ((request.body as Record<string, unknown>)?.companyId as string) ||
+      (request.query as Record<string, string>)?.companyId;
 
     return companyId ? parseInt(companyId, 10) : null;
   }

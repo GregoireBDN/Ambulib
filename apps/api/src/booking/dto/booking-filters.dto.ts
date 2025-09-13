@@ -47,7 +47,7 @@ export class BookingFiltersDto {
     required: false,
   })
   @IsOptional()
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => parseInt(value as string, 10))
   @IsInt()
   page?: number = 1;
 
@@ -59,7 +59,7 @@ export class BookingFiltersDto {
     required: false,
   })
   @IsOptional()
-  @Transform(({ value }) => parseInt(value))
+  @Transform(({ value }) => parseInt(value as string, 10))
   @IsInt()
   limit?: number = 10;
 }

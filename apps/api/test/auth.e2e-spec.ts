@@ -215,7 +215,7 @@ describe('AuthController (e2e)', () => {
 
     beforeAll(async () => {
       // Create an admin user for protected endpoint test
-      const user = await prismaService.user.create({
+      const _user = await prismaService.user.create({
         data: {
           firstName: 'Admin',
           lastName: 'User',
@@ -228,7 +228,7 @@ describe('AuthController (e2e)', () => {
       });
 
       // Sign in to get token
-      const response = await request(app.getHttpServer())
+      const _response = await request(app.getHttpServer())
         .post('/auth/signin')
         .send({
           email: 'test-e2e-admin@example.com',

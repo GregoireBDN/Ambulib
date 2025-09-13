@@ -242,7 +242,18 @@ describe('AdminService', () => {
         where: { role: Role.FLEET_MANAGER },
         skip: 0,
         take: 10,
-        select: expect.objectContaining({}),
+        select: expect.objectContaining({
+          id: expect.any(Boolean),
+          email: expect.any(Boolean),
+          firstName: expect.any(Boolean),
+          lastName: expect.any(Boolean),
+          role: expect.any(Boolean),
+          phoneNumber: expect.any(Boolean),
+          city: expect.any(Boolean),
+          isProfileComplete: expect.any(Boolean),
+          createdAt: expect.any(Boolean),
+          updatedAt: expect.any(Boolean),
+        }),
         orderBy: { createdAt: 'desc' },
       });
     });
