@@ -9,7 +9,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { UpdateBookingDto } from './dto/update-booking.dto';
 import { BookingFiltersDto } from './dto/booking-filters.dto';
-import { BookingStatus, BookingType, Role } from '@prisma/client';
+import { Prisma, BookingStatus, BookingType, Role } from '@prisma/client';
 
 @Injectable()
 export class BookingService {
@@ -77,7 +77,7 @@ export class BookingService {
     }
 
     try {
-      const booking = await this.prisma.booking.create({
+      const booking = (await this.prisma.booking.create({
         data: {
           ...createBookingDto,
           clientId: userId,
@@ -107,7 +107,30 @@ export class BookingService {
             },
           },
         },
-      });
+      })) as Prisma.BookingGetPayload<{
+        include: {
+          client: {
+            select: {
+              firstName: true;
+              lastName: true;
+              phoneNumber: true;
+            };
+          };
+          transportTickets: true;
+          assignments: {
+            include: {
+              ambulance: true;
+              driver: {
+                select: {
+                  firstName: true;
+                  lastName: true;
+                  phoneNumber: true;
+                };
+              };
+            };
+          };
+        };
+      }>;
 
       this.logger.log(`Booking created successfully with ID: ${booking.id}`);
       return booking;
@@ -236,7 +259,7 @@ export class BookingService {
   async findOne(id: number, userId: number, userRole: Role) {
     this.logger.log(`Fetching booking ${id} for user ${userId}`);
 
-    const booking = await this.prisma.booking.findUnique({
+    const booking = (await this.prisma.booking.findUnique({
       where: { id },
       include: {
         client: {
@@ -268,7 +291,37 @@ export class BookingService {
           },
         },
       },
-    });
+    })) as Prisma.BookingGetPayload<{
+      include: {
+        client: {
+          select: {
+            firstName: true;
+            lastName: true;
+            phoneNumber: true;
+            email: true;
+          };
+        };
+        transportTickets: true;
+        assignments: {
+          include: {
+            ambulance: {
+              select: {
+                id: true;
+                licensePlate: true;
+                model: true;
+              };
+            };
+            driver: {
+              select: {
+                firstName: true;
+                lastName: true;
+                phoneNumber: true;
+              };
+            };
+          };
+        };
+      };
+    }> | null;
 
     if (!booking) {
       throw new NotFoundException('Réservation introuvable');
@@ -346,7 +399,7 @@ export class BookingService {
     }
 
     try {
-      const updatedBooking = await this.prisma.booking.update({
+      const updatedBooking = (await this.prisma.booking.update({
         where: { id },
         data: {
           ...updateBookingDto,
@@ -376,7 +429,30 @@ export class BookingService {
             },
           },
         },
-      });
+      })) as Prisma.BookingGetPayload<{
+        include: {
+          client: {
+            select: {
+              firstName: true;
+              lastName: true;
+              phoneNumber: true;
+            };
+          };
+          transportTickets: true;
+          assignments: {
+            include: {
+              ambulance: true;
+              driver: {
+                select: {
+                  firstName: true;
+                  lastName: true;
+                  phoneNumber: true;
+                };
+              };
+            };
+          };
+        };
+      }>;
 
       this.logger.log(`Booking ${id} updated successfully`);
       return updatedBooking;

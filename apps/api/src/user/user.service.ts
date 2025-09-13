@@ -8,7 +8,7 @@ import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { hash, verify } from 'argon2';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -109,8 +109,20 @@ export class UserService {
     return result;
   }
 
-  async findByEmail(email: string) {
-    const result = await this.prisma.user.findUnique({
+  async findByEmail(email: string): Promise<Prisma.UserGetPayload<{
+    select: {
+      id: true;
+      email: true;
+      firstName: true;
+      lastName: true;
+      role: true;
+      password: true;
+      isProfileComplete: true;
+      companyId: true;
+      hashedRefreshToken: true;
+    };
+  }> | null> {
+    const result = (await this.prisma.user.findUnique({
       where: {
         email,
       },
@@ -125,12 +137,24 @@ export class UserService {
         companyId: true,
         hashedRefreshToken: true,
       },
-    });
+    })) as Prisma.UserGetPayload<{
+      select: {
+        id: true;
+        email: true;
+        firstName: true;
+        lastName: true;
+        role: true;
+        password: true;
+        isProfileComplete: true;
+        companyId: true;
+        hashedRefreshToken: true;
+      };
+    }> | null;
     return result;
   }
 
   async findOne(userId: number) {
-    const user = await this.prisma.user.findUnique({
+    const user = (await this.prisma.user.findUnique({
       where: {
         id: userId,
       },
@@ -138,7 +162,12 @@ export class UserService {
         emergencyContact: true,
         dependent: true,
       },
-    });
+    })) as Prisma.UserGetPayload<{
+      include: {
+        emergencyContact: true;
+        dependent: true;
+      };
+    }> | null;
 
     if (!user) {
       throw new NotFoundException('Utilisateur introuvable');
@@ -154,8 +183,13 @@ export class UserService {
   }
 
   // Méthode interne pour récupérer l'utilisateur avec tous les champs (pour AuthService)
-  async findOneInternal(userId: number) {
-    return await this.prisma.user.findUnique({
+  async findOneInternal(userId: number): Promise<Prisma.UserGetPayload<{
+    include: {
+      emergencyContact: true;
+      dependent: true;
+    };
+  }> | null> {
+    return (await this.prisma.user.findUnique({
       where: {
         id: userId,
       },
@@ -163,10 +197,18 @@ export class UserService {
         emergencyContact: true,
         dependent: true,
       },
-    });
+    })) as Prisma.UserGetPayload<{
+      include: {
+        emergencyContact: true;
+        dependent: true;
+      };
+    }> | null;
   }
 
-  async updateHashedRefreshToken(userId: number, hashedRT: string | null) {
+  async updateHashedRefreshToken(
+    userId: number,
+    hashedRT: string | null,
+  ): Promise<User> {
     return await this.prisma.user.update({
       where: {
         id: userId,
@@ -177,7 +219,7 @@ export class UserService {
     });
   }
 
-  async update(userId: number, data: Prisma.UserUpdateInput) {
+  async update(userId: number, data: Prisma.UserUpdateInput): Promise<User> {
     return await this.prisma.user.update({
       where: { id: userId },
       data,
@@ -323,7 +365,7 @@ export class UserService {
     }>[];
   }
 
-  async deleteAccount(userId: number) {
+  async deleteAccount(userId: number): Promise<void> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });

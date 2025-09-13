@@ -9,7 +9,7 @@ import { CreateFleetManagerDto } from './dto/create-fleet-manager.dto';
 import { CreateAmbulanceDriverDto } from './dto/create-ambulance-driver.dto';
 import { CreateAmbulanceDto } from './dto/create-ambulance.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Role, User, Ambulance } from '@prisma/client';
+import { Prisma, Role, User, Ambulance } from '@prisma/client';
 import * as argon from 'argon2';
 
 @Injectable()
@@ -48,7 +48,7 @@ export class AdminService {
 
     const hashedPassword = await argon.hash(dto.password);
 
-    return this.prisma.user.create({
+    return await this.prisma.user.create({
       data: {
         ...dto,
         password: hashedPassword,
@@ -79,7 +79,7 @@ export class AdminService {
       }
     }
 
-    return this.prisma.ambulance.create({
+    return (await this.prisma.ambulance.create({
       data: {
         ...dto,
         companyId: 1, // TODO: Récupérer companyId dynamiquement
@@ -88,7 +88,7 @@ export class AdminService {
         driver: true,
         company: true,
       },
-    });
+    })) as Ambulance;
   }
 
   async getAllUsers(
@@ -146,13 +146,18 @@ export class AdminService {
   }
 
   async getUserById(id: number): Promise<User> {
-    const user = await this.prisma.user.findUnique({
+    const user = (await this.prisma.user.findUnique({
       where: { id },
       include: {
         emergencyContact: true,
         dependent: true,
       },
-    });
+    })) as Prisma.UserGetPayload<{
+      include: {
+        emergencyContact: true;
+        dependent: true;
+      };
+    }> | null;
 
     if (!user) {
       throw new NotFoundException('User not found');
@@ -180,7 +185,7 @@ export class AdminService {
       }
     }
 
-    return this.prisma.user.update({
+    return await this.prisma.user.update({
       where: { id },
       data: dto,
     });
@@ -205,7 +210,7 @@ export class AdminService {
   }
 
   async getAllAmbulances(): Promise<Ambulance[]> {
-    return this.prisma.ambulance.findMany({
+    return (await this.prisma.ambulance.findMany({
       include: {
         driver: {
           select: {
@@ -217,11 +222,22 @@ export class AdminService {
         },
       },
       orderBy: { createdAt: 'desc' },
-    });
+    })) as Prisma.AmbulanceGetPayload<{
+      include: {
+        driver: {
+          select: {
+            id: true;
+            firstName: true;
+            lastName: true;
+            email: true;
+          };
+        };
+      };
+    }>[];
   }
 
   async getAmbulanceById(id: number): Promise<Ambulance> {
-    const ambulance = await this.prisma.ambulance.findUnique({
+    const ambulance = (await this.prisma.ambulance.findUnique({
       where: { id },
       include: {
         driver: true,
@@ -233,7 +249,16 @@ export class AdminService {
           orderBy: { assignedAt: 'desc' },
         },
       },
-    });
+    })) as Prisma.AmbulanceGetPayload<{
+      include: {
+        driver: true;
+        assignments: {
+          include: {
+            booking: true;
+          };
+        };
+      };
+    }> | null;
 
     if (!ambulance) {
       throw new NotFoundException('Ambulance not found');
@@ -266,13 +291,13 @@ export class AdminService {
       }
     }
 
-    return this.prisma.ambulance.update({
+    return (await this.prisma.ambulance.update({
       where: { id },
       data: dto,
       include: {
         driver: true,
       },
-    });
+    })) as Ambulance;
   }
 
   async deleteAmbulance(id: number): Promise<void> {
@@ -311,7 +336,9 @@ export class AdminService {
     ] = await Promise.all([
       this.prisma.user.count(),
       this.prisma.user.count({ where: { role: Role.CLIENT } }),
-      this.prisma.user.count({ where: { role: Role.AMBULANCE_DRIVER } }),
+      this.prisma.user.count({
+        where: { role: Role.AMBULANCE_DRIVER },
+      }),
       this.prisma.user.count({ where: { role: Role.FLEET_MANAGER } }),
       this.prisma.ambulance.count(),
       this.prisma.ambulance.count({ where: { status: 'AVAILABLE' } }),
