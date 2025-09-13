@@ -6,7 +6,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   /**
    * Connect to the database when the module is initialized
    */
-  async onModuleInit() {
+  async onModuleInit(): Promise<void> {
     await this.$connect();
   }
 }
