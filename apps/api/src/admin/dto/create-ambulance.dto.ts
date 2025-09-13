@@ -41,12 +41,12 @@ export class CreateAmbulanceDto {
 
   @ApiProperty({
     description: "Statut de l'ambulance",
-    enum: AmbulanceStatus,
+    enum: ['AVAILABLE', 'IN_USE', 'MAINTENANCE', 'OUT_OF_SERVICE'],
     example: 'AVAILABLE',
     required: false,
   })
   @IsOptional()
-  @IsEnum(AmbulanceStatus)
+  @IsEnum(['AVAILABLE', 'IN_USE', 'MAINTENANCE', 'OUT_OF_SERVICE'])
   status?: AmbulanceStatus;
 
   @ApiProperty({
