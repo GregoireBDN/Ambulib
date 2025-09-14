@@ -1,7 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Role } from '@prisma/client';
@@ -21,27 +17,23 @@ export interface SystemStats {
 export class AdminStatsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  private get db(): PrismaService {
-    return this.prisma;
-  }
-
   async getSystemStats(): Promise<SystemStats> {
-    const totalUsers = await this.db.user.count();
-    const totalClients = await this.db.user.count({
+    const totalUsers = await this.prisma.user.count();
+    const totalClients = await this.prisma.user.count({
       where: { role: 'CLIENT' as Role },
     });
-    const totalDrivers = await this.db.user.count({
+    const totalDrivers = await this.prisma.user.count({
       where: { role: 'AMBULANCE_DRIVER' as Role },
     });
-    const totalFleetManagers = await this.db.user.count({
+    const totalFleetManagers = await this.prisma.user.count({
       where: { role: 'FLEET_MANAGER' as Role },
     });
-    const totalAmbulances = await this.db.ambulance.count();
-    const availableAmbulances = await this.db.ambulance.count({
+    const totalAmbulances = await this.prisma.ambulance.count();
+    const availableAmbulances = await this.prisma.ambulance.count({
       where: { status: 'AVAILABLE' },
     });
-    const totalBookings = await this.db.booking.count();
-    const pendingBookings = await this.db.booking.count({
+    const totalBookings = await this.prisma.booking.count();
+    const pendingBookings = await this.prisma.booking.count({
       where: { status: 'PENDING' },
     });
 
