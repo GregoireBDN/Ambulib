@@ -47,6 +47,7 @@ import { ForgotPasswordDto, ResetPasswordDto } from './dto/password-reset.dto';
 import { EmailVerificationService } from './email-verification.service';
 import { PasswordResetService } from './password-reset.service';
 import { RequestWithUser } from '../common/interfaces/request-with-user.interface';
+import { Role, Prisma } from '@prisma/client';
 
 // Interface moved to ../common/interfaces/request-with-user.interface.ts
 
@@ -188,7 +189,15 @@ export class AuthController {
   })
   async googleCallback(@Request() req: RequestWithUser, @Res() res: Response) {
     try {
-      const response = await this.authService.login(
+      const response: {
+        id: number;
+        firstName: string;
+        lastName: string;
+        role: Role;
+        isProfileComplete: boolean;
+        accessToken: string;
+        refreshToken: string;
+      } = await this.authService.login(
         req.user.id,
         req.user.firstName,
         req.user.lastName,
@@ -291,7 +300,19 @@ export class AuthController {
     }
 
     try {
-      const existingUser = await this.userService.findByEmail(email);
+      const existingUser: Prisma.UserGetPayload<{
+        select: {
+          id: true;
+          email: true;
+          firstName: true;
+          lastName: true;
+          role: true;
+          password: true;
+          isProfileComplete: true;
+          companyId: true;
+          hashedRefreshToken: true;
+        };
+      }> | null = await this.userService.findByEmail(email);
 
       if (existingUser) {
         return {
