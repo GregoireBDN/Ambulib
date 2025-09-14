@@ -47,7 +47,7 @@ import { ForgotPasswordDto, ResetPasswordDto } from './dto/password-reset.dto';
 import { EmailVerificationService } from './email-verification.service';
 import { PasswordResetService } from './password-reset.service';
 import { RequestWithUser } from '../common/interfaces/request-with-user.interface';
-import { Role } from '@prisma/client';
+import { Role, Prisma } from '@prisma/client';
 
 // Interface moved to ../common/interfaces/request-with-user.interface.ts
 
@@ -300,7 +300,19 @@ export class AuthController {
     }
 
     try {
-      const existingUser = await this.userService.findByEmail(email);
+      const existingUser: Prisma.UserGetPayload<{
+        select: {
+          id: true;
+          email: true;
+          firstName: true;
+          lastName: true;
+          role: true;
+          password: true;
+          isProfileComplete: true;
+          companyId: true;
+          hashedRefreshToken: true;
+        };
+      }> | null = await this.userService.findByEmail(email);
 
       if (existingUser) {
         return {
