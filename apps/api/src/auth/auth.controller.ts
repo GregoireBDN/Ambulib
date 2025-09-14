@@ -47,9 +47,21 @@ import { ForgotPasswordDto, ResetPasswordDto } from './dto/password-reset.dto';
 import { EmailVerificationService } from './email-verification.service';
 import { PasswordResetService } from './password-reset.service';
 import { RequestWithUser } from '../common/interfaces/request-with-user.interface';
-import { Role, Prisma } from '@prisma/client';
+import { Role } from '@prisma/client';
 
 // Interface moved to ../common/interfaces/request-with-user.interface.ts
+
+interface UserEmailCheck {
+  id: number;
+  email: string;
+  firstName: string;
+  lastName: string;
+  role: Role;
+  password: string;
+  isProfileComplete: boolean;
+  companyId: number | null;
+  hashedRefreshToken: string | null;
+}
 
 @ApiTags('auth')
 @Controller('auth')
@@ -300,19 +312,8 @@ export class AuthController {
     }
 
     try {
-      const existingUser: Prisma.UserGetPayload<{
-        select: {
-          id: true;
-          email: true;
-          firstName: true;
-          lastName: true;
-          role: true;
-          password: true;
-          isProfileComplete: true;
-          companyId: true;
-          hashedRefreshToken: true;
-        };
-      }> | null = await this.userService.findByEmail(email);
+      const existingUser: UserEmailCheck | null =
+        await this.userService.findByEmail(email);
 
       if (existingUser) {
         return {

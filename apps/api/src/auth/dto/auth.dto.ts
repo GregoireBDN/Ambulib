@@ -337,7 +337,7 @@ export class CreateCompanyUserDto {
   @ApiProperty({
     description: "Rôle de l'utilisateur dans l'entreprise",
     enum: Role,
-    example: Role.AMBULANCE_DRIVER,
+    example: 'AMBULANCE_DRIVER' as Role,
   })
   role: Role;
 
