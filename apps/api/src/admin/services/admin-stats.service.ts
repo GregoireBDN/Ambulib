@@ -17,36 +17,29 @@ export interface SystemStats {
 export class AdminStatsService {
   constructor(private readonly prisma: PrismaService) {}
 
+  private get db(): PrismaService {
+    return this.prisma as PrismaService;
+  }
+
   async getSystemStats(): Promise<SystemStats> {
-    const [
-      totalUsers,
-      totalClients,
-      totalDrivers,
-      totalFleetManagers,
-      totalAmbulances,
-      availableAmbulances,
-      totalBookings,
-      pendingBookings,
-    ] = await Promise.all([
-      (this.prisma as PrismaService).user.count(),
-      (this.prisma as PrismaService).user.count({
-        where: { role: 'CLIENT' as Role },
-      }),
-      (this.prisma as PrismaService).user.count({
-        where: { role: 'AMBULANCE_DRIVER' as Role },
-      }),
-      (this.prisma as PrismaService).user.count({
-        where: { role: 'FLEET_MANAGER' as Role },
-      }),
-      (this.prisma as PrismaService).ambulance.count(),
-      (this.prisma as PrismaService).ambulance.count({
-        where: { status: 'AVAILABLE' },
-      }),
-      (this.prisma as PrismaService).booking.count(),
-      (this.prisma as PrismaService).booking.count({
-        where: { status: 'PENDING' },
-      }),
-    ]);
+    const totalUsers = await this.db.user.count();
+    const totalClients = await this.db.user.count({
+      where: { role: 'CLIENT' as Role },
+    });
+    const totalDrivers = await this.db.user.count({
+      where: { role: 'AMBULANCE_DRIVER' as Role },
+    });
+    const totalFleetManagers = await this.db.user.count({
+      where: { role: 'FLEET_MANAGER' as Role },
+    });
+    const totalAmbulances = await this.db.ambulance.count();
+    const availableAmbulances = await this.db.ambulance.count({
+      where: { status: 'AVAILABLE' },
+    });
+    const totalBookings = await this.db.booking.count();
+    const pendingBookings = await this.db.booking.count({
+      where: { status: 'PENDING' },
+    });
 
     return {
       totalUsers,

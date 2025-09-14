@@ -40,8 +40,12 @@ type PaginatedUsersResponse = {
 export class AdminUsersService {
   constructor(private readonly prisma: PrismaService) {}
 
+  private get db(): PrismaService {
+    return this.prisma as PrismaService;
+  }
+
   async createFleetManager(dto: CreateFleetManagerDto): Promise<User> {
-    const existingUser = await (this.prisma as PrismaService).user.findUnique({
+    const existingUser = await this.db.user.findUnique({
       where: { email: dto.email },
     });
 
@@ -51,7 +55,7 @@ export class AdminUsersService {
 
     const hashedPassword = await argon.hash(dto.password);
 
-    return await (this.prisma as PrismaService).user.create({
+    return await this.db.user.create({
       data: {
         ...dto,
         password: hashedPassword,
@@ -62,7 +66,7 @@ export class AdminUsersService {
   }
 
   async createAmbulanceDriver(dto: CreateAmbulanceDriverDto): Promise<User> {
-    const existingUser = await (this.prisma as PrismaService).user.findUnique({
+    const existingUser = await this.db.user.findUnique({
       where: { email: dto.email },
     });
 
@@ -72,7 +76,7 @@ export class AdminUsersService {
 
     const hashedPassword = await argon.hash(dto.password);
 
-    return await (this.prisma as PrismaService).user.create({
+    return await this.db.user.create({
       data: {
         ...dto,
         password: hashedPassword,
@@ -91,7 +95,7 @@ export class AdminUsersService {
     const where = role ? { role } : {};
 
     const [users, total] = await Promise.all([
-      (this.prisma as PrismaService).user.findMany({
+      this.db.user.findMany({
         where,
         skip,
         take: limit,
@@ -109,7 +113,7 @@ export class AdminUsersService {
         },
         orderBy: { createdAt: 'desc' },
       }),
-      (this.prisma as PrismaService).user.count({ where }),
+      this.db.user.count({ where }),
     ]);
 
     return {
@@ -121,7 +125,7 @@ export class AdminUsersService {
   }
 
   async getUserById(id: number): Promise<UserWithRelations> {
-    const user = await (this.prisma as PrismaService).user.findUnique({
+    const user = await this.db.user.findUnique({
       where: { id },
       include: {
         emergencyContact: true,
@@ -137,7 +141,7 @@ export class AdminUsersService {
   }
 
   async updateUser(id: number, dto: UpdateUserDto): Promise<User> {
-    const user = await (this.prisma as PrismaService).user.findUnique({
+    const user = await this.db.user.findUnique({
       where: { id },
     });
 
@@ -146,7 +150,7 @@ export class AdminUsersService {
     }
 
     if (dto.email && dto.email !== user.email) {
-      const existingUser = await (this.prisma as PrismaService).user.findUnique({
+      const existingUser = await this.db.user.findUnique({
         where: { email: dto.email },
       });
 
@@ -155,14 +159,14 @@ export class AdminUsersService {
       }
     }
 
-    return await (this.prisma as PrismaService).user.update({
+    return await this.db.user.update({
       where: { id },
       data: dto,
     });
   }
 
   async deleteUser(id: number): Promise<void> {
-    const user = await (this.prisma as PrismaService).user.findUnique({
+    const user = await this.db.user.findUnique({
       where: { id },
     });
 
@@ -174,7 +178,7 @@ export class AdminUsersService {
       throw new ForbiddenException('Cannot delete super admin user');
     }
 
-    await (this.prisma as PrismaService).user.delete({
+    await this.db.user.delete({
       where: { id },
     });
   }
