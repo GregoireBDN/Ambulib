@@ -132,7 +132,7 @@ export class CompanyApprovalDto {
   @ApiProperty({
     description: "Statut de l'entreprise",
     enum: CompanyStatus,
-    example: CompanyStatus.APPROVED,
+    example: 'APPROVED' as CompanyStatus,
   })
   status: CompanyStatus;
 

@@ -10,6 +10,11 @@ import { UserService } from '../../user/user.service';
 import { hash } from 'argon2';
 import { CompanyRegistrationDto, CompanyApprovalDto } from '../dto/company.dto';
 import { CompanyStatus, Role, AuthProvider } from '@prisma/client';
+import { CreateUserDto } from '../../user/dto/create-user.dto';
+
+type CreateCompanyUserDto = CreateUserDto & {
+  role: Role;
+};
 
 @Injectable()
 export class CompanyService {
@@ -186,7 +191,7 @@ export class CompanyService {
     return company;
   }
 
-  async createCompanyUser(companyId: number, userDto: any) {
+  async createCompanyUser(companyId: number, userDto: CreateCompanyUserDto) {
     this.logger.log(`Creating user for company ID: ${companyId}`);
 
     const company = await this.prisma.company.findUnique({

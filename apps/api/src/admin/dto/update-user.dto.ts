@@ -44,7 +44,13 @@ export class UpdateUserDto {
   age?: number;
 
   @IsOptional()
-  @IsEnum(Role)
+  @IsEnum([
+    'CLIENT',
+    'ADMIN',
+    'FLEET_MANAGER',
+    'AMBULANCE_DRIVER',
+    'SUPER_ADMIN',
+  ])
   role?: Role;
 
   @IsOptional()

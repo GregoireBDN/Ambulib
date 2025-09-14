@@ -27,8 +27,8 @@ describe('BookingController (e2e)', () => {
 
   let clientToken: string;
   let adminToken: string;
-  let driverToken: string;
-  let fleetManagerToken: string;
+  let _driverToken: string;
+  let _fleetManagerToken: string;
 
   let testBooking: any;
 
@@ -114,8 +114,8 @@ describe('BookingController (e2e)', () => {
     // Generate JWT tokens
     clientToken = jwtService.sign({ sub: clientUser.id });
     adminToken = jwtService.sign({ sub: adminUser.id });
-    driverToken = jwtService.sign({ sub: driverUser.id });
-    fleetManagerToken = jwtService.sign({ sub: fleetManagerUser.id });
+    _driverToken = jwtService.sign({ sub: driverUser.id });
+    _fleetManagerToken = jwtService.sign({ sub: fleetManagerUser.id });
   });
 
   afterAll(async () => {
@@ -135,12 +135,11 @@ describe('BookingController (e2e)', () => {
       pickupAddress: '123 rue de la Santé, Paris',
       destinationAddress:
         'Hôpital Saint-Louis, 1 Avenue Claude Vellefaux, Paris',
-      pickupCity: 'Paris',
-      destinationCity: 'Paris',
       pickupPostalCode: '75014',
       destinationPostalCode: '75010',
-      scheduledDateTime: '2024-12-25T14:30:00.000Z',
-      bookingType: BookingType.SCHEDULED,
+      pickupDateTime: '2024-12-25T14:00:00.000Z',
+      appointmentDateTime: '2024-12-25T14:30:00.000Z',
+      bookingType: BookingType.MEDICAL_APPOINTMENT,
       specialRequirements: [SpecialRequirements.NEEDS_OXYGEN],
       notes: 'Patient avec mobilité réduite',
       estimatedDuration: 60,
@@ -158,7 +157,7 @@ describe('BookingController (e2e)', () => {
             clientId: clientUser.id,
             pickupAddress: validBookingDto.pickupAddress,
             destinationAddress: validBookingDto.destinationAddress,
-            bookingType: BookingType.SCHEDULED,
+            bookingType: BookingType.MEDICAL_APPOINTMENT,
             status: BookingStatus.PENDING,
           });
           testBooking = response.body;
@@ -169,7 +168,7 @@ describe('BookingController (e2e)', () => {
       const emergencyDto = {
         ...validBookingDto,
         bookingType: BookingType.EMERGENCY,
-        scheduledDateTime: undefined,
+        appointmentDateTime: undefined,
       };
 
       return request(app.getHttpServer())
@@ -207,7 +206,7 @@ describe('BookingController (e2e)', () => {
     it('should reject scheduled booking without date', () => {
       const invalidDto = {
         ...validBookingDto,
-        scheduledDateTime: undefined,
+        appointmentDateTime: undefined,
       };
 
       return request(app.getHttpServer())
@@ -233,7 +232,7 @@ describe('BookingController (e2e)', () => {
     it('should reject booking with past date', () => {
       const pastDateDto = {
         ...validBookingDto,
-        scheduledDateTime: '2023-01-01T10:00:00.000Z',
+        appointmentDateTime: '2023-01-01T10:00:00.000Z',
       };
 
       return request(app.getHttpServer())
@@ -259,11 +258,10 @@ describe('BookingController (e2e)', () => {
           clientId: clientUser.id,
           pickupAddress: '123 rue de la Santé',
           destinationAddress: 'Hôpital Saint-Louis',
-          pickupCity: 'Paris',
-          destinationCity: 'Paris',
-          bookingType: BookingType.SCHEDULED,
+          bookingType: BookingType.MEDICAL_APPOINTMENT,
           status: BookingStatus.PENDING,
-          scheduledDateTime: new Date('2024-12-25T14:30:00Z'),
+          pickupDateTime: new Date('2024-12-25T14:00:00Z'),
+          appointmentDateTime: new Date('2024-12-25T14:30:00Z'),
         },
       });
 
@@ -273,10 +271,9 @@ describe('BookingController (e2e)', () => {
           clientId: adminUser.id,
           pickupAddress: '456 rue de la Paix',
           destinationAddress: 'Hôpital Central',
-          pickupCity: 'Lyon',
-          destinationCity: 'Lyon',
           bookingType: BookingType.EMERGENCY,
           status: BookingStatus.CONFIRMED,
+          pickupDateTime: new Date(),
         },
       });
     });
@@ -360,28 +357,25 @@ describe('BookingController (e2e)', () => {
             clientId: clientUser.id,
             pickupAddress: '123 rue A',
             destinationAddress: 'Hôpital A',
-            pickupCity: 'Paris',
-            destinationCity: 'Paris',
-            bookingType: BookingType.SCHEDULED,
+            bookingType: BookingType.MEDICAL_APPOINTMENT,
             status: BookingStatus.PENDING,
+            pickupDateTime: new Date(),
           },
           {
             clientId: clientUser.id,
             pickupAddress: '456 rue B',
             destinationAddress: 'Hôpital B',
-            pickupCity: 'Paris',
-            destinationCity: 'Paris',
             bookingType: BookingType.EMERGENCY,
             status: BookingStatus.CONFIRMED,
+            pickupDateTime: new Date(),
           },
           {
             clientId: clientUser.id,
             pickupAddress: '789 rue C',
             destinationAddress: 'Hôpital C',
-            pickupCity: 'Paris',
-            destinationCity: 'Paris',
-            bookingType: BookingType.SCHEDULED,
+            bookingType: BookingType.MEDICAL_APPOINTMENT,
             status: BookingStatus.COMPLETED,
+            pickupDateTime: new Date(),
           },
         ],
       });
@@ -434,10 +428,9 @@ describe('BookingController (e2e)', () => {
           clientId: clientUser.id,
           pickupAddress: '123 rue de la Santé',
           destinationAddress: 'Hôpital Saint-Louis',
-          pickupCity: 'Paris',
-          destinationCity: 'Paris',
-          bookingType: BookingType.SCHEDULED,
+          bookingType: BookingType.MEDICAL_APPOINTMENT,
           status: BookingStatus.PENDING,
+          pickupDateTime: new Date(),
         },
       });
     });
@@ -471,9 +464,8 @@ describe('BookingController (e2e)', () => {
             clientId: adminUser.id,
             pickupAddress: '456 rue',
             destinationAddress: 'Hôpital',
-            pickupCity: 'Lyon',
-            destinationCity: 'Lyon',
             bookingType: BookingType.EMERGENCY,
+            pickupDateTime: new Date(),
           },
         })
         .then((otherBooking) => {
@@ -506,11 +498,10 @@ describe('BookingController (e2e)', () => {
           clientId: clientUser.id,
           pickupAddress: '123 rue de la Santé',
           destinationAddress: 'Hôpital Saint-Louis',
-          pickupCity: 'Paris',
-          destinationCity: 'Paris',
-          bookingType: BookingType.SCHEDULED,
+          bookingType: BookingType.MEDICAL_APPOINTMENT,
           status: BookingStatus.PENDING,
-          scheduledDateTime: new Date('2024-12-25T14:30:00Z'),
+          pickupDateTime: new Date('2024-12-25T14:00:00Z'),
+          appointmentDateTime: new Date('2024-12-25T14:30:00Z'),
         },
       });
     });
@@ -596,7 +587,7 @@ describe('BookingController (e2e)', () => {
 
     it('should reject past date updates', () => {
       const updateDto = {
-        scheduledDateTime: '2023-01-01T10:00:00.000Z',
+        appointmentDateTime: '2023-01-01T10:00:00.000Z',
       };
 
       return request(app.getHttpServer())
@@ -614,10 +605,9 @@ describe('BookingController (e2e)', () => {
           clientId: clientUser.id,
           pickupAddress: '123 rue de la Santé',
           destinationAddress: 'Hôpital Saint-Louis',
-          pickupCity: 'Paris',
-          destinationCity: 'Paris',
-          bookingType: BookingType.SCHEDULED,
+          bookingType: BookingType.MEDICAL_APPOINTMENT,
           status: BookingStatus.PENDING,
+          pickupDateTime: new Date(),
         },
       });
     });
@@ -672,10 +662,9 @@ describe('BookingController (e2e)', () => {
           clientId: clientUser.id,
           pickupAddress: '123 rue de la Santé',
           destinationAddress: 'Hôpital Saint-Louis',
-          pickupCity: 'Paris',
-          destinationCity: 'Paris',
-          bookingType: BookingType.SCHEDULED,
+          bookingType: BookingType.MEDICAL_APPOINTMENT,
           status: BookingStatus.CANCELLED,
+          pickupDateTime: new Date(),
         },
       });
     });

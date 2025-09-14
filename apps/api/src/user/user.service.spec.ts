@@ -87,8 +87,8 @@ describe('UserService', () => {
   describe('create', () => {
     it('should create a new user successfully', async () => {
       (argon2.hash as jest.Mock).mockResolvedValue('hashedPassword');
-      (prismaService.$transaction as jest.Mock).mockImplementation((callback) => 
-        callback(prismaService)
+      (prismaService.$transaction as jest.Mock).mockImplementation((callback) =>
+        callback(prismaService),
       );
       (prismaService.user.create as jest.Mock).mockResolvedValue(mockUser);
 
@@ -101,8 +101,8 @@ describe('UserService', () => {
 
     it('should handle string age conversion', async () => {
       (argon2.hash as jest.Mock).mockResolvedValue('hashedPassword');
-      (prismaService.$transaction as jest.Mock).mockImplementation((callback) => 
-        callback(prismaService)
+      (prismaService.$transaction as jest.Mock).mockImplementation((callback) =>
+        callback(prismaService),
       );
       (prismaService.user.create as jest.Mock).mockResolvedValue(mockUser);
 
@@ -114,8 +114,8 @@ describe('UserService', () => {
 
     it('should handle null age', async () => {
       (argon2.hash as jest.Mock).mockResolvedValue('hashedPassword');
-      (prismaService.$transaction as jest.Mock).mockImplementation((callback) => 
-        callback(prismaService)
+      (prismaService.$transaction as jest.Mock).mockImplementation((callback) =>
+        callback(prismaService),
       );
       (prismaService.user.create as jest.Mock).mockResolvedValue(mockUser);
 
@@ -163,7 +163,9 @@ describe('UserService', () => {
           role: true,
           password: true,
           isProfileComplete: true,
-        }
+          companyId: true,
+          hashedRefreshToken: true,
+        },
       });
       expect(result).toEqual(mockUser);
     });
@@ -189,8 +191,8 @@ describe('UserService', () => {
   describe('findOne', () => {
     it('should find user by ID successfully', async () => {
       const {
-        password,
-        hashedRefreshToken,
+        password: _password,
+        hashedRefreshToken: _hashedRefreshToken,
         ...expectedUserWithoutSensitiveData
       } = mockUser;
 

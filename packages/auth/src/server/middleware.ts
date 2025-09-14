@@ -80,7 +80,6 @@ export function createAuthMiddleware(config: AuthMiddlewareConfig) {
   const {
     secretKey,
     publicRoutes = ['/auth/*', '/', '/api/auth/*'],
-    protectedRoutes = [],
     roleBasedRoutes = {},
     redirectTo = '/auth/signin',
     companyIsolation = false

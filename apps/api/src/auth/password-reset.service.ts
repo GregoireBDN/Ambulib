@@ -1,4 +1,10 @@
-import { Injectable, BadRequestException, HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  NotFoundException,
+} from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { PrismaService } from '../prisma/prisma.service';
 import { randomUUID } from 'crypto';
@@ -51,11 +57,13 @@ export class PasswordResetService {
     });
 
     // Si une demande a été faite il y a moins de 15 minutes
-    if (existingReset && 
-        new Date().getTime() - existingReset.createdAt.getTime() < 15 * 60 * 1000) {
+    if (
+      existingReset &&
+      new Date().getTime() - existingReset.createdAt.getTime() < 15 * 60 * 1000
+    ) {
       throw new HttpException(
         'Un email de réinitialisation a déjà été envoyé. Veuillez attendre 15 minutes avant de faire une nouvelle demande.',
-        HttpStatus.TOO_MANY_REQUESTS
+        HttpStatus.TOO_MANY_REQUESTS,
       );
     }
 
@@ -102,10 +110,10 @@ export class PasswordResetService {
 
       console.log(`Email de réinitialisation envoyé à ${email}`);
     } catch (error) {
-      console.error('Erreur lors de l\'envoi de l\'email:', error);
+      console.error("Erreur lors de l'envoi de l'email:", error);
       throw new HttpException(
-        'Erreur lors de l\'envoi de l\'email de réinitialisation',
-        HttpStatus.INTERNAL_SERVER_ERROR
+        "Erreur lors de l'envoi de l'email de réinitialisation",
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
@@ -150,11 +158,15 @@ export class PasswordResetService {
     });
 
     if (!resetToken || resetToken.isUsed || new Date() > resetToken.expiresAt) {
-      throw new BadRequestException('Token de réinitialisation invalide ou expiré');
+      throw new BadRequestException(
+        'Token de réinitialisation invalide ou expiré',
+      );
     }
 
     if (resetToken.attempts >= 5) {
-      throw new BadRequestException('Trop de tentatives. Demandez un nouveau lien de réinitialisation.');
+      throw new BadRequestException(
+        'Trop de tentatives. Demandez un nouveau lien de réinitialisation.',
+      );
     }
 
     // Incrémenter le nombre de tentatives
@@ -217,12 +229,17 @@ export class PasswordResetService {
         });
       });
 
-      console.log(`Mot de passe réinitialisé avec succès pour ${resetToken.email}`);
+      console.log(
+        `Mot de passe réinitialisé avec succès pour ${resetToken.email}`,
+      );
     } catch (error) {
-      console.error('Erreur lors de la réinitialisation du mot de passe:', error);
+      console.error(
+        'Erreur lors de la réinitialisation du mot de passe:',
+        error,
+      );
       throw new HttpException(
         'Erreur lors de la réinitialisation du mot de passe',
-        HttpStatus.INTERNAL_SERVER_ERROR
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }

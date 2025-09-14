@@ -11,7 +11,7 @@ export default function ProtectedRoute({
   children, 
   fallback
 }: ProtectedRouteProps) {
-  const { user, isLoading } = useAuth()
+  const { isLoading } = useAuth()
 
   // Loading ultra-rapide car lecture cookie = synchrone
   if (isLoading) {

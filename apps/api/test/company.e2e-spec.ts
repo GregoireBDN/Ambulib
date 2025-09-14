@@ -13,7 +13,7 @@ describe('Company Endpoints (e2e)', () => {
   let jwtService: JwtService;
   let superAdminToken: string;
   let companyAdminToken: string;
-  let clientToken: string;
+  let _clientToken: string;
   let testCompany: any;
   let testUser: any;
 
@@ -79,6 +79,8 @@ describe('Company Endpoints (e2e)', () => {
         email: 'company@test.com',
         status: CompanyStatus.APPROVED,
         licenseNumber: 'LIC-TEST-001',
+        address: '123 Test Street',
+        phoneNumber: '+33123456789',
       },
     });
 
@@ -101,7 +103,7 @@ describe('Company Endpoints (e2e)', () => {
     // Generate tokens
     superAdminToken = jwtService.sign({ sub: superAdmin.id });
     companyAdminToken = jwtService.sign({ sub: companyAdmin.id });
-    clientToken = jwtService.sign({ sub: client.id });
+    _clientToken = jwtService.sign({ sub: client.id });
   });
 
   afterAll(async () => {
@@ -182,6 +184,9 @@ describe('Company Endpoints (e2e)', () => {
           name: 'Pending Company',
           email: 'pending@test.com',
           status: CompanyStatus.PENDING,
+          licenseNumber: 'LIC-PENDING-001',
+          address: '456 Pending Street',
+          phoneNumber: '+33987654321',
         },
       });
 
@@ -211,6 +216,9 @@ describe('Company Endpoints (e2e)', () => {
           name: 'Pending Company',
           email: 'pending@test.com',
           status: CompanyStatus.PENDING,
+          licenseNumber: 'LIC-PENDING-002',
+          address: '789 Pending Avenue',
+          phoneNumber: '+33111222333',
         },
       });
     });
@@ -283,6 +291,9 @@ describe('Company Endpoints (e2e)', () => {
           name: 'Other Company',
           email: 'other@test.com',
           status: CompanyStatus.APPROVED,
+          licenseNumber: 'LIC-OTHER-001',
+          address: '321 Other Street',
+          phoneNumber: '+33444555666',
         },
       });
 
@@ -422,6 +433,8 @@ describe('Company Endpoints (e2e)', () => {
           email: 'company2@test.com',
           status: CompanyStatus.APPROVED,
           licenseNumber: 'LIC-2',
+          address: '654 Company2 Boulevard',
+          phoneNumber: '+33777888999',
         },
       });
 

@@ -37,7 +37,7 @@ export class ServerAuthApiClient {
   /**
    * Méthode privée pour faire les appels HTTP avec gestion d'erreur
    */
-  private async request(endpoint: string, options: RequestInit = {}): Promise<any> {
+  private async request(endpoint: string, options: RequestInit = {}): Promise<unknown> {
     const url = `${this.baseUrl}${endpoint}`
     
     try {
@@ -93,7 +93,7 @@ export class ServerAuthApiClient {
     return this.request('/auth/signup', {
       method: 'POST',
       body: JSON.stringify(userData)
-    })
+    }) as Promise<AuthResponse>
   }
 
   /**
@@ -103,7 +103,7 @@ export class ServerAuthApiClient {
     return this.request('/auth/signin', {
       method: 'POST',
       body: JSON.stringify(credentials)
-    })
+    }) as Promise<AuthResponse>
   }
 
   /**
@@ -115,14 +115,14 @@ export class ServerAuthApiClient {
       headers: {
         'Authorization': `Bearer ${refreshToken}`
       }
-    })
+    }) as Promise<AuthResponse>
   }
 
   /**
    * Déconnexion utilisateur
    */
   async signOut(accessToken: string): Promise<void> {
-    return this.request('/auth/signout', {
+    await this.request('/auth/signout', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`
@@ -133,14 +133,14 @@ export class ServerAuthApiClient {
   /**
    * Compléter le profil utilisateur
    */
-  async completeProfile(accessToken: string, profileData: any): Promise<AuthResponse> {
+  async completeProfile(accessToken: string, profileData: Record<string, unknown>): Promise<AuthResponse> {
     return this.request('/auth/complete-profile', {
       method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${accessToken}`
       },
       body: JSON.stringify(profileData)
-    })
+    }) as Promise<AuthResponse>
   }
 
   /**
@@ -170,7 +170,7 @@ export class ServerAuthApiClient {
   /**
    * Extraire le payload d'un JWT (sans vérification de signature)
    */
-  decodeToken(token: string): any | null {
+  decodeToken(token: string): Record<string, unknown> | null {
     try {
       return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
     } catch {

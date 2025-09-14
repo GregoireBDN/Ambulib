@@ -2,11 +2,9 @@
 
 import { Button } from "@repo/ui"
 import ProtectedLayout from "@/components/ProtectedLayout"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
 
 export default function DashboardPage() {
-  const router = useRouter()
 
   return (
     <ProtectedLayout>

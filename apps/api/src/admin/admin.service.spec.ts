@@ -1,5 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AdminService } from './admin.service';
+import { AdminUsersService } from './services/admin-users.service';
+import { AdminAmbulancesService } from './services/admin-ambulances.service';
+import { AdminStatsService } from './services/admin-stats.service';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   ConflictException,
@@ -65,6 +68,9 @@ describe('AdminService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AdminService,
+        AdminUsersService,
+        AdminAmbulancesService,
+        AdminStatsService,
         {
           provide: PrismaService,
           useValue: mockPrismaService,
@@ -242,7 +248,18 @@ describe('AdminService', () => {
         where: { role: Role.FLEET_MANAGER },
         skip: 0,
         take: 10,
-        select: expect.any(Object),
+        select: expect.objectContaining({
+          id: expect.any(Boolean),
+          email: expect.any(Boolean),
+          firstName: expect.any(Boolean),
+          lastName: expect.any(Boolean),
+          role: expect.any(Boolean),
+          phoneNumber: expect.any(Boolean),
+          city: expect.any(Boolean),
+          isProfileComplete: expect.any(Boolean),
+          createdAt: expect.any(Boolean),
+          updatedAt: expect.any(Boolean),
+        }),
         orderBy: { createdAt: 'desc' },
       });
     });

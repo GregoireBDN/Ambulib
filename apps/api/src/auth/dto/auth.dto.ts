@@ -4,7 +4,6 @@ import {
   IsString,
   IsOptional,
   IsBoolean,
-  IsNumber,
   MinLength,
   Matches,
 } from 'class-validator';
@@ -49,7 +48,7 @@ export class SignupDto {
   @Matches(/\d/, {
     message: 'Le mot de passe doit contenir au moins un chiffre',
   })
-  @Matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, {
+  @Matches(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/, {
     message:
       'Le mot de passe doit contenir au moins un caractère spécial (!@#$%^&*...)',
   })
@@ -191,7 +190,7 @@ export class SignupDto {
   doctorPhone?: string;
 
   @ApiProperty({
-    description: 'Nom complet du contact d\'urgence',
+    description: "Nom complet du contact d'urgence",
     example: 'Marie Dubois',
     required: false,
   })
@@ -200,7 +199,7 @@ export class SignupDto {
   emergencyContactName?: string;
 
   @ApiProperty({
-    description: 'Téléphone du contact d\'urgence',
+    description: "Téléphone du contact d'urgence",
     example: '0123456789',
     required: false,
   })
@@ -209,7 +208,7 @@ export class SignupDto {
   emergencyContactPhone?: string;
 
   @ApiProperty({
-    description: 'Relation avec le contact d\'urgence',
+    description: "Relation avec le contact d'urgence",
     example: 'Conjoint(e)',
     required: false,
   })
@@ -329,7 +328,7 @@ export class CreateCompanyUserDto {
   @Matches(/\d/, {
     message: 'Le mot de passe doit contenir au moins un chiffre',
   })
-  @Matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, {
+  @Matches(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/, {
     message:
       'Le mot de passe doit contenir au moins un caractère spécial (!@#$%^&*...)',
   })
@@ -338,7 +337,7 @@ export class CreateCompanyUserDto {
   @ApiProperty({
     description: "Rôle de l'utilisateur dans l'entreprise",
     enum: Role,
-    example: Role.AMBULANCE_DRIVER,
+    example: 'AMBULANCE_DRIVER' as Role,
   })
   role: Role;
 

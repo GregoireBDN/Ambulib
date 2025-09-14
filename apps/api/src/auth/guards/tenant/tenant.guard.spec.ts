@@ -4,11 +4,10 @@ import { Reflector } from '@nestjs/core';
 import { TenantGuard } from './tenant.guard';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { Role } from '@prisma/client';
+import { RequestWithUser } from '../../../common/interfaces/request-with-user.interface';
 
 describe('TenantGuard', () => {
   let guard: TenantGuard;
-  let reflector: jest.Mocked<Reflector>;
-  let prismaService: jest.Mocked<PrismaService>;
 
   beforeEach(async () => {
     const mockReflector = {
@@ -28,15 +27,13 @@ describe('TenantGuard', () => {
     }).compile();
 
     guard = module.get<TenantGuard>(TenantGuard);
-    reflector = module.get(Reflector);
-    prismaService = module.get(PrismaService);
   });
 
   const createMockExecutionContext = (
-    user: any,
-    params: any = {},
-    body: any = {},
-    query: any = {},
+    user: { companyId?: number | null; role: Role } | null,
+    params: Record<string, unknown> = {},
+    body: Record<string, unknown> = {},
+    query: Record<string, unknown> = {},
   ): ExecutionContext => {
     return {
       switchToHttp: () => ({
@@ -51,78 +48,72 @@ describe('TenantGuard', () => {
   };
 
   describe('canActivate', () => {
-    it('should allow access for SUPER_ADMIN', async () => {
+    it('should allow access for SUPER_ADMIN', () => {
       const user = { id: 1, role: Role.SUPER_ADMIN, companyId: null };
       const context = createMockExecutionContext(user);
 
-      const result = await guard.canActivate(context);
+      const result = guard.canActivate(context);
 
       expect(result).toBe(true);
     });
 
-    it('should allow access for CLIENT users', async () => {
+    it('should allow access for CLIENT users', () => {
       const user = { id: 1, role: Role.CLIENT, companyId: null };
       const context = createMockExecutionContext(user);
 
-      const result = await guard.canActivate(context);
+      const result = guard.canActivate(context);
 
       expect(result).toBe(true);
     });
 
-    it('should allow access when user belongs to same company', async () => {
+    it('should allow access when user belongs to same company', () => {
       const user = { id: 1, role: Role.ADMIN, companyId: 1 };
       const context = createMockExecutionContext(user, { companyId: '1' });
 
-      const result = await guard.canActivate(context);
+      const result = guard.canActivate(context);
 
       expect(result).toBe(true);
     });
 
-    it('should allow access when no company resource is specified', async () => {
+    it('should allow access when no company resource is specified', () => {
       const user = { id: 1, role: Role.ADMIN, companyId: 1 };
       const context = createMockExecutionContext(user, {}, {}, {});
 
-      const result = await guard.canActivate(context);
+      const result = guard.canActivate(context);
 
       expect(result).toBe(true);
     });
 
-    it('should throw ForbiddenException when user is not authenticated', async () => {
+    it('should throw ForbiddenException when user is not authenticated', () => {
       const context = createMockExecutionContext(null);
 
-      await expect(guard.canActivate(context)).rejects.toThrow(
-        ForbiddenException,
-      );
+      expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
     });
 
-    it('should throw ForbiddenException when company user has no companyId', async () => {
+    it('should throw ForbiddenException when company user has no companyId', () => {
       const user = { id: 1, role: Role.ADMIN, companyId: null };
       const context = createMockExecutionContext(user);
 
-      await expect(guard.canActivate(context)).rejects.toThrow(
-        ForbiddenException,
-      );
+      expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
     });
 
-    it('should throw ForbiddenException when user tries to access different company', async () => {
+    it('should throw ForbiddenException when user tries to access different company', () => {
       const user = { id: 1, role: Role.ADMIN, companyId: 1 };
       const context = createMockExecutionContext(user, { companyId: '2' });
 
-      await expect(guard.canActivate(context)).rejects.toThrow(
-        ForbiddenException,
-      );
+      expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
     });
 
-    it('should extract companyId from request body', async () => {
+    it('should extract companyId from request body', () => {
       const user = { id: 1, role: Role.FLEET_MANAGER, companyId: 1 };
       const context = createMockExecutionContext(user, {}, { companyId: 1 });
 
-      const result = await guard.canActivate(context);
+      const result = guard.canActivate(context);
 
       expect(result).toBe(true);
     });
 
-    it('should extract companyId from query parameters', async () => {
+    it('should extract companyId from query parameters', () => {
       const user = { id: 1, role: Role.AMBULANCE_DRIVER, companyId: 1 };
       const context = createMockExecutionContext(
         user,
@@ -131,27 +122,25 @@ describe('TenantGuard', () => {
         { companyId: '1' },
       );
 
-      const result = await guard.canActivate(context);
+      const result = guard.canActivate(context);
 
       expect(result).toBe(true);
     });
 
-    it('should handle string companyId conversion', async () => {
+    it('should handle string companyId conversion', () => {
       const user = { id: 1, role: Role.ADMIN, companyId: 1 };
       const context = createMockExecutionContext(user, { companyId: '1' });
 
-      const result = await guard.canActivate(context);
+      const result = guard.canActivate(context);
 
       expect(result).toBe(true);
     });
 
-    it('should throw ForbiddenException with string companyId mismatch', async () => {
+    it('should throw ForbiddenException with string companyId mismatch', () => {
       const user = { id: 1, role: Role.ADMIN, companyId: 1 };
       const context = createMockExecutionContext(user, { companyId: '2' });
 
-      await expect(guard.canActivate(context)).rejects.toThrow(
-        ForbiddenException,
-      );
+      expect(() => guard.canActivate(context)).toThrow(ForbiddenException);
     });
   });
 
@@ -161,7 +150,7 @@ describe('TenantGuard', () => {
         params: { companyId: '1' },
         body: {},
         query: {},
-      };
+      } as unknown as RequestWithUser;
 
       const result = guard['extractCompanyIdFromRequest'](request);
 
@@ -173,7 +162,7 @@ describe('TenantGuard', () => {
         params: {},
         body: { companyId: 2 },
         query: {},
-      };
+      } as unknown as RequestWithUser;
 
       const result = guard['extractCompanyIdFromRequest'](request);
 
@@ -185,7 +174,7 @@ describe('TenantGuard', () => {
         params: {},
         body: {},
         query: { companyId: '3' },
-      };
+      } as unknown as RequestWithUser;
 
       const result = guard['extractCompanyIdFromRequest'](request);
 
@@ -197,7 +186,7 @@ describe('TenantGuard', () => {
         params: {},
         body: {},
         query: {},
-      };
+      } as unknown as RequestWithUser;
 
       const result = guard['extractCompanyIdFromRequest'](request);
 
@@ -209,7 +198,7 @@ describe('TenantGuard', () => {
         params: { companyId: 'invalid' },
         body: {},
         query: {},
-      };
+      } as unknown as RequestWithUser;
 
       const result = guard['extractCompanyIdFromRequest'](request);
 

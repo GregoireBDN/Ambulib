@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
-import { Role } from '@prisma/client';
+import { Role, AuthProvider, AmbulanceStatus } from '@prisma/client';
 
 describe('AdminController', () => {
   let controller: AdminController;
@@ -22,7 +22,7 @@ describe('AdminController', () => {
     city: null,
     postalCode: null,
     country: 'France',
-    authProvider: 'CREDENTIALS' as any,
+    authProvider: 'CREDENTIALS' as AuthProvider,
     isProfileComplete: true,
     isEmailVerified: false,
     emailVerificationToken: null,
@@ -43,7 +43,7 @@ describe('AdminController', () => {
     model: 'Mercedes Sprinter',
     year: 2022,
     capacity: 2,
-    status: 'AVAILABLE' as any,
+    status: 'AVAILABLE' as AmbulanceStatus,
     driverId: null,
     companyId: 1,
     createdAt: new Date(),

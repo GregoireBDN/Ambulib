@@ -8,120 +8,153 @@ import { UpdateProfileDto } from './dto/update-profile.dto';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { hash, verify } from 'argon2';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
-    try {
-      const { 
-        password, 
-        age, 
-        birthDate,
-        socialSecurity,
-        allergies, 
-        medications, 
-        mobility,
-        mobilityDetails,
-        doctorName, 
-        doctorPhone,
-        emergencyContactName,
-        emergencyContactPhone,
-        emergencyContactRelation,
-        ...userData 
-      } = createUserDto;
-      
-      const hashedPassword = await hash(password);
+    const {
+      password,
+      age,
+      birthDate,
+      socialSecurity,
+      allergies,
+      medications,
+      mobility,
+      mobilityDetails,
+      doctorName,
+      doctorPhone,
+      emergencyContactName,
+      emergencyContactPhone,
+      emergencyContactRelation,
+      ...userData
+    } = createUserDto;
 
-      // Calculer l'âge à partir de la date de naissance si fournie
-      let calculatedAge = age ? (typeof age === 'string' ? parseInt(age) : age) : null;
-      if (birthDate && !calculatedAge) {
-        const birth = new Date(birthDate);
-        const today = new Date();
-        calculatedAge = today.getFullYear() - birth.getFullYear();
-      }
+    const hashedPassword = await hash(password);
 
-      // Créer l'utilisateur avec une transaction pour gérer les relations
-      const result = await this.prisma.$transaction(async (prisma) => {
-        // 1. Créer l'utilisateur principal
-        const user = await prisma.user.create({
+    // Calculer l'âge à partir de la date de naissance si fournie
+    let calculatedAge = age
+      ? typeof age === 'string'
+        ? parseInt(age)
+        : age
+      : null;
+    if (birthDate && !calculatedAge) {
+      const birth = new Date(birthDate);
+      const today = new Date();
+      calculatedAge = today.getFullYear() - birth.getFullYear();
+    }
+
+    // Créer l'utilisateur avec une transaction pour gérer les relations
+    const result = await this.prisma.$transaction(async (prisma) => {
+      // 1. Créer l'utilisateur principal
+      const user = await prisma.user.create({
+        data: {
+          password: hashedPassword,
+          age: calculatedAge,
+          ...userData,
+          updatedAt: new Date(),
+        },
+      });
+
+      // 2. Créer les informations médicales si fournies
+      if (
+        allergies ||
+        medications ||
+        socialSecurity ||
+        doctorName ||
+        doctorPhone
+      ) {
+        await prisma.medicalInfo.create({
           data: {
-            password: hashedPassword,
-            age: calculatedAge,
-            ...userData,
-            updatedAt: new Date(),
+            userId: user.id,
+            allergies: allergies || null,
+            medications: medications || null,
+            medicalConditions:
+              mobility && mobility !== 'none'
+                ? `Mobilité réduite: ${mobility}${mobilityDetails ? ` - ${mobilityDetails}` : ''}`
+                : null,
+            doctorName: doctorName || null,
+            doctorPhone: doctorPhone || null,
+            insuranceNumber: socialSecurity || null, // Utiliser le champ existant
           },
         });
+      }
 
-        // 2. Créer les informations médicales si fournies
-        if (allergies || medications || socialSecurity || doctorName || doctorPhone) {
-          await prisma.medicalInfo.create({
-            data: {
-              userId: user.id,
-              allergies: allergies || null,
-              medications: medications || null,
-              medicalConditions: mobility && mobility !== 'none' 
-                ? `Mobilité réduite: ${mobility}${mobilityDetails ? ` - ${mobilityDetails}` : ''}` 
-                : null,
-              doctorName: doctorName || null,
-              doctorPhone: doctorPhone || null,
-              insuranceNumber: socialSecurity || null, // Utiliser le champ existant
-            },
-          });
-        }
+      // 3. Créer le contact d'urgence si fourni
+      if (
+        emergencyContactName &&
+        emergencyContactPhone &&
+        emergencyContactRelation
+      ) {
+        // Séparer le nom complet en prénom et nom
+        const [firstName, ...lastNameParts] = emergencyContactName.split(' ');
+        const lastName = lastNameParts.join(' ') || firstName;
 
-        // 3. Créer le contact d'urgence si fourni
-        if (emergencyContactName && emergencyContactPhone && emergencyContactRelation) {
-          // Séparer le nom complet en prénom et nom
-          const [firstName, ...lastNameParts] = emergencyContactName.split(' ');
-          const lastName = lastNameParts.join(' ') || firstName;
+        await prisma.emergencyContact.create({
+          data: {
+            userId: user.id,
+            firstName: firstName,
+            lastName: lastName,
+            phoneNumber: emergencyContactPhone,
+            relationship: emergencyContactRelation,
+          },
+        });
+      }
 
-          await prisma.emergencyContact.create({
-            data: {
-              userId: user.id,
-              firstName: firstName,
-              lastName: lastName,
-              phoneNumber: emergencyContactPhone,
-              relationship: emergencyContactRelation,
-            },
-          });
-        }
+      return user;
+    });
 
-        return user;
-      });
-
-      return result;
-    } catch (error) {
-      throw error;
-    }
+    return result;
   }
 
-  async findByEmail(email: string) {
-    try {
-      const result = await this.prisma.user.findUnique({
-        where: {
-          email,
-        },
-        select: {
-          id: true,
-          email: true,
-          firstName: true,
-          lastName: true,
-          role: true,
-          password: true,
-          isProfileComplete: true,
-        }
-      });
-      return result;
-    } catch (error) {
-      throw error;
-    }
+  async findByEmail(email: string): Promise<Prisma.UserGetPayload<{
+    select: {
+      id: true;
+      email: true;
+      firstName: true;
+      lastName: true;
+      role: true;
+      password: true;
+      isProfileComplete: true;
+      companyId: true;
+      hashedRefreshToken: true;
+    };
+  }> | null> {
+    const result = (await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        password: true,
+        isProfileComplete: true,
+        companyId: true,
+        hashedRefreshToken: true,
+      },
+    })) as Prisma.UserGetPayload<{
+      select: {
+        id: true;
+        email: true;
+        firstName: true;
+        lastName: true;
+        role: true;
+        password: true;
+        isProfileComplete: true;
+        companyId: true;
+        hashedRefreshToken: true;
+      };
+    }> | null;
+    return result;
   }
 
   async findOne(userId: number) {
-    const user = await this.prisma.user.findUnique({
+    const user = (await this.prisma.user.findUnique({
       where: {
         id: userId,
       },
@@ -129,20 +162,34 @@ export class UserService {
         emergencyContact: true,
         dependent: true,
       },
-    });
+    })) as Prisma.UserGetPayload<{
+      include: {
+        emergencyContact: true;
+        dependent: true;
+      };
+    }> | null;
 
     if (!user) {
       throw new NotFoundException('Utilisateur introuvable');
     }
 
     // Exclure le mot de passe et le refresh token de la réponse
-    const { password, hashedRefreshToken, ...userWithoutSensitiveData } = user;
+    const {
+      password: _password,
+      hashedRefreshToken: _hashedRefreshToken,
+      ...userWithoutSensitiveData
+    } = user;
     return userWithoutSensitiveData;
   }
 
   // Méthode interne pour récupérer l'utilisateur avec tous les champs (pour AuthService)
-  async findOneInternal(userId: number) {
-    return await this.prisma.user.findUnique({
+  async findOneInternal(userId: number): Promise<Prisma.UserGetPayload<{
+    include: {
+      emergencyContact: true;
+      dependent: true;
+    };
+  }> | null> {
+    return (await this.prisma.user.findUnique({
       where: {
         id: userId,
       },
@@ -150,10 +197,18 @@ export class UserService {
         emergencyContact: true,
         dependent: true,
       },
-    });
+    })) as Prisma.UserGetPayload<{
+      include: {
+        emergencyContact: true;
+        dependent: true;
+      };
+    }> | null;
   }
 
-  async updateHashedRefreshToken(userId: number, hashedRT: string | null) {
+  async updateHashedRefreshToken(
+    userId: number,
+    hashedRT: string | null,
+  ): Promise<User> {
     return await this.prisma.user.update({
       where: {
         id: userId,
@@ -164,7 +219,7 @@ export class UserService {
     });
   }
 
-  async update(userId: number, data: Prisma.UserUpdateInput) {
+  async update(userId: number, data: Prisma.UserUpdateInput): Promise<User> {
     return await this.prisma.user.update({
       where: { id: userId },
       data,
@@ -190,7 +245,7 @@ export class UserService {
     } = dto;
 
     // Mettre à jour les données utilisateur
-    const updatedUser = await this.prisma.user.update({
+    const updatedUser = (await this.prisma.user.update({
       where: { id: userId },
       data: {
         ...userData,
@@ -199,7 +254,7 @@ export class UserService {
       include: {
         emergencyContact: true,
       },
-    });
+    })) as Prisma.UserGetPayload<{ include: { emergencyContact: true } }>;
 
     // Gérer le contact d'urgence si des données sont fournies
     if (
@@ -226,8 +281,11 @@ export class UserService {
     }
 
     // Retourner l'utilisateur mis à jour sans données sensibles
-    const { password, hashedRefreshToken, ...userWithoutSensitiveData } =
-      updatedUser;
+    const {
+      password: _password,
+      hashedRefreshToken: _hashedRefreshToken,
+      ...userWithoutSensitiveData
+    } = updatedUser;
     return userWithoutSensitiveData;
   }
 
@@ -270,7 +328,7 @@ export class UserService {
       throw new NotFoundException('Utilisateur introuvable');
     }
 
-    return await this.prisma.booking.findMany({
+    return (await this.prisma.booking.findMany({
       where: { clientId: userId },
       orderBy: { createdAt: 'desc' },
       include: {
@@ -288,10 +346,26 @@ export class UserService {
           },
         },
       },
-    });
+    })) as Prisma.BookingGetPayload<{
+      include: {
+        transportTickets: true;
+        assignments: {
+          include: {
+            ambulance: true;
+            driver: {
+              select: {
+                firstName: true;
+                lastName: true;
+                phoneNumber: true;
+              };
+            };
+          };
+        };
+      };
+    }>[];
   }
 
-  async deleteAccount(userId: number) {
+  async deleteAccount(userId: number): Promise<void> {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
     });

@@ -81,21 +81,41 @@ export class CreateBookingDto {
 
   @ApiProperty({
     description: 'Type de réservation',
-    enum: BookingType,
-    example: BookingType.MEDICAL_APPOINTMENT,
+    enum: [
+      'EMERGENCY',
+      'MEDICAL_APPOINTMENT',
+      'HOSPITAL_TRANSFER',
+      'ROUTINE_TRANSPORT',
+    ],
+    example: 'MEDICAL_APPOINTMENT',
   })
-  @IsEnum(BookingType)
+  @IsEnum([
+    'EMERGENCY',
+    'MEDICAL_APPOINTMENT',
+    'HOSPITAL_TRANSFER',
+    'ROUTINE_TRANSPORT',
+  ])
   bookingType: BookingType;
 
   @ApiProperty({
     description: 'Besoins spéciaux pour le transport',
-    enum: SpecialRequirements,
+    enum: [
+      'WHEELCHAIR',
+      'STRETCHER',
+      'OXYGEN',
+      'MONITOR',
+      'ISOLATION',
+      'PEDIATRIC',
+    ],
     isArray: true,
     required: false,
   })
   @IsOptional()
   @IsArray()
-  @IsEnum(SpecialRequirements, { each: true })
+  @IsEnum(
+    ['WHEELCHAIR', 'STRETCHER', 'OXYGEN', 'MONITOR', 'ISOLATION', 'PEDIATRIC'],
+    { each: true },
+  )
   specialRequirements?: SpecialRequirements[];
 
   @ApiProperty({

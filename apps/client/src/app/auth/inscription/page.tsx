@@ -77,14 +77,22 @@ export default function InscriptionPage() {
       
       // Redirection automatique
       window.location.href = "/dashboard"
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Erreur inscription:", error)
       
+      // Helper pour extraire le message d'erreur
+      const errorMessage = (error && typeof error === 'object' && 'message' in error && typeof error.message === 'string') ? error.message : String(error)
+      const responseMessage = (error && typeof error === 'object' && 'response' in error && 
+                              error.response && typeof error.response === 'object' && 
+                              'data' in error.response && error.response.data &&
+                              typeof error.response.data === 'object' && 'message' in error.response.data &&
+                              typeof error.response.data.message === 'string') ? error.response.data.message : ''
+      
       // Gestion spécifique des erreurs
-      if (error?.message?.includes('User already exists') || 
-          error?.message?.includes('already exists') ||
-          error?.message?.includes('déjà utilisé') ||
-          error?.response?.data?.message?.includes('exists')) {
+      if (errorMessage.includes('User already exists') || 
+          errorMessage.includes('already exists') ||
+          errorMessage.includes('déjà utilisé') ||
+          responseMessage.includes('exists')) {
         setError("Cette adresse email est déjà utilisée. Veuillez en choisir une autre ou vous connecter.")
         // Retourner à l'étape 2 (sécurité) pour permettre de changer l'email
         if (currentStep === 5) {
@@ -99,11 +107,11 @@ export default function InscriptionPage() {
             }, 100)
           }, 100)
         }
-      } else if (error?.message?.includes('validation') || 
-                 error?.message?.includes('invalid')) {
+      } else if (errorMessage.includes('validation') || 
+                 errorMessage.includes('invalid')) {
         setError("Certaines informations ne sont pas valides. Veuillez vérifier vos données.")
-      } else if (error?.message?.includes('network') || 
-                 error?.message?.includes('fetch')) {
+      } else if (errorMessage.includes('network') || 
+                 errorMessage.includes('fetch')) {
         setError("Problème de connexion. Vérifiez votre connexion internet et réessayez.")
       } else {
         setError("Une erreur inattendue s'est produite. Veuillez réessayer ou contacter le support.")

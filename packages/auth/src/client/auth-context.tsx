@@ -1,7 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useReducer, useEffect, useCallback, type ReactNode } from 'react'
-import { AuthApiClient, getApiClient } from './api-client'
+import { getApiClient } from './api-client'
 import { type AuthResponse, type User, type SignupDto, type SigninDto } from '../types'
 import { AuthError, getErrorMessage } from '../utils/errors'
 
@@ -76,7 +76,6 @@ interface AuthProviderProps {
   config?: {
     enableAutoRefresh?: boolean
     refreshInterval?: number
-    storageKey?: string
   }
 }
 
@@ -92,7 +91,6 @@ export function AuthProvider({
   const {
     enableAutoRefresh = true,
     refreshInterval = 15 * 60 * 1000, // 15 minutes
-    storageKey = 'ambulib_auth'
   } = config
 
   const [state, dispatch] = useReducer(authReducer, initialState)
@@ -229,7 +227,7 @@ export function AuthProvider({
       }})
       
       return response
-    } catch (error) {
+    } catch {
       // Token de rafraîchissement invalide, on déconnecte l'utilisateur
       clearTokens()
       dispatch({ type: 'SET_USER', payload: null })

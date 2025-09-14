@@ -87,7 +87,7 @@ export class BiometricAuthManager {
   }
 
   // Authentifier avec la biométrie pour accéder à l'application
-  async authenticateWithBiometrics(options?: BiometricAuthOptions): Promise<BiometricAuthResult & { userData?: any }> {
+  async authenticateWithBiometrics(options?: BiometricAuthOptions): Promise<BiometricAuthResult & { userData?: unknown }> {
     try {
       const isEnabled = await this.secureStorage.isBiometricEnabled()
       if (!isEnabled) {
@@ -125,35 +125,49 @@ export class BiometricAuthManager {
   }
 }
 
+// Types pour expo-local-authentication
+interface LocalAuthInterface {
+  hasHardwareAsync: () => Promise<boolean>
+  isEnrolledAsync: () => Promise<boolean>
+  supportedAuthenticationTypesAsync: () => Promise<number[]>
+  authenticateAsync: (options: unknown) => Promise<{ success: boolean; error?: string }>
+  AuthenticationType: {
+    FINGERPRINT: number
+    FACIAL_RECOGNITION: number
+    IRIS: number
+  }
+}
+
 // Implémentation pour Expo LocalAuthentication
 export class ExpoLocalAuth implements BiometricAuth {
-  private LocalAuthentication: any
+  private LocalAuthentication: LocalAuthInterface | null = null
 
   constructor() {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       this.LocalAuthentication = require('expo-local-authentication')
-    } catch (error) {
+    } catch {
       throw new Error('Expo LocalAuthentication n\'est pas disponible. Assurez-vous d\'installer expo-local-authentication.')
     }
   }
 
   async checkAvailability(): Promise<BiometricStatus> {
     try {
-      const hasHardware = await this.LocalAuthentication.hasHardwareAsync()
-      const isEnrolled = await this.LocalAuthentication.isEnrolledAsync()
-      const supportedAuthenticationTypes = await this.LocalAuthentication.supportedAuthenticationTypesAsync()
+      const hasHardware = await this.LocalAuthentication!.hasHardwareAsync()
+      const isEnrolled = await this.LocalAuthentication!.isEnrolledAsync()
+      const supportedAuthenticationTypes = await this.LocalAuthentication!.supportedAuthenticationTypesAsync()
 
       const supportedTypes: BiometricType[] = []
       
       for (const type of supportedAuthenticationTypes) {
         switch (type) {
-          case this.LocalAuthentication.AuthenticationType.FINGERPRINT:
+          case this.LocalAuthentication!.AuthenticationType.FINGERPRINT:
             supportedTypes.push(BiometricType.FINGERPRINT)
             break
-          case this.LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION:
+          case this.LocalAuthentication!.AuthenticationType.FACIAL_RECOGNITION:
             supportedTypes.push(BiometricType.FACE_RECOGNITION)
             break
-          case this.LocalAuthentication.AuthenticationType.IRIS:
+          case this.LocalAuthentication!.AuthenticationType.IRIS:
             supportedTypes.push(BiometricType.IRIS)
             break
         }
@@ -176,7 +190,7 @@ export class ExpoLocalAuth implements BiometricAuth {
 
   async authenticate(options: BiometricAuthOptions = {}): Promise<BiometricAuthResult> {
     try {
-      const result = await this.LocalAuthentication.authenticateAsync({
+      const result = await this.LocalAuthentication!.authenticateAsync({
         promptMessage: options.promptMessage || 'Authentifiez-vous avec votre biométrie',
         cancelLabel: options.cancelButtonText || 'Annuler',
         fallbackLabel: options.fallbackButtonText || 'Utiliser le mot de passe',
@@ -201,22 +215,29 @@ export class ExpoLocalAuth implements BiometricAuth {
   }
 }
 
-// Implémentation pour React Native Biometrics (alternative)
+// Types pour react-native-biometrics
+interface BiometricsInterface {
+  isSensorAvailable: () => Promise<{ available: boolean; biometryType?: string }>
+  simplePrompt: (options: unknown) => Promise<{ success: boolean; error?: string }>
+}
+
+// Implémentation pour React Native Biometrics (alternative)  
 export class ReactNativeBiometrics implements BiometricAuth {
-  private Biometrics: any
+  private Biometrics: BiometricsInterface | null = null
 
   constructor() {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { default: ReactNativeBiometrics } = require('react-native-biometrics')
       this.Biometrics = new ReactNativeBiometrics()
-    } catch (error) {
+    } catch {
       throw new Error('React Native Biometrics n\'est pas disponible. Assurez-vous d\'installer react-native-biometrics.')
     }
   }
 
   async checkAvailability(): Promise<BiometricStatus> {
     try {
-      const { available, biometryType } = await this.Biometrics.isSensorAvailable()
+      const { available, biometryType } = await this.Biometrics!.isSensorAvailable()
       
       const supportedTypes: BiometricType[] = []
       if (biometryType) {
@@ -248,7 +269,7 @@ export class ReactNativeBiometrics implements BiometricAuth {
 
   async authenticate(options: BiometricAuthOptions = {}): Promise<BiometricAuthResult> {
     try {
-      const { success, error } = await this.Biometrics.simplePrompt({
+      const { success, error } = await this.Biometrics!.simplePrompt({
         promptMessage: options.promptMessage || 'Authentifiez-vous avec votre biométrie',
         cancelButtonText: options.cancelButtonText || 'Annuler',
       })

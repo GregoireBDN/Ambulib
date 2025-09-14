@@ -10,7 +10,8 @@ export class ChangePasswordDto {
   currentPassword: string;
 
   @ApiProperty({
-    description: 'Nouveau mot de passe (minimum 8 caractères avec majuscule, chiffre et caractère spécial)',
+    description:
+      'Nouveau mot de passe (minimum 8 caractères avec majuscule, chiffre et caractère spécial)',
     example: 'NouveauMotDePasse456!',
     minLength: 8,
   })
@@ -27,7 +28,7 @@ export class ChangePasswordDto {
   @Matches(/\d/, {
     message: 'Le mot de passe doit contenir au moins un chiffre',
   })
-  @Matches(/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/, {
+  @Matches(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/, {
     message:
       'Le mot de passe doit contenir au moins un caractère spécial (!@#$%^&*...)',
   })

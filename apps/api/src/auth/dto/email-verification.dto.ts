@@ -26,6 +26,8 @@ export class VerifyCodeDto {
   })
   @IsString({ message: 'Le code doit être une chaîne de caractères' })
   @Length(6, 6, { message: 'Le code doit contenir exactement 6 caractères' })
-  @Matches(/^\d{6}$/, { message: 'Le code doit contenir uniquement des chiffres' })
+  @Matches(/^\d{6}$/, {
+    message: 'Le code doit contenir uniquement des chiffres',
+  })
   code: string;
 }

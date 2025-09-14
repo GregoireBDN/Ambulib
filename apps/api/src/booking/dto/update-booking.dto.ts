@@ -7,11 +7,11 @@ import { BookingStatus } from '@prisma/client';
 export class UpdateBookingDto extends PartialType(CreateBookingDto) {
   @ApiProperty({
     description: 'Statut de la réservation',
-    enum: BookingStatus,
-    example: BookingStatus.CONFIRMED,
+    enum: ['PENDING', 'CONFIRMED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'],
+    example: 'CONFIRMED',
     required: false,
   })
   @IsOptional()
-  @IsEnum(BookingStatus)
+  @IsEnum(['PENDING', 'CONFIRMED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'])
   status?: BookingStatus;
 }

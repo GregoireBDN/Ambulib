@@ -50,7 +50,7 @@ export const useFormStepper = () => {
   const [submitError, setSubmitError] = useState<string>('')
 
   // Mettre à jour un champ du formulaire
-  const updateField = useCallback((field: keyof FormData, value: any) => {
+  const updateField = useCallback((field: keyof FormData, value: unknown) => {
     setFormData(prev => ({ ...prev, [field]: value }))
     
     // Effacer l'erreur du champ modifié

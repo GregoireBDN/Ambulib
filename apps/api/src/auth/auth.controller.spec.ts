@@ -3,8 +3,11 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
-import { Role } from '@prisma/client';
+import { Role, AuthProvider } from '@prisma/client';
 import { Response } from 'express';
+import { EmailVerificationService } from './email-verification.service';
+import { PasswordResetService } from './password-reset.service';
+import { RequestWithUser } from '../common/interfaces/request-with-user.interface';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -42,7 +45,7 @@ describe('AuthController', () => {
 
   const mockRequest = {
     user: mockUser,
-  } as any;
+  } as unknown as RequestWithUser;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -64,6 +67,23 @@ describe('AuthController', () => {
             findOne: jest.fn(),
             update: jest.fn(),
             create: jest.fn(),
+            findByEmail: jest.fn(),
+          },
+        },
+        {
+          provide: EmailVerificationService,
+          useValue: {
+            sendVerificationCode: jest.fn(),
+            verifyCode: jest.fn(),
+            isEmailVerified: jest.fn(),
+          },
+        },
+        {
+          provide: PasswordResetService,
+          useValue: {
+            sendPasswordResetEmail: jest.fn(),
+            resetPassword: jest.fn(),
+            verifyResetToken: jest.fn(),
           },
         },
       ],
@@ -154,7 +174,7 @@ describe('AuthController', () => {
     it('should handle Google callback successfully', async () => {
       const mockResponse = {
         redirect: jest.fn(),
-      } as any as Response;
+      } as unknown as Response;
 
       authService.login.mockResolvedValue(mockAuthResponse);
 
@@ -177,7 +197,7 @@ describe('AuthController', () => {
     it('should handle Google callback error', async () => {
       const mockResponse = {
         redirect: jest.fn(),
-      } as any as Response;
+      } as unknown as Response;
 
       authService.login.mockRejectedValue(new Error('Login failed'));
 
@@ -200,7 +220,7 @@ describe('AuthController', () => {
         address: '123 Main St',
         city: 'Paris',
         postalCode: '75001',
-        authProvider: 'CREDENTIALS' as any,
+        authProvider: 'CREDENTIALS' as AuthProvider,
         age: 30,
         phoneNumber: '+33123456789',
         isEmailVerified: false,
@@ -233,7 +253,7 @@ describe('AuthController', () => {
         address: '123 Main St',
         city: 'Paris',
         postalCode: '75001',
-        authProvider: 'CREDENTIALS' as any,
+        authProvider: 'CREDENTIALS' as AuthProvider,
         age: 25,
         phoneNumber: '+33123456789',
         isEmailVerified: false,

@@ -42,7 +42,7 @@ import { Role } from '@prisma/client';
 @ApiBearerAuth('JWT-auth')
 @Controller('admin')
 @UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(Role.ADMIN, Role.SUPER_ADMIN)
+@Roles('ADMIN', 'SUPER_ADMIN')
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
@@ -199,7 +199,13 @@ export class AdminController {
   @ApiQuery({
     name: 'role',
     required: false,
-    enum: Role,
+    enum: [
+      'CLIENT',
+      'FLEET_MANAGER',
+      'AMBULANCE_DRIVER',
+      'ADMIN',
+      'SUPER_ADMIN',
+    ],
     description: 'Filtrer par rôle spécifique',
   })
   @ApiOkResponse({

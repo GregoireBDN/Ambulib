@@ -149,34 +149,42 @@ export class AuthSecureStorage {
   }
 }
 
+// Types pour expo-secure-store
+interface SecureStoreInterface {
+  setItemAsync: (key: string, value: string, options?: unknown) => Promise<void>
+  getItemAsync: (key: string, options?: unknown) => Promise<string | null>
+  deleteItemAsync: (key: string, options?: unknown) => Promise<void>
+}
+
 // Implémentation pour Expo SecureStore
 export class ExpoSecureStorage implements SecureStorage {
-  private SecureStore: any
+  private SecureStore: SecureStoreInterface | null = null
 
   constructor() {
     try {
       // Import dynamique pour éviter les erreurs lors du build web
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       this.SecureStore = require('expo-secure-store')
-    } catch (error) {
+    } catch {
       throw new Error('Expo SecureStore n\'est pas disponible. Assurez-vous d\'installer expo-secure-store.')
     }
   }
 
   async setItem(key: string, value: string): Promise<void> {
-    await this.SecureStore.setItemAsync(key, value, {
+    await this.SecureStore!.setItemAsync(key, value, {
       keychainService: 'ambulib_auth',
       requireAuthentication: false, // Peut être configuré selon les besoins
     })
   }
 
   async getItem(key: string): Promise<string | null> {
-    return await this.SecureStore.getItemAsync(key, {
+    return await this.SecureStore!.getItemAsync(key, {
       keychainService: 'ambulib_auth',
     })
   }
 
   async removeItem(key: string): Promise<void> {
-    await this.SecureStore.deleteItemAsync(key, {
+    await this.SecureStore!.deleteItemAsync(key, {
       keychainService: 'ambulib_auth',
     })
   }
@@ -189,28 +197,42 @@ export class ExpoSecureStorage implements SecureStorage {
   }
 }
 
+// Types pour react-native-keychain
+interface KeychainInterface {
+  setInternetCredentials: (server: string, username: string, password: string, options?: unknown) => Promise<void>
+  getInternetCredentials: (server: string) => Promise<{ password: string } | null>
+  resetInternetCredentials: (server: string) => Promise<void>
+  ACCESS_CONTROL: {
+    BIOMETRY_CURRENT_SET_OR_DEVICE_PASSCODE: unknown
+  }
+  ACCESSIBLE: {
+    WHEN_UNLOCKED_THIS_DEVICE_ONLY: unknown
+  }
+}
+
 // Implémentation pour React Native Keychain (alternative)
 export class KeychainSecureStorage implements SecureStorage {
-  private Keychain: any
+  private Keychain: KeychainInterface | null = null
 
   constructor() {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       this.Keychain = require('react-native-keychain')
-    } catch (error) {
+    } catch {
       throw new Error('React Native Keychain n\'est pas disponible. Assurez-vous d\'installer react-native-keychain.')
     }
   }
 
   async setItem(key: string, value: string): Promise<void> {
-    await this.Keychain.setInternetCredentials(key, 'ambulib', value, {
-      accessControl: this.Keychain.ACCESS_CONTROL.BIOMETRY_CURRENT_SET_OR_DEVICE_PASSCODE,
-      accessible: this.Keychain.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+    await this.Keychain!.setInternetCredentials(key, 'ambulib', value, {
+      accessControl: this.Keychain!.ACCESS_CONTROL.BIOMETRY_CURRENT_SET_OR_DEVICE_PASSCODE,
+      accessible: this.Keychain!.ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
     })
   }
 
   async getItem(key: string): Promise<string | null> {
     try {
-      const credentials = await this.Keychain.getInternetCredentials(key)
+      const credentials = await this.Keychain!.getInternetCredentials(key)
       return credentials ? credentials.password : null
     } catch {
       return null
@@ -218,7 +240,7 @@ export class KeychainSecureStorage implements SecureStorage {
   }
 
   async removeItem(key: string): Promise<void> {
-    await this.Keychain.resetInternetCredentials(key)
+    await this.Keychain!.resetInternetCredentials(key)
   }
 
   async clear(): Promise<void> {

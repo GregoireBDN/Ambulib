@@ -6,7 +6,7 @@ import { FormData } from '@/types/inscription'
 interface SecurityStepProps {
   formData: FormData
   errors: Record<string, string>
-  onFieldChange: (field: keyof FormData, value: any) => void
+  onFieldChange: (field: keyof FormData, value: unknown) => void
   onResetEmailVerification?: () => void
 }
 

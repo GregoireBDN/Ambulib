@@ -1,4 +1,9 @@
-import { Injectable, BadRequestException, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { PrismaService } from '../prisma/prisma.service';
 import { randomBytes } from 'crypto';
@@ -41,11 +46,13 @@ export class EmailVerificationService {
     });
 
     // Si une vérification est déjà en cours et qu'elle a été créée il y a moins de 60 secondes
-    if (existingVerification && 
-        new Date().getTime() - existingVerification.createdAt.getTime() < 60000) {
+    if (
+      existingVerification &&
+      new Date().getTime() - existingVerification.createdAt.getTime() < 60000
+    ) {
       throw new HttpException(
         'Un code de vérification a déjà été envoyé. Veuillez attendre 60 secondes avant de demander un nouveau code.',
-        HttpStatus.TOO_MANY_REQUESTS
+        HttpStatus.TOO_MANY_REQUESTS,
       );
     }
 
@@ -86,8 +93,8 @@ export class EmailVerificationService {
         },
       });
     } catch (error) {
-      console.error('Erreur lors de l\'envoi de l\'email:', error);
-      
+      console.error("Erreur lors de l'envoi de l'email:", error);
+
       // Supprimer la vérification si l'envoi a échoué
       await this.prisma.emailVerification.deleteMany({
         where: {
@@ -95,9 +102,9 @@ export class EmailVerificationService {
           code,
         },
       });
-      
+
       throw new BadRequestException(
-        'Impossible d\'envoyer l\'email de vérification. Veuillez réessayer plus tard.'
+        "Impossible d'envoyer l'email de vérification. Veuillez réessayer plus tard.",
       );
     }
   }
@@ -121,14 +128,14 @@ export class EmailVerificationService {
 
     if (!verification) {
       throw new BadRequestException(
-        'Code de vérification non trouvé ou expiré. Veuillez demander un nouveau code.'
+        'Code de vérification non trouvé ou expiré. Veuillez demander un nouveau code.',
       );
     }
 
     // Vérifier si le nombre maximum de tentatives a été atteint
     if (verification.attempts >= 3) {
       throw new BadRequestException(
-        'Nombre maximum de tentatives atteint. Veuillez demander un nouveau code.'
+        'Nombre maximum de tentatives atteint. Veuillez demander un nouveau code.',
       );
     }
 
@@ -146,9 +153,9 @@ export class EmailVerificationService {
     if (verification.code !== code) {
       const attemptsLeft = 2 - verification.attempts;
       throw new BadRequestException(
-        attemptsLeft > 0 
+        attemptsLeft > 0
           ? `Code incorrect. Il vous reste ${attemptsLeft} tentative(s).`
-          : 'Code incorrect. Nombre maximum de tentatives atteint.'
+          : 'Code incorrect. Nombre maximum de tentatives atteint.',
       );
     }
 

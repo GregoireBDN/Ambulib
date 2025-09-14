@@ -88,7 +88,14 @@ export class UpdateProfileDto {
 
   @ApiProperty({
     description: 'Besoins spéciaux pour le transport',
-    enum: SpecialRequirements,
+    enum: [
+      'WHEELCHAIR',
+      'STRETCHER',
+      'OXYGEN',
+      'MONITOR',
+      'ISOLATION',
+      'PEDIATRIC',
+    ],
     isArray: true,
     required: false,
   })
