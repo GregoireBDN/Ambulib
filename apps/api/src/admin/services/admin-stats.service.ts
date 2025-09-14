@@ -28,22 +28,22 @@ export class AdminStatsService {
       totalBookings,
       pendingBookings,
     ] = await Promise.all([
-      this.prisma.user.count(),
-      this.prisma.user.count({
+      (this.prisma as PrismaService).user.count(),
+      (this.prisma as PrismaService).user.count({
         where: { role: 'CLIENT' as Role },
       }),
-      this.prisma.user.count({
+      (this.prisma as PrismaService).user.count({
         where: { role: 'AMBULANCE_DRIVER' as Role },
       }),
-      this.prisma.user.count({
+      (this.prisma as PrismaService).user.count({
         where: { role: 'FLEET_MANAGER' as Role },
       }),
-      this.prisma.ambulance.count(),
-      this.prisma.ambulance.count({
+      (this.prisma as PrismaService).ambulance.count(),
+      (this.prisma as PrismaService).ambulance.count({
         where: { status: 'AVAILABLE' },
       }),
-      this.prisma.booking.count(),
-      this.prisma.booking.count({
+      (this.prisma as PrismaService).booking.count(),
+      (this.prisma as PrismaService).booking.count({
         where: { status: 'PENDING' },
       }),
     ]);

@@ -36,7 +36,7 @@ export class AdminAmbulancesService {
   constructor(private readonly prisma: PrismaService) {}
 
   async createAmbulance(dto: CreateAmbulanceDto): Promise<Ambulance> {
-    const existingAmbulance = await this.prisma.ambulance.findUnique({
+    const existingAmbulance = await (this.prisma as PrismaService).ambulance.findUnique({
       where: { licensePlate: dto.licensePlate },
     });
 
@@ -47,7 +47,7 @@ export class AdminAmbulancesService {
     }
 
     if (dto.driverId) {
-      const driver = await this.prisma.user.findUnique({
+      const driver = await (this.prisma as PrismaService).user.findUnique({
         where: { id: dto.driverId, role: 'AMBULANCE_DRIVER' as Role },
       });
 
@@ -56,7 +56,7 @@ export class AdminAmbulancesService {
       }
     }
 
-    return (await this.prisma.ambulance.create({
+    return (await (this.prisma as PrismaService).ambulance.create({
       data: {
         ...dto,
         companyId: 1, // TODO: Récupérer companyId dynamiquement
@@ -69,7 +69,7 @@ export class AdminAmbulancesService {
   }
 
   async getAllAmbulances(): Promise<AmbulanceWithDriver[]> {
-    return (await this.prisma.ambulance.findMany({
+    return (await (this.prisma as PrismaService).ambulance.findMany({
       include: {
         driver: {
           select: {
@@ -85,7 +85,7 @@ export class AdminAmbulancesService {
   }
 
   async getAmbulanceById(id: number): Promise<AmbulanceWithRelations> {
-    const ambulance = await this.prisma.ambulance.findUnique({
+    const ambulance = await (this.prisma as PrismaService).ambulance.findUnique({
       where: { id },
       include: {
         driver: true,
@@ -110,7 +110,7 @@ export class AdminAmbulancesService {
     id: number,
     dto: Partial<CreateAmbulanceDto>,
   ): Promise<Ambulance> {
-    const ambulance = await this.prisma.ambulance.findUnique({
+    const ambulance = await (this.prisma as PrismaService).ambulance.findUnique({
       where: { id },
     });
 
@@ -119,7 +119,7 @@ export class AdminAmbulancesService {
     }
 
     if (dto.licensePlate && dto.licensePlate !== ambulance.licensePlate) {
-      const existingAmbulance = await this.prisma.ambulance.findUnique({
+      const existingAmbulance = await (this.prisma as PrismaService).ambulance.findUnique({
         where: { licensePlate: dto.licensePlate },
       });
 
@@ -130,7 +130,7 @@ export class AdminAmbulancesService {
       }
     }
 
-    return (await this.prisma.ambulance.update({
+    return (await (this.prisma as PrismaService).ambulance.update({
       where: { id },
       data: dto,
       include: {
@@ -140,7 +140,7 @@ export class AdminAmbulancesService {
   }
 
   async deleteAmbulance(id: number): Promise<void> {
-    const ambulance = await this.prisma.ambulance.findUnique({
+    const ambulance = await (this.prisma as PrismaService).ambulance.findUnique({
       where: { id },
     });
 
@@ -148,7 +148,7 @@ export class AdminAmbulancesService {
       throw new NotFoundException('Ambulance not found');
     }
 
-    await this.prisma.ambulance.delete({
+    await (this.prisma as PrismaService).ambulance.delete({
       where: { id },
     });
   }
