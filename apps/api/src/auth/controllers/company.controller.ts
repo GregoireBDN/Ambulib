@@ -55,7 +55,7 @@ export class CompanyController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.SUPER_ADMIN)
+  @Roles('SUPER_ADMIN' as Role)
   @Get('pending')
   @ApiOperation({
     summary: 'Get all pending company registrations (Super Admin only)',
@@ -71,7 +71,7 @@ export class CompanyController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Role.SUPER_ADMIN)
+  @Roles('SUPER_ADMIN' as Role)
   @Put(':id/approval')
   @ApiOperation({
     summary: 'Approve or reject a company registration (Super Admin only)',
@@ -106,7 +106,7 @@ export class CompanyController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard, TenantGuard)
-  @Roles(Role.ADMIN)
+  @Roles('ADMIN' as Role)
   @Tenant()
   @Post(':id/users')
   @ApiOperation({
@@ -120,7 +120,7 @@ export class CompanyController {
     @Request() req: RequestWithUser,
   ) {
     // SUPER_ADMIN peut accéder à toutes les entreprises
-    if (req.user.role === Role.SUPER_ADMIN) {
+    if (req.user.role === ('SUPER_ADMIN' as Role)) {
       return this.companyService.createCompanyUser(companyId, userDto);
     }
 
@@ -144,7 +144,7 @@ export class CompanyController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard, TenantGuard)
-  @Roles(Role.ADMIN)
+  @Roles('ADMIN' as Role)
   @Tenant()
   @Delete(':companyId/users/:userId')
   @ApiOperation({
@@ -158,7 +158,7 @@ export class CompanyController {
     @Request() req: RequestWithUser,
   ) {
     // SUPER_ADMIN peut accéder à toutes les entreprises
-    if (req.user.role === Role.SUPER_ADMIN) {
+    if (req.user.role === ('SUPER_ADMIN' as Role)) {
       return this.companyService.deleteCompanyUser(companyId, userId);
     }
 
