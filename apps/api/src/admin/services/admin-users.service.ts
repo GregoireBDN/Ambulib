@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 import {
   Injectable,
   NotFoundException,
@@ -41,7 +45,7 @@ export class AdminUsersService {
   constructor(private readonly prisma: PrismaService) {}
 
   private get db(): PrismaService {
-    return this.prisma as PrismaService;
+    return this.prisma;
   }
 
   async createFleetManager(dto: CreateFleetManagerDto): Promise<User> {

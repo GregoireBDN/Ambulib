@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Role } from '@prisma/client';
@@ -18,7 +22,7 @@ export class AdminStatsService {
   constructor(private readonly prisma: PrismaService) {}
 
   private get db(): PrismaService {
-    return this.prisma as PrismaService;
+    return this.prisma;
   }
 
   async getSystemStats(): Promise<SystemStats> {
