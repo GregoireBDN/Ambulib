@@ -19,15 +19,9 @@ export default tseslint.config(
       },
       sourceType: 'commonjs',
       parserOptions: {
-        project: './tsconfig.eslint.json',
+        projectService: true,
         tsconfigRootDir: import.meta.dirname,
         warnOnUnsupportedTypeScriptVersion: false,
-        // Force single run mode for CI environments
-        disallowAutomaticSingleRunInference: false,
-        // Configure cache for CI environment
-        cacheLifetime: {
-          glob: 30,
-        },
       },
     },
   },
